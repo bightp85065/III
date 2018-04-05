@@ -1,0 +1,757 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>AP管理</title>
+    <link rel="shortcut icon" href="../resources/images/NEXCOM.jpg"/>
+    
+    <!-- Global CSS -->
+    <link href="../resources/css/global.css" rel="stylesheet">
+    <!-- Style CSS -->
+    <link href="../resources/css/back.css" rel="stylesheet">
+    <link href="../resources/css/addFix_2.css" rel="stylesheet">
+    
+    <script src="../resources/js/kernel/jquery.min.js"></script>
+    <script src="../resources/js/kernel/bootstrap.min.js"></script>
+    <script src="../resources/js/kernel/datatables.min.js"></script>
+    <script src="../resources/js/kernel/ajaxq.js"></script>
+    <script src="../resources/js/kernel/md5.js"></script>
+    <script src="../resources/js/kernel/notify.js"></script>
+    <script src="../resources/js/kernel/sweetalert.min.js"></script>
+    <script src="../resources/js/kernel/pagination.js"></script>
+    <script src="../resources/js/global.js"></script>
+
+    
+    <script>
+        $(document).ready(function() {
+            
+            //tab-block
+            $('.tab-block').each(function(index, element) {
+                    $(this).find('.tabs a').eq(0).addClass('active');
+                    $(this).find('.tab-content > li').eq(0).show();
+            });
+
+            $('.tab-block .tabs a').unbind('click').bind('click',function(){
+            var $tabIndex = $(this).index();
+                    $(this).addClass('active').siblings().removeClass('active');
+                    $(this).parent().siblings('.tab-content').find('> li').eq($tabIndex).show().siblings().hide();
+            });
+        });
+    </script>
+</head>
+<body>
+    
+    <!--header-->
+    <div class="navbar-wrapper" style="height: auto;">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container">
+                <div class="">
+                    <div class="menu-sm">
+                        <div class="burger-container">
+                            <div id="burger">
+                                <div class="bar topBar"></div>
+                                <div class="bar btmBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mobile-hide" style="position: absolute;top: 70px;color: #8181b1;">English version backend management</p>
+                </div>
+            </div>
+            <!--<div id="navbar" class="navbar-collapse collapse menu" style="padding: 0;">-->
+            <div id="navbar" class="mobile-hide header-menu">
+                <ul class="nav navbar-nav navbar-right">
+    <!--                <li id="language">
+                        <span class="lan active" value="zh-tw"><a>中文版</a></span><span class="lan m-r-md" value="en-us"><a>英文版</a></span>
+                    </li>-->
+<!--                    <li><a style="cursor: pointer;" onclick="processAdminLogout();">登出</a></li>-->
+                </ul>
+                <br>
+                <ul class="nav nav-sec navbar-bottom relative text-center">
+                    <li>
+                        <a href="account_management.html">Account</a>
+                    </li>
+                    <li>
+                        <a href="ap_management.html">Access Point</a>
+                    </li>
+                    <li style="border-right: none;">
+                        <a href="wall_management.html">Wall</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        // Mobile Menu
+        var burger = document.querySelector('.burger-container'),
+            header = document.querySelector('.navbar-default'),
+            menu = document.querySelector('#navbar');
+
+        burger.onclick = function() {
+            header.classList.toggle('menu-opened');
+            menu.classList.toggle('block');
+        };
+
+    </script>
+    
+    <!--html-->
+    <div class="container">
+        <p>Access Point Management</p>
+
+        <div class="col-sm-12 filter p-n">
+            <div class="col-sm-2 import" style="padding: 10px;" onclick="$('#addModal').modal();">
+                <i class="fa fa-plus m-r-sm" aria-hidden="true"></i>Add Access Point</div>
+        </div>
+
+        <div id="datatable">
+            <!--sample code-->
+            <table id="example" class="display" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Access Point Name</th>
+                        <th>Standard</th>
+                        <th>Power</th>
+                        <th>MAC Address</th>
+                        <th>SSID</th>
+                        <th>Operate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+    <!--add modal-->
+    <div class="modal" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="z-index: 9999;">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-plus m-r-sm" aria-hidden="true"></i>
+                        Add Access Point
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <table class="display dataTable" width="100%" cellspacing="0">
+                        <tbody>
+                            <tr class="p-sm">
+                                <td>Access point name</td>
+                                <td class="filter">
+                                    <input id="addAccessPointName" type="text">
+                                </td>
+                                <td>Radio enabled</td>
+                                <td class="filter" style="text-align: left;position: relative;">
+                                    <input id="addRadioEnabled" type="checkbox">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Standard</td>
+                                <td class="filter" style="text-align: left;">
+                                    <select id="addStandard">
+                                        <option>802.11n</option>
+                                    </select>
+                                </td>
+                                <td>Power</td>
+                                <td class="filter" style="text-align: left;">
+                                    <select id="addPower">
+                                        <option>0 dBm (1 mW)</option>
+                                        <option>4 dBm (2 mW)</option>
+                                        <option>5 dBm (3 mW)</option>
+                                        <option>7 dBm (5 mW)</option>
+                                        <option>8 dBm (6 mW)</option>
+                                        <option>9 dBm (7 mW)</option>
+                                        <option>10 dBm (10 mW)</option>
+                                        <option>11 dBm (12 mW)</option>
+                                        <option>12 dBm (15 mW)</option>
+                                        <option>13 dBm (19 mW)</option>
+                                        <option>14 dBm (25 mW)</option>
+                                        <option>15 dBm (31 mW)</option>
+                                        <option>16 dBm (39 mW)</option>
+                                        <option>17 dBm (50 mW)</option>
+                                        <option>18 dBm (63 mW)</option>
+                                        <option>19 dBm (79 mW)</option>
+                                        <option>20 dBm (100 mW)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Channel</td>
+                                <td class="filter" style="text-align: left;">
+                                    <select id="addChannel">
+                                        <option>auto</option>
+                                        <option>1(2412MHz)</option>
+                                        <option>2(2417MHz)</option>
+                                        <option>3(2422MHz)</option>
+                                        <option>4(2427MHz)</option>
+                                        <option>5(2432MHz)</option>
+                                        <option>6(2437MHz)</option>
+                                        <option>7(2442MHz)</option>
+                                        <option>8(2447MHz)</option>
+                                        <option>9(2452MHz)</option>
+                                        <option>10(2457MHz)</option>
+                                        <option>11(2462MHz)</option>
+                                    </select>
+                                </td>
+                                <td>Range</td>
+                                <td class="filter" style="text-align: left;">
+                                    <input id="addRange" type="number">m
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>MAC Address:</td>
+                                <td class="filter">
+                                    <input id="addMACAddress" type="text">
+                                </td>
+                                <td>SSID:</td>
+                                <td class="filter">
+                                    <input id="addSSID" type="text">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>802.11n</td>
+                                <td class="filter" style="text-align: left;" colspan="3"><button type="submit">Supported Rates...</button></td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>40 MHz channels</td>
+                                <td class="filter" style="text-align: left;position: relative;">
+                                    <input id="add40MHzChannels" type="checkbox">
+                                </td>
+                                <td class="filter multiTd" style="text-align: left;" colspan="2">
+                                    <input name="secondary_channel" value="above" type="radio" style="height: auto;margin-right: 6px;"><span style="height: 45px;line-height: 45px;display: inline-block;">Secondary channel above</span>
+                                    <input name="secondary_channel" value="below" type="radio" style="height: auto;margin-right: 6px;"><span style="height: 45px;line-height: 45px;display: inline-block;">Secondary channel below</span>
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Spatial Streams:</td>
+                                <td class="filter" style="text-align: left;position: relative;">
+                                    <select id="addSpatialStreams">
+                                        <option>0</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                    </select>
+                                </td>
+                                <td class="filter multiTd" style="text-align: left;" colspan="2">
+                                    <input id="addShortGI" type="checkbox" style="height: auto;margin-right: 6px;"><span style="height: 45px;line-height: 45px;display: inline-block;">Short GI</span>
+                                    <input id="addGreenfield" type="checkbox" style="height: auto;margin-right: 6px;"><span style="height: 45px;line-height: 45px;display: inline-block;">Greenfield</span>
+                                </td>
+                            </tr>
+                            
+                            <tr class="p-sm">
+                                <td>Antenna</td>
+                                <td class="filter" style="text-align: left;" colspan="3"><button type="submit">Advanced...</button></td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Type:</td>
+                                <td class="filter" style="text-align: left;">
+                                    <select id="addType">
+                                        <option>Generic Omni 2.2 dBi</option>
+                                    </select>
+                                </td>
+                                <td>Rotation:</td>
+                                <td class="filter">
+                                    <input id="addRotation" type="number" value="0">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Elevation:</td>
+                                <td class="filter">
+                                    <input id="addElevation" type="number" value="0">
+                                </td>
+                                <td>Species:</td>
+                                <td class="filter" style="text-align: left;position: relative;">
+                                    <select id="addSpecies">
+                                        <option value="all">All</option>
+                                        <option value="uplinkpoint">Uplink Point</option>
+                                        <option value="sensornode">Sensor Node</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="m-t-lg text-center">
+                        <button type="submit" class="btn-success" id="btnAddModalYes">Submit</button>
+                        <button type="submit" class="btn-disable" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--edit modal-->
+    <div class="modal" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="z-index: 9999;">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Modify Access Point</h4>
+                </div>
+                <div class="modal-body">
+
+                    <table class="display dataTable" width="100%" cellspacing="0">
+                        <tbody>
+                            <tr class="p-sm">
+                                <td>Access point name</td>
+                                <td class="filter">
+                                    <input id="modifyAccessPointName" type="text">
+                                </td>
+                                <td>Radio enabled</td>
+                                <td class="filter" style="text-align: left;position: relative;">
+                                    <input id="modifyRadioEnabled" type="checkbox">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Standard</td>
+                                <td class="filter" style="text-align: left;">
+                                    <select id="modifyStandard">
+                                        <option>802.11n</option>
+                                    </select>
+                                </td>
+                                <td>Power</td>
+                                <td class="filter" style="text-align: left;">
+                                    <select id="modifyPower">
+                                        <option>0 dBm (1 mW)</option>
+                                        <option>4 dBm (2 mW)</option>
+                                        <option>5 dBm (3 mW)</option>
+                                        <option>7 dBm (5 mW)</option>
+                                        <option>8 dBm (6 mW)</option>
+                                        <option>9 dBm (7 mW)</option>
+                                        <option>10 dBm (10 mW)</option>
+                                        <option>11 dBm (12 mW)</option>
+                                        <option>12 dBm (15 mW)</option>
+                                        <option>13 dBm (19 mW)</option>
+                                        <option>14 dBm (25 mW)</option>
+                                        <option>15 dBm (31 mW)</option>
+                                        <option>16 dBm (39 mW)</option>
+                                        <option>17 dBm (50 mW)</option>
+                                        <option>18 dBm (63 mW)</option>
+                                        <option>19 dBm (79 mW)</option>
+                                        <option>20 dBm (100 mW)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Channel</td>
+                                <td class="filter" style="text-align: left;">
+                                    <select id="modifyChannel">
+                                        <option>auto</option>
+                                        <option>1(2412MHz)</option>
+                                        <option>2(2417MHz)</option>
+                                        <option>3(2422MHz)</option>
+                                        <option>4(2427MHz)</option>
+                                        <option>5(2432MHz)</option>
+                                        <option>6(2437MHz)</option>
+                                        <option>7(2442MHz)</option>
+                                        <option>8(2447MHz)</option>
+                                        <option>9(2452MHz)</option>
+                                        <option>10(2457MHz)</option>
+                                        <option>11(2462MHz)</option>
+                                    </select>
+                                </td>
+                                <td>Range</td>
+                                <td class="filter" style="text-align: left;">
+                                    <input id="modifyRange" type="number">m
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>MAC modifyress:</td>
+                                <td class="filter">
+                                    <input id="modifyMACAddress" type="text">
+                                </td>
+                                <td>SSID:</td>
+                                <td class="filter">
+                                    <input id="modifySSID" type="text">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>802.11n</td>
+                                <td class="filter" style="text-align: left;" colspan="3"><button type="submit">Supported Rates...</button></td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>40 MHz channels</td>
+                                <td class="filter" style="text-align: left;position: relative;">
+                                    <input id="modify40MHzChannels" type="checkbox">
+                                </td>
+                                <td class="filter multiTd" style="text-align: left;" colspan="2">
+                                    <input name="modify_secondary_channel" value="above" type="radio" style="height: auto;margin-right: 6px;"><span style="height: 45px;line-height: 45px;display: inline-block;">Secondary channel above</span>
+                                    <input name="modify_secondary_channel" value="below" type="radio" style="height: auto;margin-right: 6px;"><span style="height: 45px;line-height: 45px;display: inline-block;">Secondary channel below</span>
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Spatial Streams:</td>
+                                <td class="filter" style="text-align: left;position: relative;">
+                                    <select id="modifySpatialStreams">
+                                        <option>0</option>
+                                        <option>1</option>
+                                        <option>2</option>
+                                    </select>
+                                </td>
+                                <td class="filter multiTd" style="text-align: left;" colspan="2">
+                                    <input id="modifyShortGI" type="checkbox" style="height: auto;margin-right: 6px;"><span style="height: 45px;line-height: 45px;display: inline-block;">Short GI</span>
+                                    <input id="modifyGreenfield" type="checkbox" style="height: auto;margin-right: 6px;"><span style="height: 45px;line-height: 45px;display: inline-block;">Greenfield</span>
+                                </td>
+                            </tr>
+                            
+                            <tr class="p-sm">
+                                <td>Antenna</td>
+                                <td class="filter" style="text-align: left;" colspan="3"><button type="submit">Advanced...</button></td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Type:</td>
+                                <td class="filter" style="text-align: left;">
+                                    <select id="modifyType">
+                                        <option>Generic Omni 2.2 dBi</option>
+                                    </select>
+                                </td>
+                                <td>Rotation:</td>
+                                <td class="filter">
+                                    <input id="modifyRotation" type="number" value="0">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Elevation:</td>
+                                <td class="filter">
+                                    <input id="modifyElevation" type="number" value="0">
+                                </td>
+                                <td>Species:</td>
+                                <td class="filter" style="text-align: left;position: relative;">
+                                    <select id="modifySpecies">
+                                        <option value="all">All</option>
+                                        <option value="uplinkpoint">Uplink Point</option>
+                                        <option value="sensornode">Sensor Node</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="m-t-lg text-center">
+                        <button type="submit" class="btn-success" id="btnModifyModalYes">Modify</button>
+                        <button type="submit" class="btn-disable" data-dismiss="modal">Cancel</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+    <script>
+        
+//        function unconnected_callback() {
+////                loading_ajax_hide();
+//                show_remind("未登入，三秒後轉跳到登入。", "error");
+//                setTimeout( function(){ returnAdminLoginPage(); }, 3000);
+//        };
+
+        /* 管理者未登入則跳轉到首頁 */
+//        function connected_callback(member) {
+//                $.member = member;
+//                if( $.member.userinfo_InExUser !== "admin" ){
+//                    show_remind("您不是管理者，三秒後轉跳到登入。", "error");
+//                    setTimeout( function(){ returnAdminLoginPage(); }, 3000);
+//                }
+//                else{
+//                    adminInit();
+//                }
+//        };
+        adminInit();
+        
+        function adminInit(){
+                $("#btnAddProductType").bind("click",function(){
+                        $("#addProductTypeName").val("");
+                        $("#addProductTypeEName").val("");
+                        $("#addProductTypeOrder").val("");
+                        $("#addProductTypeMainProject").val("");
+                        $("#addProductTypeEMainProject").val("");
+                        $("#addProductTypeSubProject").val("");
+                        $("#addProductTypeESubProject").val("");
+                        $("#addProductTypeIntro").val("");
+                        $("#addProductTypeEIntro").val("");
+                        $("#addProductTypeImageText").html("");
+                        $("#addProductTypeImage").attr("src","img/index/04.jpg");
+                        $('#addModal').modal();
+                });
+                $("#btnAddModalYes").bind("click",function(){
+                    var bool = true;
+                    var msg = "";
+                    
+//                    $("#addModal tbody input[type=text],#addModal tbody input[type=number]")
+//                    $("#addModal tbody input[type=checkbox]")
+//                    $("#addModal tbody select")
+                    
+                    if( $('[name="secondary_channel"]:checked').val()===undefined ){
+                        swal("Please Choose Secondary Channel","","error");
+                        return false;
+                    }
+                    
+                    $.each($("#addModal tbody input[type=text],#addModal tbody input[type=number]"),function(k,v){
+                        if($(v).val()===""){
+                            swal("Please Input All Input","","error");
+                            return false;
+                        }
+                    });
+                    
+                //    `ap_image`
+                    
+                    $.ajax({
+                        type:"POST",
+                        dataType: "text",
+                        url: "jsp/access_point.jsp",
+                        data: {
+                            "func": "create",
+                            "ap_name": $("#addAccessPointName").val(),
+                            "ap_mac_address": $("#addMACAddress").val(),
+                            "ap_ssid": $("#addSSID").val(),
+                            "ap_rotation": $("#addRotation").val(),
+                            "ap_elevation": $("#addElevation").val(),
+                            "ap_range": $("#addRange").val(),
+                            "ap_radio_enabled": $("#addRadioEnabled").is(":checked")?1:0,
+                            "ap_40mhz_channels": $("#add40MHzChannels").is(":checked")?1:0,
+                            "ap_short_gi": $("#addShortGI").is(":checked")?1:0,
+                            "ap_greenfield": $("#addGreenfield").is(":checked")?1:0,
+                            "ap_standard": $("#addStandard").val(),
+                            "ap_power": $("#addPower").val(),
+                            "ap_channel": $("#addChannel").val(),
+                            "ap_spatial_streams": $("#addSpatialStreams").val(),
+                            "ap_type": $("#addType").val(),
+                            "ap_species": $("#addSpecies").val(),
+                            "ap_secondary_channel": $('[name="secondary_channel"]:checked').val()
+                        },
+                        success: function(data){
+                            console.log(data);
+                            data = JSON.parse(data);
+                            if( data.success ) {
+                                    getAccessPointListByAdmin();
+                                    show_remind("create success");
+                                    $("#addModal").modal("hide");
+                            }
+                            else 
+                            {
+                                    show_remind(data.msg, "error");
+                            } 
+                        },
+                        error:function(xhr, ajaxOptions, thrownError){ 
+                            console.log(xhr.status); 
+                            console.log(thrownError); 
+                        }
+                    });
+                });
+                
+                $("#btnModifyModalYes").bind("click",function(){
+                    var bool = true;
+                    var msg = "";
+//                    var data = { ap_id: $.modify_ap_id , "func": "modifyOne" };
+                    
+                    if( $('[name="modify_secondary_channel"]:checked').val()===undefined ){
+                        swal("Please Choose Secondary Channel","","error");
+                        return false;
+                    }
+                    
+                    $.each($("#editModal tbody input[type=text],#editModal tbody input[type=number]"),function(k,v){
+                        if($(v).val()===""){
+                            swal("Please Input All Input","","error");
+                            return false;
+                        }
+                    });
+                    
+                    $.ajax({
+                        type:"POST",
+                        dataType: "text",
+                        url: "jsp/access_point.jsp",
+                        data: { 
+                            ap_id: $.modify_ap_id ,
+                            "func": "modifyOne",
+                            "ap_name": $("#modifyAccessPointName").val(),
+                            "ap_mac_address": $("#modifyMACAddress").val(),
+                            "ap_ssid": $("#modifySSID").val(),
+                            "ap_rotation": $("#modifyRotation").val(),
+                            "ap_elevation": $("#modifyElevation").val(),
+                            "ap_range": $("#modifyRange").val(),
+                            "ap_radio_enabled": $("#modifyRadioEnabled").is(":checked")?1:0,
+                            "ap_40mhz_channels": $("#modify40MHzChannels").is(":checked")?1:0,
+                            "ap_short_gi": $("#modifyShortGI").is(":checked")?1:0,
+                            "ap_greenfield": $("#modifyGreenfield").is(":checked")?1:0,
+                            "ap_standard": $("#modifyStandard").val(),
+                            "ap_power": $("#modifyPower").val(),
+                            "ap_channel": $("#modifyChannel").val(),
+                            "ap_spatial_streams": $("#modifySpatialStreams").val(),
+                            "ap_type": $("#modifyType").val(),
+                            "ap_species": $("#modifySpecies").val(),
+                            "ap_secondary_channel": $('[name="modify_secondary_channel"]:checked').val()
+                        },
+                        success: function(data){
+                            console.log(data);
+                            data = JSON.parse(data);
+                            if( data.success ) {
+                                    getAccessPointListByAdmin();
+                                    show_remind("modify success");
+                                    $("#editModal").modal("hide");
+                            }
+                            else 
+                            {
+                                    show_remind(data.msg, "error");
+                            } 
+                        },
+                        error:function(xhr, ajaxOptions, thrownError){ 
+                            console.log(xhr.status); 
+                            console.log(thrownError); 
+                        }
+                    });
+                });
+                
+                getAccessPointListByAdmin();
+                
+                $("#datatable").delegate(".modifyProductType","click",function(){
+                        var ap_id = $(this).attr("ap_id");
+                        $.ajax({
+                            type:"GET",
+                            dataType: "text",
+                            url: "jsp/access_point.jsp",
+                            headers: {},
+                            data: {
+                                func: "getOne",
+                                ap_id: ap_id
+                            },
+                            success: function(data){
+                                data = JSON.parse(data);
+                                console.log(data);
+                                if( data.success ) {
+                                        $.modify_ap_id = data.data.ap_id;
+                                        $("#modifyAccessPointName").val(data.data.ap_name);
+                                        $("#modifyMACAddress").val(data.data.ap_mac_address);
+                                        $("#modifySSID").val(data.data.ap_ssid);
+                                        $("#modifyRotation").val(data.data.ap_rotation);
+                                        $("#modifyElevation").val(data.data.ap_elevation);
+                                        $("#modifyRange").val(data.data.ap_range);
+                                        $("#modifyStandard").val(data.data.ap_standard);
+                                        $("#modifyPower").val(data.data.ap_power);
+                                        $("#modifyChannel").val(data.data.ap_channel);
+                                        $("#modifySpatialStreams").val(data.data.ap_spatial_streams);
+                                        $("#modifyType").val(data.data.ap_type);
+                                        $("#modifySpecies").val(data.data.ap_species);
+                                        $("#modifyRadioEnabled").prop("checked",data.data.ap_radio_enabled);
+                                        $("#modifyGreenfield").prop("checked",data.data.ap_greenfield);
+                                        $("#modifyShortGI").prop("checked",data.data.ap_short_gi);
+                                        $("#modify40MHzChannels").prop("checked",data.data.ap_40mhz_channels=="1");
+                                        $('[name="modify_secondary_channel"][value='+data.data.ap_secondary_channel+']').click();
+                                        $('#editModal').modal();
+                                }
+                                else {
+                                        swal("ERROR", data.msg, "error");
+                                }
+                            },
+                            error:function(xhr, ajaxOptions, thrownError){ 
+                                console.log(xhr.status); 
+                                console.log(thrownError); 
+                            }
+                        });
+                });
+                
+                $("#datatable").delegate(".delAccessPoint","click",function(){
+                        $.delApId = $(this).attr("ap_id");
+                        var ap_name = $(this).attr("ap_name");
+                        var swalJSON = {
+                                    title: "Attention: Can not be restored after deleted",
+                                    text: "You are deleting access point name: "+ap_name+"." ,
+                                    type: "warning",
+                                    confirmButtonColor: "#aedef4",
+                                    confirmButtonText: "Submit",
+                                    cancelButtonText: "Cancel",
+                                    showCancelButton: true,
+                                    closeOnConfirm: true,
+                                    closeOnCancel: true };
+                        swal( swalJSON ,
+                            function (isConfirm) {
+                                if (isConfirm) {
+                                    deleteAccessPoint( $.delApId );
+                                } else {
+                                    
+                                }
+                        });
+                });
+                
+        }
+        
+        function deleteAccessPoint(ap_id){
+            
+                $.ajax({
+                    type:"POST",
+                    dataType: "text",
+                    url: "jsp/access_point.jsp",
+                    data: {
+                        func: "delete",
+                        ap_id: ap_id
+                    },
+                    success: function(data){
+                        console.log(data);
+                        data = JSON.parse(data);
+                        if( data.success ) {
+                                show_remind("Delete success");
+                                getAccessPointListByAdmin();
+                        }
+                        else {
+                                swal("ERROR", data.msg, "error");
+                        }
+                    },
+                    error:function(xhr, ajaxOptions, thrownError){ 
+                        console.log(xhr.status); 
+                        console.log(thrownError); 
+                    }
+                });
+        }
+        
+        function getAccessPointListByAdmin(){
+                $.ajax({
+                    type:"GET",
+                    dataType: "text",
+                    url: "jsp/access_point.jsp",
+                    headers: {},
+                    data: {
+                        "func" : "list"
+                    },
+                    success: function(data){
+                        console.log(data);
+                        data = JSON.parse(data);
+                        if( data.success ) {
+                                $("#example").DataTable().destroy();
+                                var html="";
+                                $.each(data.data,function(k,v){
+                                    html += '<tr ap_id="'+v.ap_id+'">\n\
+                                                <td>'+v.ap_name+'</td>\n\
+                                                <td>'+v.ap_standard+'</td>\n\
+                                                <td>'+v.ap_power+'</td>\n\
+                                                <td>'+v.ap_mac_address+'</td>\n\
+                                                <td>'+v.ap_ssid+'</td>\n\
+                                                <td><a style="cursor:pointer;" ap_id="'+v.ap_id+'" class="modifyProductType">Modify</a>|<a style="cursor:pointer;" ap_id="'+v.ap_id+'" ap_name="'+v.ap_name+'" class="delAccessPoint">Delete</a></td>\n\
+                                            </tr>';
+                                });
+                                $('#example tbody').html(html);
+                                
+                                $('#example').DataTable( {       
+                                    "order": [[ 1, "asc" ]],
+                                    "pageLength": 20,
+                                    "dom": 'tp',
+                                    "pagingType": 'numbers'
+                                });
+                        }
+                        else {
+                                swal("ERROR", data.msg, "error");
+                        }
+                    },
+                    error:function(xhr, ajaxOptions, thrownError){ 
+                        console.log(xhr.status); 
+                        console.log(thrownError); 
+                    }
+                });
+        }
+        
+    </script>
+</body>
+</html>

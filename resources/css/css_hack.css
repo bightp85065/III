@@ -1,0 +1,38 @@
+/* -- IE css hack Start-- */
+.content #iconmenu li a{
+  width: calc( 100% + 65px )\0;
+  width: calc( 100% + 65px )\9\0;
+  padding-right: 65px\0;
+  padding-right: 65px\9\0;
+}
+
+.content #iconmenu li a span.icon_2 {
+  margin-top: -65px\0 ;
+  margin-top: -65px\9\0 ;
+}
+
+
+@media screen and (max-width: 1240px\0) {
+  /* line 13, ../sass/Module/_RWD.sass */
+  .nav #iconmenu li a span.icon_2 {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 1240px\0) {
+  /* line 26, ../sass/Module/_RWD.sass */
+  .nav #iconmenu li a:after {
+    content: ">";
+    margin: 0 0 0 20px;
+  }
+
+
+}
+
+@media screen and (max-width: 1240px\0) {
+    .nav #iconmenu li a:after {
+        content: ">";
+        margin: 0 5px;
+    }
+}
+/* -- IE css hack End-- */

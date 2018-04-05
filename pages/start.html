@@ -1,0 +1,963 @@
+<!doctype html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>Nexcom</title>
+        <link rel="shortcut icon" href="../resources/images/NEXCOM.jpg"/>
+        <link rel="stylesheet" href="../resources/css/bootstrap.min.css">
+        <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="../resources/js/bootstrap.min.js"></script>
+        <script src="../resources/js/kernel/ajaxq.js"></script>
+        
+<!--        <script type="text/javascript" src="js/lib/jquery.steps-1.1.0/jquery.steps.js"></script>-->
+        <script type="text/javascript" src="../resources/js/lib/sweetalert.min.js"></script>
+        <script type="text/javascript" src="../resources/js/view_upload_img.js"></script>
+        
+        <script type="text/javascript" src="../resources/js/global.js"></script>
+        
+        <link href="../resources/css/reset.css" rel="stylesheet" type="text/css">
+        <link href="../resources/css/style_.css" rel="stylesheet" type="text/css">
+        <link href="../resources/css/css_hack.css" rel="stylesheet" type="text/css">
+        <link href="../resources/css/addFix_1.css" rel="stylesheet" type="text/css">
+        <link href="../resources/css/modal.css" rel="stylesheet" type="text/css">
+        
+	<link rel="stylesheet" type="text/css" href="../resources/css/lib/sweetalert.css" />
+<!--	<link rel="stylesheet" type="text/css" href="css/index.css" />-->
+	<link rel="stylesheet" type="text/css" href="../resources/css/close.css" />
+<!--	<link rel="stylesheet" type="text/css" href="css/extra.css" />-->
+	<link rel="stylesheet" type="text/css" href="../resources/css/start.css" />
+	<link rel="stylesheet" type="text/css" href="../resources/css/font-awesome.css" />
+        
+        <script>
+            $.upload_file_transient = [];
+        </script>
+</head>
+<body>
+    <div id="loading">
+        <i class="fa fa-spinner fa-spin fa-2x"></i>
+        <div></div>
+    </div>
+    
+    <div class="head">
+        <img src="../resources/images/top.png" width="38" height="49" alt=""/>
+        <img class="logo" src="../resources/images/Nexcom.png" width="230" height="22" alt=""/>
+        <a href="../">
+            <button class="btn headBtn" translate="LOGOUT">Logout</button>
+        </a>
+        <a href="#">
+            <button class="btn headBtn" translate="ACCESS_POINT_MANAGEMENT" data-toggle="modal" data-target="#modalManagement">Management</button>
+        </a>
+    </div>
+
+    <div class="headContent">
+        <div class="topOption">
+<!--            <span translate="MODE">Mode:</span>
+            <select>
+              <option translate="FIXED">Fixed</option>
+            </select>-->
+        </div>
+    </div>
+
+
+
+    <div class="content">
+        <!-- Menu -->
+        <nav class="nav">
+          <ul id="iconmenu" class="nav-tabs">
+              <li id="sContentMenu_01">
+                <a href="#sContent_01" class="active">
+                  <span class="icon_1"></span>
+                    <c translate="MAP_SCALE">Map&Scale</c>
+                  <span class="icon_2"></span>
+                </a>
+              </li>
+              <li id="sContentMenu_02">
+                <a href="#sContent_02">
+                  <span class="icon_1"></span>
+                    <c translate="BOUNDARY_OBSTACLE">Boundary&Obstacle</c>
+                  <span class="icon_2"></span>
+                </a>
+              </li>
+              <li id="sContentMenu_03">
+                <a href="#sContent_03">
+                  <span class="icon_1"></span>
+                    <c translate="PREDICTIVE_SURVEY">Predictive Survey</c>
+                  <span class="icon_2"></span>
+                </a>
+              </li>
+              <li id="sContentMenu_04">
+                <a href="#sContent_04">
+                  <span class="icon_1"></span>
+                    <c translate="SENSOR_NODE">Sensor Node</c>
+                  <span class="icon_2"></span>
+                </a>
+              </li>
+              <li id="sContentMenu_05">
+                <a href="#sContent_05">
+                  <span class="icon_1"></span>
+                    <c translate="REPORT">Report</c>
+                  <span class="icon_2"></span>
+                </a>
+              </li>
+           </ul>
+        </nav>
+
+        <!-- sub Content -->
+        <div id="subContent" class="tab-conten">
+                <div class="sContentBox tab-pane fade in active" id="sContent_01">
+                    <div class="subOption">
+                        <div class="listBox">
+                            <span translate="IMPORT_MAP">Import Map:</span>
+                            <input id="mapUploadFileName" type="text" disabled>
+                            <input id="mapUpload" type="file" style="display:none;">
+                            <img id="mapUploadBtn" src="../resources/images/download.png" width="19" height="22" alt="" style="cursor:pointer;"/>
+                            <span class="button-group">
+                                <button id="btnStep1Next" class="btnStart" translate="NEXT_STEP">Next Step</button>
+                            </span>
+                        </div>
+                        <ul class="nav nav-pills">
+                            <li id="btnRequirementArea" class="active"><a href="#" translate="REQUIREMENT_AREA">Requirement Area</a></li>
+                            <li id="btnDrag" style="display: none;"></li>
+                        </ul>
+
+<!--                       <div class="listBox">
+                           <span>Distance:</span>
+                           <input type="text">
+                           <span>m</span>
+                       </div>-->
+
+                    </div>
+
+<!--                    <div class="contentBox">
+                       <div class="incontent">
+                          1
+                       </div>
+                     </div>-->
+                </div>
+
+                <div class="sContentBox tab-pane fade" id="sContent_02">
+                    <div class="subOption">
+                        <div class="listBox">
+                            <span translate="BOUNDARY_WALL">Boundary: Wall</span>
+                            <select id="wallColor" style="display: inline-block;">
+<!--                                 <option value="#888888" w_type="0" translate="Metal_Sliver">Metal(Sliver)</option>
+                                 <option value="#009FCC" w_type="0" translate="GLASS_BLUE">Glass(Blue)</option>
+                                 <option value="#DDAA00" w_type="1" translate="CUBICLE_YELLOW">Cubicle(Yellow)</option>
+                                 <option value="#880000" w_type="2" translate="BRICK_RED">Brick(Red)</option>
+                                 <option value="#666666" w_type="3" translate="CONCRETE_GRAY">Concrete(Gray)</option>
+                                 <option value="#8B4513" w_type="4" translate="WOOD_BROWN">Wood(Browm)</option>
+                                 <option value="#227700" w_type="5" translate="WATER_GREEN">Water(Green)</option>-->
+                             </select>
+                            <span class="icon-box-0"></span>
+                            <span translate="THICKNESS_WALL">Thickness: Wall</span>
+                             <select id="wallThick" style="display: inline-block;">
+                                 <option value="15">15</option>
+                                 <option value="10">10</option>
+                                 <option value="5">5</option>
+                                 <option value="3">3</option>
+                                 <option value="2">2</option>
+                                 <option value="1">1</option>
+                             </select>
+                            <span>cm</span>
+                            <span class="button-group">
+                                <button id="btnStep2Prev" class="btnStart" translate="PREV_STEP">Prev Step</button>
+                                <button id="btnStep2Next" class="btnStart" translate="NEXT_STEP">Next Step</button>
+                            </span>
+                        </div>
+                        
+                        <ul class="nav nav-pills">
+                            <li id="btnScale" class="action-group" index="1"><a href="#" translate="SCALE">Scale</a></li>
+                            <li id="btnStraightDrawWall" class="action-group" index="2"><a href="#" translate="DRAW_Straight_WALL">Draw Straight Wall</a></li>
+                            <li id="btnDrawWall" class="action-group" index="2"><a href="#" translate="DRAW_WALL">Draw Wall</a></li>
+                            <li id="btnElevator" class="action-group" index="3"><a href="#" translate="ELEVATOR">Elevator</a></li>
+                            <span style="margin-left: 15px;">
+                                <button id="btnPrevAction" class="btnStart" translate="PREV_ACTION" style="margin-top: 15px;" hidden>Prev Action</button>
+                                <button id="btnNextAction" class="btnStart" translate="NEXT_ACTION" style="margin-top: 15px;">Next Action</button>
+                            </span>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="sContentBox tab-pane fade" id="sContent_03">
+                    <div class="subOption">
+                        <div class="listBox">
+                            <span><input id="apTypeMesh" type="radio" name="apType" value="Mesh" style="display:inline-block;" checked></span>
+                            <span><label for="apTypeMesh">MESH</label></span>
+                            
+                            <span class="placeForChooseApType" for="Mesh">
+                                <select id="selectApValue" for="Mesh" style="display: inline-block;"></select>
+                                <span style="width:90px;" translate="AP_HEIGHT">AP Height</span>
+                                <span><input id="inputAPHeight" step="0.1" style="padding-right: 0;width: 75px;" value="0" type="number" for="Mesh"></span>
+                                <span>m</span>
+                                <span style="width:90px;" translate="MINIMUM_RSSI">Minimum RSSI</span>
+                                <span><input id="inputMiniRSSI" step="1" style="padding-right: 0;width: 75px;" value="-100" for="Mesh"></span>
+                                <span>dBm</span>
+                            </span>
+                            <span class="button-group">
+                                <button id="btnStep3Prev" class="btnStart" translate="PREV_STEP">Prev Step</button>
+                                <button id="btnStep3Next" class="btnStart" translate="NEXT_STEP">Next Step</button>
+                            </span>
+                        </div>
+
+                        <div class="listBox">
+                            <span><input id="apTypeAP" type="radio" name="apType" value="Ap" style="display:inline-block;"></span>
+                            <span><label for="apTypeAP">AP</label></span>
+                            
+                            <span class="placeForChooseApType" for="Ap" style="display: none;">
+                                <select id="selectApValue" for="Ap" style="display: inline-block;"></select>
+                                <span style="width:90px;" translate="AP_HEIGHT">AP Height</span>
+                                <span><input id="inputAPHeight" step="0.1" style="padding-right: 0;width: 75px;" value="0" type="number" for="Ap"></span>
+                                <span>m</span>
+                                <span style="width:90px;" translate="MINIMUM_RSSI">Minimum RSSI</span>
+                                <span><input id="inputMiniRSSI" step="1" style="padding-right: 0;width: 75px;" value="-100" for="Ap"></span>
+                                <span>dBm</span>
+                            </span>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sContentBox tab-pane fade" id="sContent_04">
+                    <div class="subOption">
+                        <div class="listBox">
+                            <span translate="SENSOR_NODE_COLON" style="width: 90px;">Sensor Node:</span>
+                            <select id="selectSensorNode" style="display: inline-block;"></select>
+                            <span style="transform: translateY(28%); margin-left: 5px;">
+                                <ul class="nav nav-pills" style="padding: 0px 12px; height: auto; border-bottom: none; box-shadow: none;">
+                                    <li id="btnSensorNode" role="presentation"><a href="#" translate="DRAW">Draw</a></li>
+                                </ul>
+                            </span>
+                            <span class="button-group" style="width: 90px;">
+                                <button id="btnStep4Prev" class="btnStart" translate="PREV_STEP">Prev Step</button>
+                                <button id="btnStep4Next" class="btnStart" translate="BUILD">BUILD</button>
+                            </span>
+                        </div>
+
+                        <div class="listBox" id="placeSelectUplinkPoint">
+                            <span translate="UPLINK_POINT">Uplink Point:</span>
+                            <select id="selectUplinkPoint" style="display: inline-block;"></select>
+                            <span style="transform: translateY(28%); margin-left: 5px;">
+                                <ul class="nav nav-pills" style="padding: 0px 12px; height: auto; border-bottom: none; box-shadow: none;">
+                                    <li id="btnUplinkPoint" role="presentation"><a href="#" translate="DRAW">Draw</a></li>
+                                </ul>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="sContentBox tab-pane fade" id="sContent_05">
+                    <div class="subOption">
+                        <div class="listBox">
+                            <a href="../resources/test.xls" target="_blank">
+                                <button id="btnDownloadExcel" class="btnStart btnStart-big">Download Excel</button>
+                            </a>
+                            <span class="button-group">
+                                <button id="btnReBuild" class="btnStart" translate="REBUILD">Re-BUILD</button>
+                                <button id="btnReDraw" class="btnStart" style="display: none;" translate="REDRAW">Re-Draw</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+    </div>
+    
+    <div id="inputScalePlace">
+        <span style="width: 75px;height: 35px;display: inline-block;"><input id="inputScale" step="1" type="number" class="form-control" value="0"></span>
+        <span style="width: 75px;height: 35px;display: inline-block;margin-left: 21px;">m</span>
+    </div>
+    <div id="inputHeightPlace">
+        <span style="width: 75px;height: 35px;display: inline-block;"><input id="inputHeight" step="0.1" type="number" class="form-control" value="0"></span>
+        <span style="width: 75px;height: 35px;display: inline-block;margin-left: 21px;">m</span>
+    </div>
+    
+    <div id="placeForScale" style="text-align: left;">
+        <span id="scaleForImage" class="canvasScale" style="display: inline-block; left: 0;">
+            <span>0</span><span></span><span></span><span></span><span></span>
+        </span>
+        <img class="canvasScaleImage" src="../resources/images/scale_200_horizontal.png" style="margin-right: auto; margin-left: 0; left: 10px;">
+    </div>
+    <div id='canvasPlace'>
+        <div class="coverCanvas" type="heatmap"></div>
+        <div class="dragPlace"></div>
+        <div class="tooltip right" role="tooltip"> <div class="tooltip-arrow"></div> <div class="tooltip-inner"></div> </div>
+<!--        <div class="coverCanvas" type="indr_heatmap"></div>-->
+<!--        <div class="coverCanvas" type="indr_img"></div>-->
+        <div id="dragFrame"></div>
+        <canvas id="canvas"></canvas>
+<!--        <img class="canvasScaleImage" src="../resources/images/scale_200_horizontal.png">
+        <span id="scaleForImage" class="canvasScale">
+            <span>0</span><span></span><span></span><span></span><span></span>
+        </span>-->
+    </div>
+    <div id="listOfCompnentPlace">
+        <div class="listOfComponent" component-type="straightWall">
+            <div class="list-name" translate="STRAIGHT_WALL_LIST">Straight Wall List</div>
+            <ul class="list-group"></ul>
+        </div>
+        <div class="listOfComponent" component-type="wall">
+            <div class="list-name" translate="WALL_LIST">Wall List</div>
+            <ul class="list-group"></ul>
+        </div>
+        <div class="listOfComponent" component-type="elevator">
+            <div class="list-name" translate="ELEVATOR_LIST">Elevator List</div>
+            <ul class="list-group"></ul>
+        </div>
+        <div class="listOfComponent" component-type="uplinkPoint">
+            <div class="list-name" translate="UPLINK_POINT_LIST">Uplink Point List</div>
+            <ul class="list-group"></ul>
+        </div>
+        <div class="listOfComponent" component-type="sensorNode">
+            <div class="list-name" translate="SENSOR_NODE_LIST">Sensor Node List</div>
+            <button id="btnCleanSensorNode" class="btn en-us-style" translate="CLEAN_SENSOR_NODE" style="width: 100%;">Clean Sensor Node</button>
+            <ul class="list-group"></ul>
+        </div>
+    </div>
+    
+    <li class="list-group-item list-group-item-sample">
+        <img src="">
+        <span class="color"></span>
+        <span class="word"></span>
+        <span class="close">x</span>
+    </li>
+    
+    <div class="modal" id="modalManagement" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="z-index: 9999;">
+            <div class="modal-content animated fadeIn">
+                <iframe src="account_management.html" width="100%" style="height: 95vh;"></iframe>
+            </div>
+        </div>
+    </div>
+    
+    <footer>Industry 4.0 Device & Network Health Manager</footer>
+    
+        <script type="text/javascript" src="../resources/js/canvas.js"></script>
+        <script>
+            
+            
+            
+            $(document).ready(function(){
+                    init();
+            });
+            
+            function init(){
+                //radio button reset
+                $("#apTypeMesh").click();
+                //input reset
+                $("#mapUploadFileName").val("");
+                $("#inputScale").val("0");
+                $("[id=inputAPHeight]").val("0");
+                $("[id=inputMiniRSSI]").val("-100");
+                //drag frame drag event
+                dragElement(document.getElementById(("dragFrame")));
+                
+                getWallList();
+                getAccessPointList();
+                //get client info
+                $.ajax({
+                    type:"POST",
+                    url: "jsp/account.jsp",
+    //                    dataType: "JSON",
+                    data: {
+                        "func": "login2"
+                    },
+                    success: function(data){
+                            data = JSON.parse(data);
+                            console.log(data);
+                    },
+                    error:function(xhr, ajaxOptions, thrownError){ 
+                        console.log(xhr.status); 
+                        console.log(thrownError); 
+                    }
+                });
+            }
+            
+            $("[name='apType']").bind("change",function(e){
+                $(".placeForChooseApType").hide();
+                $(".placeForChooseApType[for="+$(this).attr("value")+"]").show();
+                
+            });
+        
+
+        
+        $(".list-group").delegate(".list-group-item","click",function(){
+            if($(this).hasClass("active")){
+                $(this).removeClass("active");
+                resetCanvasComponent();
+            }
+            else{
+                $(".list-group-item").removeClass("active");
+                $(this).addClass("active");
+                var componentType = $(this).parents("[component-type]").attr("component-type");
+                var info = $(this).data("info");
+                
+                switch(componentType) {
+                    case "wall":
+                        $("#dragFrame").css("left",info.x1<info.x2?info.x1:info.x2).css("top",info.y1<info.y2?info.y1:info.y2).css("width",Math.abs(info.x2-info.x1)).css("height",Math.abs(info.y2-info.y1));
+                        break;
+                    case "straightWall":
+                        $("#dragFrame").css("left",info.x1<info.x2?info.x1:info.x2).css("top",info.y1<info.y2?info.y1:info.y2).css("width",Math.abs(info.x2-info.x1)).css("height",Math.abs(info.y2-info.y1));
+                        break;
+                    case "elevator":
+                        $("#dragFrame").css("left",info.x1<info.x2?info.x1:info.x2).css("top",info.y1<info.y2?info.y1:info.y2).css("width",Math.abs(info.x2-info.x1)).css("height",Math.abs(info.y2-info.y1));
+                        break;
+                    case "uplinkPoint":
+                        $("#dragFrame").css("left",info.x-15).css("top",info.y-15).css("width",30).css("height",30);
+                        $("#inputHeight").val( info.height );
+                        $.setAPHeightType="uplinkPoint";
+                        $.setAPIndex = info.index;
+                        $("#inputHeightPlace").css("left", (info.x+$.drawCanvasOffset.left)+"px").css("top",(info.y+$.drawCanvasOffset.top)+"px").show();
+                        break;
+                    case "sensorNode":
+                        $("#dragFrame").css("left",info.x-15).css("top",info.y-15).css("width",30).css("height",30);
+                        $("#inputHeight").val( info.height );
+                        $.setAPHeightType="sensorNode";
+                        $.setAPIndex = info.index;
+                        $("#inputHeightPlace").css("left", (info.x+$.drawCanvasOffset.left)+"px").css("top",(info.y+$.drawCanvasOffset.top)+"px").show();
+                        break;
+                }
+                $("#dragFrame").attr("component-type",componentType)
+                            .attr("index",info.index)
+                            .data("info",info)
+                            .show();
+            }
+        });
+        
+        $(".list-group").delegate(".list-group-item .close","click",function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var componentType = $(this).parents("[component-type]").attr("component-type");
+            var info = $(this).parent().data("info");
+            $(this).parent().remove();
+            $("#dragFrame").hide();
+            
+            
+            switch(componentType) {
+                case "wall":
+                    delete $.drawLines[info.index];
+                    autoDisplayList($('.listOfComponent[component-type="wall"]'));
+                    break;
+                case "straightWall":
+                    delete $.drawStraightLines[info.index];
+                    autoDisplayList($('.listOfComponent[component-type="straightWall"]'));
+                    break;
+                case "elevator":
+                    delete $.drawSquaresForElevator[info.index];
+                    autoDisplayList($('.listOfComponent[component-type="elevator"]'));
+                    break;
+                case "uplinkPoint":
+                    delete $.drawUplinkPoint[info.index];
+                    autoDisplayList($('.listOfComponent[component-type="uplinkPoint"]'));
+                    break;
+                case "sensorNode":
+                    delete $.drawSensorNode[info.index];
+                    autoDisplayList($('.listOfComponent[component-type="sensorNode"]'));
+                    break;
+            }
+            drawWhole();
+            
+        });
+        
+        function go2Steps(step){
+                var pos = $(".nav-tabs a").eq(step-1);
+                pos.tab('show');
+                $(".nav-tabs a").removeClass('active');
+                pos.addClass('active');
+        }
+        
+        $(".nav.nav-pills li").bind("click",function(){
+            $(".nav.nav-pills li").removeClass("active");
+            $(this).addClass("active");
+            resetCanvasComponent();
+            if($(this).attr("id")==="btnDrag"){
+                console.log("btnDrag")
+                $(".dragPlace").show();
+            }
+            else{
+                $(".dragPlace").hide();
+            }
+            if($(this).hasClass("action-group")){
+                $(".nav.nav-pills li.action-group").removeClass("activeS");
+                var index = $(this).attr("index");
+                $("li.action-group[index="+index+"]").addClass("activeS");
+                $("#btnPrevAction,#btnNextAction").show();
+                if( $(this).attr("index")==="1" ){
+                    $("#btnPrevAction").hide();
+                }
+                else if( $(this).attr("index")==="3" ){
+                    $("#btnNextAction").hide();
+                }
+            }
+        });
+        
+        $("#btnPrevAction").bind("click",function(){
+            var index = $("li.action-group.activeS").attr("index");
+            $(".nav.nav-pills li.action-group[index="+(parseInt(index)-1)+"]").eq(0).trigger("click");
+        });
+        $("#btnNextAction").bind("click",function(){
+            var index = $("li.action-group.activeS").attr("index");
+            if(index==="1"){
+                if($.imageScale===undefined){
+                    var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                    swal($.globalLang[lang]["PLEASE_DRAW_INPUT_YOUR_SCALE"],"","error");
+                    return false;
+                }
+            }
+            $(".nav.nav-pills li.action-group[index="+(parseInt(index)+1)+"]").eq(0).trigger("click");
+        });
+        
+        $("#mapUploadBtn").bind("click",function(){
+            $("#mapUpload").click();
+        });
+        $("#btnStep1Next").bind("click",function(){
+
+            //mapUpload
+            if(!$.drawImgSrc){
+                var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                swal($.globalLang[lang]["PLEASE_IMPORT_MAP"],"","error");
+                return false;
+            }
+            if($.drawSquares[0]===undefined){
+                var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                swal($.globalLang[lang]["PLEASE_CHOOSE_REQUIREMENT_AREA"],"","error");
+                return false;
+            }
+            $("#btnScale").trigger("click");
+            go2Steps(2);
+        });
+            
+        $("#inputScale").bind("keyup change",function(){
+//                $("#htmlScale").html( parseFloat($("#inputScale").val())/$.scalePixel );
+                var scale = parseFloat($("#inputScale").val())/$.scalePixel;
+                $.imageScale = scale;
+                
+                var scaleImageWidth = getCloseHundred($.drawImg.width/3*$.imageScale)/$.imageScale;
+                var scaleOfOne = getCloseHundred($.drawImg.width/3*$.imageScale)/4;
+                for(var i=1;i<5;++i){
+                    $("#scaleForImage span:nth-child("+(i+1)+")").html(GetReadNumber(scaleOfOne*i));
+                }
+                $("#scaleForImage span:nth-child(5)").append("(m)");
+                $(".canvasScale,.canvasScaleImage").css("visibility","visible");//.css("display","block")
+                $(".canvasScaleImage").css("width",scaleImageWidth);
+                $(".canvasScale").css("width",scaleImageWidth*5/4);
+                $(".canvasScale").eq(0).css("left",-scaleImageWidth/8+10);
+        }).keyup(function(e) {
+            if (e.which == 13) {
+                $("#btnNextAction").trigger("click");
+            }
+        });
+        $("#inputHeight").bind("keyup change",function(){
+                var height = parseFloat($("#inputHeight").val());
+                var APListPos = $(".listOfComponent[component-type='"+$.setAPHeightType+"'] .list-group-item[index="+$.setAPIndex+"]");
+                if($.setAPHeightType==="sensorNode")
+                    $.drawSensorNode[$.setAPIndex]["height"] = height;
+                else if($.setAPHeightType==="uplinkPoint")
+                    $.drawUplinkPoint[$.setAPIndex]["height"] = height;
+                var info = APListPos.data("info");
+                info["height"] = height;
+                APListPos.data("info", info);
+        });
+
+        $("#btnStep2Prev").bind("click",function(){
+            
+            $("#btnRequirementArea").trigger("click");
+            go2Steps(1);
+        });
+        $("#btnStep2Next").bind("click",function(){
+
+            if($.imageScale===undefined){
+                var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                swal($.globalLang[lang]["PLEASE_DRAW_INPUT_YOUR_SCALE"],"","error");
+                return false;
+            }
+
+            resetCanvasComponent();
+            $("#btnDrag").trigger("click");
+            go2Steps(3);
+        });
+        
+        $("#btnStep3Prev").bind("click",function(){
+            $("#btnStraightDrawWall").trigger("click");
+            resetCanvasComponent();
+            go2Steps(2);
+        });
+        
+        $("#btnStep3Next").bind("click",function(){
+            
+            if( $('[name="apType"]:checked').val()===undefined ){
+                var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                swal($.globalLang[lang]["PLEASE_CHOOSE_AP_TYPE"],"","error");
+                return false;
+            }
+            
+            var deployApType = $('[name="apType"]:checked').attr("value");
+            if( $("[id=inputMiniRSSI][for="+deployApType+"]").val()==="" ){
+                var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                swal($.globalLang[lang]["PLEASE_INPUT_MINI_RSSI"],"","error");
+                return false;
+            }
+            var miniRSSI = parseInt( $("[id=inputMiniRSSI][for="+deployApType+"]").val() );
+            if( miniRSSI > -50 || miniRSSI < -100 ){
+                var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                swal($.globalLang[lang]["PLEASE_SET_RANGE"],"","error");
+                return false;
+            }
+            
+            if( $("[id=inputAPHeight][for="+deployApType+"]").val()==="" ){
+                var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                swal($.globalLang[lang]["PLEASE_INPUT_AP_HEIGHT"],"","error");
+                return false;
+            }
+            
+            resetCanvasComponent();
+//            $(".nav.nav-pills li").removeClass("active");
+            
+            
+            if( $('[name="apType"]:checked').val() === "Ap" ){
+                
+                //delete all uplink point
+                $('.listOfComponent[component-type="uplinkPoint"] .close').trigger("click");
+                $("#placeSelectUplinkPoint").hide();
+            }
+            else if( $('[name="apType"]:checked').val() === "Mesh" ){
+                
+                
+                $("#placeSelectUplinkPoint").show();
+            }
+            $("#btnSensorNode").trigger("click");
+            go2Steps(4);
+        });
+        
+        $("#btnStep4Prev").bind("click",function(){
+            $("#btnDrag").trigger("click");
+            go2Steps(3);
+        });
+        
+        $("#btnStep4Next").bind("click",function(){
+            
+            loading_ajax_show();
+            
+            var deployApType = $('[name="apType"]:checked').attr("value");
+            var ap = { "range":$('[id=selectApValue][for='+deployApType+']').val(), "height":parseFloat($("[id=inputAPHeight][for="+deployApType+"]").val()) };
+            
+            var wallLine = arrayValue($.drawLines).concat(arrayValue($.drawStraightLines));
+            var wallArr = [];
+            var x,y,lineWidth,min,max;
+            $.each(wallLine,function(k,v){
+                if(v!==undefined){
+                    
+                    lineWidth = parseInt(v.lineWidth);
+                    if(Math.abs(v.y2-v.y1)>=Math.abs(v.x2-v.x1)){
+                        //y長
+                        if(v.y1>=v.y2){
+                            min = v.y2; max = v.y1;
+                        }
+                        else{
+                            min = v.y1; max = v.y2;
+                        }
+                            
+                        for(y=min;y<=max;y++){
+                            x = Math.ceil((v.x2-v.x1+1)/(max-min+1)*(y-min+1))+v.x1;
+                            for(var z=parseInt(-(lineWidth-1)/2); z<parseInt(-(lineWidth-1)/2)+lineWidth; z++){
+                                wallArr[wallArr.length] = {"x":Math.abs(x+z),"y":y,"w_type":v.w_type};
+                                
+                            console.log(k);
+                            }
+                        }
+                    }
+                    else{
+                        //x長
+                        if(v.x1>=v.x2){
+                            min = v.x2; max = v.x1;
+                        }
+                        else{
+                            min = v.x1; max = v.x2;
+                        }
+                        for(x=min;x<=max;x++){
+                            y = Math.ceil((v.y2-v.y1+1)/(max-min+1)*(x-min+1))+v.y1;
+                            for(var z=parseInt(-(lineWidth-1)/2); z<parseInt(-(lineWidth-1)/2)+lineWidth; z++){
+                                wallArr[wallArr.length] = {"x":x,"y":Math.abs(y+z),"w_type":v.w_type};
+                                
+                            console.log(k);
+                            }
+                        }
+                    }
+                }
+            });
+
+            $.each($.drawSquaresForElevator,function(k,v){
+                if(v!==undefined)
+                for(var i=v.x1;i<=v.x2;i++){
+                    for(var j=v.y1;j<=v.y2;j++){
+                        wallArr[wallArr.length] = {"x":i,"y":j,"w_type":"0"};
+                    }
+                }
+            });
+            
+            console.log({
+                    "pos":wallArr,
+                    "imgWidth": $.drawImg.width,
+                    "imgHeight": $.drawImg.height,
+                    "requirementArea": $.drawSquares[0],
+                    "elevator": arrayValue($.drawSquaresForElevator),
+                    "uplinkPoint": arrayValue($.drawUplinkPoint),
+                    "sensorNode": arrayValue($.drawSensorNode),
+                    "apType": $('[name="apType"]:checked').val(),
+                    "ap": ap,
+                    "scale": parseFloat($.imageScale),
+                    "miniRSSI":$("[id=inputMiniRSSI][for="+deployApType+"]").val()
+            });
+            
+            if($('[name="apType"]:checked').val()==="Mesh"){
+                var uplinkPoint = [];
+                var sensorNode = arrayValue($.drawSensorNode).concat(arrayValue($.drawUplinkPoint));
+                var manuallyDeployNum = sensorNode.length;
+            }
+            else if($('[name="apType"]:checked').val()==="Ap"){
+                var uplinkPoint = [];
+                var sensorNode = arrayValue($.drawSensorNode);
+                var manuallyDeployNum = arrayValue($.drawSensorNode).length;
+            }
+            console.log(sensorNode);
+            console.log(manuallyDeployNum);
+            
+            
+            $.ajax({
+                type:"POST",
+                url: "jsp/first.jsp",
+//                    dataType: "JSON",
+                data: {
+                    "pos":JSON.stringify(wallArr),
+                    "imgWidth": $.drawImg.width,
+                    "imgHeight": $.drawImg.height,
+                    "requirementArea": JSON.stringify($.drawSquares[0]),
+                    "elevator": JSON.stringify(arrayValue($.drawSquaresForElevator)),
+                    "uplinkPoint": JSON.stringify(uplinkPoint),
+                    "sensorNode": JSON.stringify(sensorNode),
+                    "apType": $('[name="apType"]:checked').val(),
+                    "ap": JSON.stringify(ap),
+                    "scale": GetDecimals(parseFloat($.imageScale),2),
+                    "miniRSSI":$("[id=inputMiniRSSI][for="+deployApType+"]").val()
+                },
+                success: function(data){
+                        data = JSON.parse(data);
+                        console.log(data);
+                        $.debugData = data;
+                        
+                        loading_ajax_hide();
+                        go2Steps(5);
+                        
+                        $(".coverCanvas[type=heatmap]").css("background-image","url('../../III/resources/images/heatmap/"+data.heatmap_fname+"')").show();
+                        var deployApType = $('[name="apType"]:checked').attr("value");
+                        var selectTag = $('[id=selectApValue][for='+deployApType+']');
+                        var optTag = selectTag.find("[value="+selectTag.val()+"]");
+                        $.each(data.Deployed_AP_pos,function(k,v){
+                            if(k>=manuallyDeployNum)
+                                addOneSensorNode(v.x, v.y, selectTag.val(), parseFloat($("[id=inputAPHeight][for="+deployApType+"]").val()), $.drawSensorNode.length, optTag.attr("image"), optTag.attr("device"))
+                        });
+                        
+                        $.indr_RSSI_information = data.indr_RSSI_information;
+                        
+                        $("#btnDownloadExcel").parent().attr("href","../resources/reports/"+data.excel_report);
+                        
+                        $("#btnReDraw").show();
+
+                },
+                error:function(xhr, ajaxOptions, thrownError){
+                    console.log("errrrrrrrrrrrrrrrrrrorrrrrrrrrrrrrrrrrrrrrr");
+                    console.log(xhr.status); 
+                    console.log(thrownError); 
+                }
+            });
+
+        });
+    
+
+        $("#btnReDraw").bind("click",function(e){
+                $(".coverCanvas").hide();
+                $("#btnReDraw").hide();
+                go2Steps(4);
+        });
+        
+        $("#btnReBuild").bind("click",function(e){
+                $("#btnStep4Next").trigger("click");
+        });
+        
+        
+        $(".canvas-state-group").bind("click",function(e){
+                $("#inputScalePlace").hide();
+                if($(this).hasClass("active")){
+                    $(this).removeClass("active");
+                } else {
+                    $(".canvas-state-group").removeClass("active");
+                    $(this).addClass("active");
+                }
+        });
+        
+        $("#btnCleanSensorNode").bind("click",function(e){
+                $.drawSensorNode = [];
+                $('.listOfComponent[component-type="sensorNode"] .list-group').html("");
+                drawWhole();
+        });
+        
+        function resetCanvasComponent(){
+                $("#dragFrame,#inputScalePlace,#inputHeightPlace").hide();
+                $(".listOfComponent .list-group-item.active").removeClass("active");
+                drawWhole();
+        }
+        
+        //get wall list
+        function getWallList(){
+                $.ajaxq("queue",{
+                    type:"GET",
+                    dataType: "text",
+                    url: "jsp/wall.jsp",
+                    data: {
+                        "func" : "list"
+                    },
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if( data.success ) {
+                                var html="";
+                                var traArr = ["Metal_Sliver","GLASS_BLUE","CUBICLE_YELLOW","BRICK_RED","CONCRETE_GRAY","WOOD_BROWN","WATER_GREEN"];
+                                $.each(data.data,function(k,v){
+                                    html += '<option value="#'+v.w_color_rgb+'" w_type="'+v.w_id+'" translate="'+traArr[k]+'">'+$.globalLang[getCookie("IIITranslate")][traArr[k]]+"("+v.w_attenuation_factor+'dB)</option>';
+                                });
+                                
+                                $('#wallColor').html(html);
+                                
+                                $("#wallColor").bind("change",function(e){
+                                    var pos = $("#wallColor").next();
+//                                    pos.removeClass();
+//                                    var selectOptPos = $("#wallColor [value="+$(this).val()+"]");
+//                                    var w_color = $("#wallColor [value="+$(this).val()+"]").attr("w_type");
+                                    pos.css("background-color",$(this).val());
+//                                    pos.addClass("icon-box-"+w_type);
+                                }).trigger("change");
+                        }
+                        else {
+                                swal("ERROR", data.msg, "error");
+                        }
+                    },
+                    error:function(xhr, ajaxOptions, thrownError){ 
+                        console.log(xhr.status); 
+                        console.log(thrownError); 
+                    }
+                });
+        }
+        
+        //get access point list
+        function getAccessPointList(){
+                $.ajax({
+                    type:"GET",
+                    dataType: "text",
+                    url: "jsp/access_point.jsp",
+                    data: {
+                        "func" : "list"
+                    },
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if( data.success ) {
+                                var html="";
+                                $.each(data.data,function(k,v){
+                                    if($.inArray(v.ap_species,["all","uplinkpoint"])!==-1)
+                                        html += '<option value="'+v.ap_range+'" device="'+v.ap_name+'" image="'+v.ap_image+'">'+v.ap_name+'(range:'+v.ap_range+'m)</option>';
+                                });
+                                $('#selectUplinkPoint').html(html);
+                                $('[id=selectApValue][for=Mesh]').html(html);
+                                html="";
+                                $.each(data.data,function(k,v){
+                                    if($.inArray(v.ap_species,["all","sensornode"])!==-1)
+                                        html += '<option value="'+v.ap_range+'" device="'+v.ap_name+'" image="'+v.ap_image+'">'+v.ap_name+'(range:'+v.ap_range+'m)</option>';
+                                });
+                                $('#selectSensorNode').html(html);
+                                $('[id=selectApValue][for=Ap]').html(html);
+                        }
+                        else {
+                                swal("ERROR", data.msg, "error");
+                        }
+                    },
+                    error:function(xhr, ajaxOptions, thrownError){ 
+                        console.log(xhr.status); 
+                        console.log(thrownError); 
+                    }
+                });
+        }
+        
+        $( "#dragFrame" ).draggable({
+            containment: '#canvas',
+            drag: function(event) {
+                var elmnt = this;
+                var top = $(this).position().top;
+                var left = $(this).position().left;
+                var componentType = elmnt.getAttribute("component-type");
+                var listIndex = elmnt.getAttribute("index");
+                var info = $(this).data("info");
+                if($.inArray(componentType,["wall","straightWall","elevator","uplinkPoint","sensorNode"])==-1){
+                    return false;
+                }
+                updateComponentPos(componentType,listIndex,info,left,top,left+elmnt.offsetWidth ,top+elmnt.offsetHeight );
+            },
+        })
+        
+        function dragPlaceEvent(){
+            $( ".dragPlace>div" ).draggable({
+                containment: '#canvas',
+                start: function(event) {
+//                    var elmnt = this;
+//                    var top = $(this).position().top;
+//                    var left = $(this).position().left;
+//                    var componentType = elmnt.getAttribute("component-type");
+//                    var listIndex = elmnt.getAttribute("index");
+//                    var info = $(this).data("info");
+//                    if($.inArray(componentType,["wall","elevator","uplinkPoint","sensorNode"])==-1){
+//                        return false;
+//                    }
+                    //$(".listOfComponent[component-type="+componentType+"] [index="+info.index+"]").trigger("click");
+                },
+                drag: function(event) {
+                    var elmnt = this;
+                    var top = $(this).position().top;
+                    var left = $(this).position().left;
+                    var componentType = elmnt.getAttribute("component-type");
+                    var listIndex = elmnt.getAttribute("index");
+                    var info = $(this).data("info");
+                    if($.inArray(componentType,["wall","straightWall","elevator","uplinkPoint","sensorNode"])==-1){
+                        return false;
+                    }
+                    updateComponentPos(componentType,listIndex,info,left,top,left+elmnt.offsetWidth ,top+elmnt.offsetHeight );
+                },
+            })
+        }
+        
+        function dragElement(elmnt) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0, componentType, listIndex;
+            if (document.getElementById(elmnt.id + "header")) {
+                /* if present, the header is where you move the DIV from:*/
+                document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+            } else {
+                /* otherwise, move the DIV from anywhere inside the DIV:*/
+                elmnt.onmousedown = dragMouseDown;
+            }
+            
+            function dragMouseDown(e) {
+                e = e || window.event;
+                // get the mouse cursor position at startup:
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+            }
+
+            function closeDragElement() {
+                /* stop moving when mouse button is released:*/
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+        
+        
+    </script>
+    
+</body>
+</html>

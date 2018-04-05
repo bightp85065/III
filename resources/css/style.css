@@ -1,0 +1,138 @@
+@charset "utf-8";
+/* CSS Document */
+html {
+  background-image: url(../images/loginbg.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif,"å¾®è?Ÿæ­£é»‘é??";
+}
+
+
+body {
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+}
+.wrap {
+  float: right;
+  position: absolute;
+  top: 130px;
+  right: 10%;
+  z-index: 2;
+}
+.login_wrap {
+  height: 340px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgba(255,255,255,0.70);
+  width: 350px;
+  margin-top: 14px;
+  border: 1px solid #8D9D56;
+  padding-top: 10px;
+}
+
+.wrap.animated.zoomIn #nex_logo {
+  margin-top: -2px;
+}
+.wrap.animated.zoomIn img {
+  margin-left: 60px;
+  background-image: url(url);
+  margin-bottom: 12px;
+  margin-top: 30px;
+}
+
+
+#login_form {
+  margin-left: 34px;
+}
+#username {
+  border-radius: 3px;
+  border: 1px solid #B1B1B1;
+  width: 265px;
+  height: 33px;
+  background-image: url(../images/user.png);
+  background-repeat: no-repeat;
+  background-position: 250px 13px;
+  background-color: hsla(0,0%,94%,0.80);
+  padding-left: 10px;
+  float: left;
+}
+#password {
+  border: 1px solid #B1B1B1;
+  width: 265px;
+  border-radius: 3px;
+  height: 33px;
+  background-image: url(../images/key.png);
+  background-repeat: no-repeat;
+  background-position: 250px 13px;
+  background-color: hsla(0,0%,94%,0.80);
+  padding-left: 10px;
+  float: left;
+}
+.Import {
+  width: 10px;
+  float: left;
+  margin-left: -135px;
+  margin-top: -22px;
+}
+tr .text1 {
+  font-size: 0.8em;
+  color: #4A4F54;
+  padding-top: 13px;
+}
+
+#loginbn {
+  width: 277px;
+  background-color: #FFFFFF;
+  border-radius: 3px;
+  color: #4A4F55;
+  font-size: 0.75em;
+  font-weight: bold;
+  height: 33px;
+  margin-top: 15px;
+  color: #FFFFFF;
+  background-image: -webkit-linear-gradient(90deg,rgba(75,75,75,1.00) 0%,rgba(152,152,152,1.00) 100%);
+  background-image: -moz-linear-gradient(90deg,rgba(75,75,75,1.00) 0%,rgba(152,152,152,1.00) 100%);
+  background-image: -o-linear-gradient(90deg,rgba(75,75,75,1.00) 0%,rgba(152,152,152,1.00) 100%);
+  background-image: linear-gradient(0deg,rgba(75,75,75,1.00) 0%,rgba(152,152,152,1.00) 100%);
+  /* [disabled]text-shadow: 1px 1px rgba(255,255,255,0.60); */
+  border: 1px solid #5C5C5C;
+}
+#loginbn:hover {
+  background-image: -webkit-linear-gradient(90deg,rgba(130,102,147,1.00) 0.52%,rgba(90,64,105,1.00) 100%);
+  background-image: -moz-linear-gradient(90deg,rgba(130,102,147,1.00) 0.52%,rgba(90,64,105,1.00) 100%);
+  background-image: -o-linear-gradient(90deg,rgba(130,102,147,1.00) 0.52%,rgba(90,64,105,1.00) 100%);
+  background-image: linear-gradient(0deg,rgba(130,102,147,1.00) 0.52%,rgba(90,64,105,1.00) 100%);
+  border: 1px solid #493057;
+}
+#ncarelogo {
+  float: left;
+  margin-left: 5%;
+  position: fixed;
+  top: 25px;
+}
+
+#footer {
+  position: fixed;
+  bottom: 0px;
+  /* [disabled]z-index: 1; */
+  width: 100%;
+  height: 45px;
+  /* [disabled]opacity: 1; */
+/*  padding-bottom: 30px;*/
+  left: 0px;
+}
+#footer p {
+  color: hsla(0,0%,38%,1.00);
+  font-size: 9px;
+  text-align: center;
+  padding-top: 0px;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -1,0 +1,70 @@
+/* ● start.html Start */
+.content {
+    min-height: 207px;
+    margin-top: 4px;
+}
+.headContent {
+    display: none;
+}
+
+.content .nav {
+    height: 70px;
+    overflow: hidden;
+    width: 100%;
+}
+.content .nav {
+  border-bottom: none;
+  box-shadow: none;
+}
+.content .nav .nav-tabs{
+    border:  none;
+}
+#subContent .sContentBox .subOption {
+    border-top: 1px solid #CBCBCB;
+    border-bottom: 1px solid #CBCBCB;
+    box-shadow: 0px 1px white, 0px -1px 0px white;
+    padding-left: 84px;
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
+    background: linear-gradient(to bottom, #4e4e4e, #5a5a5a);
+    box-shadow: 0px 2px 2px 0px rgba(0,0,0,.5);
+}
+
+.head input[type="button" i],
+.head input[type="submit" i],
+.head input[type="reset" i],
+.head input[type="file" i]::-webkit-file-upload-button,
+.head button {
+    background-color: transparent;
+}
+
+.head .btn.focus,
+.head .btn:focus,
+.head .btn:hover {
+    color: #00ffff;
+    outline:0;
+}
+.head .btn.active,
+.head .btn:active {
+  box-shadow: none;
+}
+
+.head .btn {
+    color: #fff;
+    text-decoration: underline;
+    background: transparent;
+}
+
+.listBox button.btn {
+    margin-left: 20px;
+}
+/* ● start.html End */
+
+@media screen and (max-width: 550px) {
+    .head a button {
+        display: none;
+    }
+}
+
+

@@ -1,0 +1,55 @@
+{
+  "data": {
+    "productType": {
+      "pt_id": 2,
+      "pt_name": "畫眉鶇科系列",
+      "pt_ename": "Full-heated Yolk Foo",
+      "pt_main_project": "合美健 畫眉鶇科系列",
+      "pt_emain_project": "Series product main copy",
+      "pt_sub_project": "擁天籟之韻 古來及鳥中瑰寶",
+      "pt_esub_project": "Series product sub-copy",
+      "pt_introduce": "系列產品介紹文案（後台上稿）",
+      "pt_eintroduce": "Series of products introduced",
+      "pt_image": "20171221175250918000.jpg",
+      "pt_order": 1,
+      "pt_create_datetime": "2017-11-13 22:01:55"
+    },
+    "product": [
+      {
+        "p_id": 3,
+        "p_pt_id": 2,
+        "p_name": "全熟蛋黃飼料",
+        "p_ename": "Full-heated Yolk Food",
+        "p_image": "2017122117525158400.png",
+        "p_specification": "500g × 24 鋁箔立袋 / 箱  每包建議售價 : 110元",
+        "p_especification": "500g × 20 aluminum foil bags / carton Suggested retail price: 45 yuan",
+        "p_introduce": "以生鮮蛋黃調配多種天然原料，料性溫和是配方特色，極適合畫眉鳥的初期馴養，對縮短馴養期頗有助益，為上手後的表現水準打好基礎。",
+        "p_eintroduce": "Based on the diversity of raw materials for the formula , <br> Made of 2.5m / m short nodular particles, <br> Suitable for general omnivore large birds.",
+        "p_no": "NO.11",
+        "p_bird_name": "畫眉鳥",
+        "p_bird_ename": "English bird name",
+        "p_slider": "{\"1\":\"201712141256271150003Y3AQ.jpg\"}",
+        "p_bird_image": "{\"1\":\"2017122117525158400SE4ML.jpg\",\"2\":\"201712211752515840070C15.jpg\",\"3\":\"20171221175251584001UZ52.jpg\"}",
+        "p_create_datetime": "2017-11-13 23:13:22"
+      },
+      {
+        "p_id": 13,
+        "p_pt_id": 2,
+        "p_name": "高卡動物蛋白飼料",
+        "p_ename": "High Calorie Animal Protein Food",
+        "p_image": "20171221175250996000.png",
+        "p_specification": "500g × 12 鋁箔立袋 / 箱 每包建議售價 : 180元",
+        "p_especification": "500g × 20 aluminum foil bags / carton Suggested retail price: 180",
+        "p_introduce": "獨家配方，專為畫眉鳥的高度飼養要求及比賽目的而設計，能起得提昇鳴唱意願、亮麗的羽毛、鵝黃腳脛及喙的作用，深得行家肯定與信賴。",
+        "p_eintroduce": "english word",
+        "p_no": "No.20",
+        "p_bird_name": "畫眉鳥",
+        "p_bird_ename": "English bird name",
+        "p_slider": "{\"1\":\"20171214125747330200A69Z1.jpg\"}",
+        "p_bird_image": "{\"2\":\"20171221175250996000CM7CC.jpg\",\"3\":\"201712211752509960004QZV1.jpg\",\"4\":\"20171221175250996000YVJFP.jpg\"}",
+        "p_create_datetime": "2017-12-13 17:00:21"
+      }
+    ]
+  },
+  "success": true
+}

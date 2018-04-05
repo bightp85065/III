@@ -1,0 +1,52 @@
+@charset "UTF-8";
+
+input[type="radio"] {
+    margin: -1px 5px 0px;
+    vertical-align: middle;
+}
+
+.btn.active {
+    box-shadow:  inset 0 3px 5px rgba(0,0,0,.125);
+    color: #333;
+    background-color: #e6e6e6;
+}
+
+.form-control, .single-line {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #e5e6e7;
+    border-radius: 1px;
+    color: inherit;
+    display: block;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 100%;
+    font-size: 14px;
+}
+body{ background-color: ivory; }
+#canvas{
+    border:1px solid red;
+}
+.boostrapBtn{
+    font-size: 18px;
+    text-transform: none;
+    letter-spacing: normal;
+    line-height: 1.5;
+    border-radius: 0.3rem;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    color: #fff;
+    background-color: #2595FF;
+    border-color: #2595FF;
+}
+.boostrapBtn:hover{
+    color: #fff;
+    background-color: #0082fe;
+    border-color: #007cf1;
+    text-decoration: none;
+}

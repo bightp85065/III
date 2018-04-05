@@ -1,0 +1,239 @@
+
+<%@ page import="org.json.JSONArray" %>
+<%@ page import="org.json.JSONException" %>
+<%@ page import="org.json.JSONObject" %>
+
+<%@ page import="javax.imageio.ImageIO" %>
+<%@ page import="java.awt.*" %>
+<%@ page import="java.awt.image.BufferedImage" %>
+<%@ page import="java.io.*" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="static java.lang.StrictMath.cos" %>
+<%@ page import="static java.lang.StrictMath.sin" %>
+
+<%@ page import="java.io.FileInputStream" %>
+<%@ page import="java.io.IOException" %>
+<%@ page import="java.io.InputStream" %>
+
+<%@ page import="jxl.Workbook" %>
+<%@ page import="jxl.WorkbookSettings" %>
+<%@ page import="jxl.write.Label" %>
+<%@ page import="jxl.write.WritableSheet" %>
+<%@ page import="jxl.write.WritableWorkbook" %>
+<%@ page import="jxl.write.WriteException" %>
+
+<%@ page import="com.mitlab.AlgorithmPack" %>
+<%@ page import="com.mitlab.DataPacket" %>
+<%@ page import="com.mitlab.FunctionPack" %>
+<%@ page import="com.mitlab.JSONparser" %>
+
+<%!
+	public class EXCELwriter {
+    	public void export(DataPacket inputPacket, String fileName) throws WriteException, IOException {
+        	System.out.printf("Start Exporting!\n");
+			File csvFile = new File(fileName);
+       		WorkbookSettings wbSettings = new WorkbookSettings();
+	        // wbSettings.setLocale(new Locale("en", "EN"));
+    	    WritableWorkbook workbook = null;
+        	try {
+            	workbook = Workbook.createWorkbook(csvFile, wbSettings);
+	        } catch (IOException e) {
+    	        e.printStackTrace();
+        	}
+	        // Excel sheet name. 0 represents first sheet
+    	    WritableSheet sheet = workbook.createSheet("Site Survey Report", 0);
+        	// adding Titles
+	        sheet.addCell(new Label(0, 0, "Deplaoy AP: Index"));
+    	    sheet.addCell(new Label(1, 0, "Coordinate X(m)"));
+        	sheet.addCell(new Label(2, 0, "Coordinate Y(m)"));
+
+	        sheet.addCell(new Label(3, 0, "Pre-Built AP: Index"));
+    	    sheet.addCell(new Label(4, 0, "Coordinate X(m)"));
+        	sheet.addCell(new Label(5, 0, "Coordinate Y(m)"));
+	        sheet.addCell(new Label(6, 0, "Power"));
+
+    	    sheet.addCell(new Label(7, 0, "Pre-Built Uplink-point: Index"));
+        	sheet.addCell(new Label(8, 0, "Coordinate X(m)"));
+	        sheet.addCell(new Label(9, 0, "Coordinate Y(m)"));
+
+    	    // write date
+	        // Deploy AP
+    	    for (int i = 0; i < inputPacket.index_elected_x.size(); i++) {
+        	    sheet.addCell(new Label(0, i + 1, String.valueOf(i + 1)));
+	            sheet.addCell(new Label(1, i + 1, String.valueOf(inputPacket.index_elected_x.get(i) * inputPacket.scale)));
+	            sheet.addCell(new Label(2, i + 1, String.valueOf(inputPacket.index_elected_y.get(i) * inputPacket.scale)));
+    	    }
+        	// Pre-Built AP
+	        for (int i = 0; i < inputPacket.json_content_sensorNode_x.size(); i++) {
+    	        sheet.addCell(new Label(3, i + 1, String.valueOf(i + 1)));
+        	    sheet.addCell(new Label(4, i + 1, String.valueOf(inputPacket.json_content_sensorNode_x.get(i) * inputPacket.scale)));
+	            sheet.addCell(new Label(5, i + 1, String.valueOf(inputPacket.json_content_sensorNode_y.get(i) * inputPacket.scale)));
+	            sheet.addCell(new Label(6, i + 1, String.valueOf(inputPacket.json_content_sensorNode_power.get(i))));
+    	    }
+       		// uplink-Point
+	        for (int i = 0; i < inputPacket.json_content_uplinkPoint_x.size(); i++) {
+    	        sheet.addCell(new Label(7, i + 1, String.valueOf(i + 1)));
+	            sheet.addCell(new Label(8, i + 1, String.valueOf(inputPacket.json_content_uplinkPoint_x.get(i) * inputPacket.scale)));
+	            sheet.addCell(new Label(9, i + 1, String.valueOf(inputPacket.json_content_uplinkPoint_y.get(i) * inputPacket.scale)));
+	        }
+
+	        workbook.write();
+	        workbook.close();
+	        System.out.printf("Exporting is done!\n");
+	    }
+	}
+
+%>
+
+<%
+    // main script
+
+    // ----------------------------------- ONLY EXIST IN JSP -----------------------------------
+
+    JSONObject jsonCallback = new JSONObject();
+
+    float scale = Float.parseFloat(request.getParameter("scale"));
+
+    int imgWidth = Integer.valueOf(request.getParameter("imgWidth"));
+    int imgHeight = Integer.valueOf(request.getParameter("imgHeight"));
+
+    JSONObject requirementArea = new JSONObject(request.getParameter("requirementArea"));
+    JSONArray pos = new JSONArray(request.getParameter("pos"));
+    JSONArray ap = new JSONArray(request.getParameter("ap"));
+
+    JSONArray elevator = new JSONArray(request.getParameter("elevator"));
+    JSONArray uplinkPoint = new JSONArray(request.getParameter("uplinkPoint"));
+    JSONArray sensorNode = new JSONArray(request.getParameter("sensorNode"));
+    String apType = request.getParameter("apType");
+
+    JSONObject jsonObj = new JSONObject();
+
+    jsonObj.put("imgWidth", imgWidth);
+    jsonObj.put("imgHeight", imgHeight);
+    jsonObj.put("scale", scale);
+    jsonObj.put("requirementArea", requirementArea);
+    jsonObj.put("pos", pos);
+    jsonObj.put("ap", ap);
+    jsonObj.put("elevator", elevator);
+    jsonObj.put("uplinkPoint", uplinkPoint);
+    jsonObj.put("sensorNode", sensorNode);
+    jsonObj.put("apType", apType);
+
+    // ----------------------------------- ONLY EXIST IN JSP -----------------------------------
+
+    int state_wall = 255;
+
+    DataPacket packet = new DataPacket();
+    FunctionPack functionPack = new FunctionPack();
+    AlgorithmPack algorithmPack = new AlgorithmPack();
+    JSONparser jsonParser = new JSONparser();
+
+	int oneBlockSize = functionPack.drawScale(jsonParser.getScale(jsonObj));
+	packet.scale = jsonParser.getScale(jsonObj);
+
+    int inputJOSNArray[][] = jsonParser.drawMAP(jsonObj, packet.state_wall, packet.state_elevator, packet.state_manualDeployAP, packet.state_manualDeployAP, packet.state_sensorNodeValue);
+    packet.arr_cols = inputJOSNArray.length; //width for x
+    packet.arr_rows = inputJOSNArray[0].length; //height for y
+
+    // read Parameter from JSON
+    packet.json_content_x = jsonParser.getParameterJSON(jsonObj, 0);
+    packet.json_content_y = jsonParser.getParameterJSON(jsonObj, 1);
+    packet.json_content_type = jsonParser.getParameterJSON(jsonObj, 2);
+    packet.json_content_apIntensity = jsonParser.getParameterJSON(jsonObj, 3);
+
+    packet.json_content_sensorNode_x = jsonParser.getParameterJSON(jsonObj, 4);
+    packet.json_content_sensorNode_y = jsonParser.getParameterJSON(jsonObj, 5);
+    packet.json_content_sensorNode_power = jsonParser.getParameterJSON(jsonObj, 6);
+
+    packet.json_content_uplinkPoint_x = jsonParser.getParameterJSON(jsonObj, 7);
+    packet.json_content_uplinkPoint_y = jsonParser.getParameterJSON(jsonObj, 8);
+
+    // // Parameter status
+    // packet.state_walked_non = 0;
+    // packet.state_walked_x = 1;
+    // packet.state_walked_y = 2;
+    // packet.state_walked_both = 3;
+
+    // packet.state_border_begin = 11;
+    // packet.state_border_end = 12;
+    // packet.state_border_together = 13;
+
+    // packet.state_voted_x = 21;
+    // packet.state_voted_y = 22;
+    // packet.state_voted_both = 23;
+
+    // // Parameter
+    // packet.signal_intensity = 128;
+
+    // // output Matrix
+    // packet.index_elected_x = new ArrayList<>();
+    // packet.index_elected_y = new ArrayList<>();
+    // packet.index_counter_x = 0;
+    // packet.index_counter_y = 0;
+
+    // // Initialize array value: Extract element in file_content
+    // packet.states_channels = 5;
+    // packet.channel_route = 0;
+    // packet.channel_vote = 1;
+    // packet.channel_intensity = 2;
+    // packet.channel_inputsource = 3;
+    // packet.channel_apchooser = 4;
+    packet.mapArray = new int[packet.arr_cols][packet.arr_rows][packet.states_channels];
+
+    // if there is /n exist cols +1
+    // System.out.printf("Array size = %d x %d (cols x rows)\n", arr_cols, arr_rows);
+    for (int row = 0; row < packet.arr_rows; row++) {
+        // System.out.println(str_arr.length);
+        for (int col = 0; col < packet.arr_cols; col++) {
+            packet.mapArray[col][row][packet.channel_route] = inputJOSNArray[col][row];
+            packet.mapArray[col][row][packet.channel_inputsource] = inputJOSNArray[col][row];
+            if ((col == (packet.arr_cols - 1)) || (row == (packet.arr_rows - 1))) {
+                packet.mapArray[col][row][packet.channel_inputsource] = packet.state_wall;
+            }
+            packet.mapArray[col][row][packet.channel_vote] = 0;
+            packet.mapArray[col][row][packet.channel_intensity] = 0;
+        }
+    }
+
+    if (packet.json_content_sensorNode_x.size() != 0){
+        for (int sensorNode_counter = 0; sensorNode_counter < packet.json_content_sensorNode_x.size(); sensorNode_counter++) { // choose other ap if range is small
+            System.out.printf("Find a sensorNode >> x = %d, y = %d, power = %d\n", packet.json_content_sensorNode_x.get(sensorNode_counter), packet.json_content_sensorNode_y.get(sensorNode_counter), packet.json_content_sensorNode_power.get(sensorNode_counter));
+            packet = functionPack.drawCircle(packet, packet.json_content_sensorNode_x.get(sensorNode_counter), packet.json_content_sensorNode_y.get(sensorNode_counter), packet.json_content_sensorNode_power.get(sensorNode_counter), packet.state_sensorNodeValue, packet.channel_inputsource);
+            // drawCircle(int x, int y, int r, int intensity, int[][][] inputArray, int selectedChannel)
+        }
+    }
+
+    if (packet.json_content_uplinkPoint_x.size() != 0){
+        for (int uplinkPoint_counter = 0; uplinkPoint_counter < packet.json_content_uplinkPoint_x.size(); uplinkPoint_counter++) { // choose other ap if range is small
+            System.out.printf("Find a uplinkPoint >> x = %d, y = %d\n", packet.json_content_uplinkPoint_x.get(uplinkPoint_counter), packet.json_content_uplinkPoint_y.get(uplinkPoint_counter));
+            packet = functionPack.drawCircle(packet, packet.json_content_uplinkPoint_x.get(uplinkPoint_counter), packet.json_content_uplinkPoint_y.get(uplinkPoint_counter), 20, packet.state_uplinkPointValue, packet.channel_inputsource);
+            // drawCircle(int x, int y, int r, int intensity, int[][][] inputArray, int selectedChannel)
+
+        }
+    }
+
+    System.out.printf("mapArray size = %d x %d x %d\n", packet.mapArray.length, packet.mapArray[0].length, packet.mapArray[0][0].length);
+
+    packet = algorithmPack.apDeployAlgorithm(packet);
+    // packet = deployMainAP(packet);
+
+    functionPack.drawJPG(packet);
+
+	EXCELwriter writer = new EXCELwriter();
+    writer.export(packet, "/opt/tomcat/webapps/III/resources/reports/SiteSurvey_Report.xls");
+
+		
+	jsonCallback.put("scaleLength",oneBlockSize);
+	
+	
+%>
+
+<%= jsonCallback%>
+<%--<%= pos%>
+<%= imgWidth%>
+<%= imgHeight%>
+<%= requirementArea%>
+<%= scale%>
+<%= ap%>--%>
+<%--<%= jsonObj%>--%>

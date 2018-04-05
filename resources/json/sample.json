@@ -1,0 +1,29 @@
+{
+  "data": [
+    {
+      "pt_id": 2,
+      "pt_name": "IWF300",
+      "pt_ename": "802.11n",
+      "pt_main_project": "17 dBm / 50mv",
+      "pt_emain_project": "FF:FF:FF:00:00:0A",
+      "ssid": "SSID 3"
+    },
+    {
+      "pt_id": 12,
+      "pt_name": "IWF310",
+      "pt_ename": "For Contest Oscines",
+      "pt_main_project": "34 dBm / 100mv",
+      "pt_emain_project": "FF:AB:CC:00:00:5F",
+      "ssid": "SSID 5"
+    },
+    {
+      "pt_id": 3,
+      "pt_name": "NIO51",
+      "pt_ename": "Omnivorous bird nutrition series",
+      "pt_main_project": "30 dBm / 70mv",
+      "pt_emain_project": "GG:AA:AA:11:00:7A",
+      "ssid": "SSID 9"
+    }
+  ],
+  "success": true
+}

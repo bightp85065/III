@@ -1,0 +1,134 @@
+body {
+    background-color: #dfdfdf;
+}
+#navbar .navbar-bottom {
+    background-color: #8181b1;
+    padding: 20px 0;
+}
+#navbar .nav>li>a {
+    padding: 0px 15px;
+}
+.navbar-default a {
+    color: #fff;
+}
+.nav>li>a:focus, .nav>li>a:hover {
+    text-decoration: underline;
+    background-color: transparent;
+    color: #00ffff;
+}
+.navbar-default .navbar-bottom > li {
+    border-right: 1px solid #ffffff;
+}
+.navbar p.mobile-hide{
+    position: absolute;
+    top: 70px;
+    color: #8181b1;
+}
+.filter .import,
+.sweet-alert button.confirm{
+    background: linear-gradient(to bottom, #4e4e4e, #5a5a5a);
+    box-shadow: 0px 2px 2px 0px rgba(0,0,0,.5);
+    color: #fff;
+    background-color: transparent;
+    border-radius: 4px;
+}
+.sweet-alert button.confirm:hover{
+    background: linear-gradient(to bottom, #4e4e4e, #333);
+}
+
+.container>p {
+    color: #4e4e4e;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+
+
+table.dataTable thead tr th {
+    color: #797979;
+    font-weight: 100;
+}
+table.dataTable td, table.dataTable th {
+    border: 1px solid #797979;
+}
+table.dataTable thead tr th {
+    letter-spacing: 3.2px;
+}
+table.dataTable tbody tr {
+    color: #666666;
+    font-weight: 100;
+    letter-spacing: 2px;
+}
+
+/* ● Modal Start */
+.modal .btn-success,
+.modal .btn-disable {
+    background: linear-gradient(to bottom, #4e4e4e, #5a5a5a);
+    box-shadow: 0px 2px 2px 0px rgba(0,0,0,.5);
+    color: #fff;
+    background-color: transparent;
+    border-radius: 4px;
+    outline: 0px;
+    margin-right: 20px;
+}
+.modal-title {
+    color: #8182b2;
+}
+.modal-content {
+    min-height: 75vh;
+    padding-bottom: 20px;
+}
+.modal .p-sm{
+    color: #8182b2;
+}
+.modal table.dataTable tbody tr {
+    background-color: #f7f6fb;
+}
+.modal table.dataTable td, table.dataTable th {
+    border: 1px solid #9993bf;
+}
+.modal .filter input, .filter select {
+    border: 1px solid #dddaeb;
+    box-shadow: none;
+    border-radius: 0px;
+    width: 85%;
+    min-width: 11vw;
+    height: 33px;
+    padding: 0px 10px;
+}
+.modal .m-t-lg {
+    margin-top: 50px;
+/*     margin-left: 35%;*/
+}
+.modal table.dataTable tbody tr {
+    letter-spacing: 1px;
+}
+
+@media screen and (max-width: 870px){
+    .modal .m-r-sm {
+        margin-right: 3px;
+    }
+    .modal-body {
+        position: relative;
+        padding: 20px 50px 35px;
+    }
+    .modal table.dataTable td:nth-child(1),
+    .modal table.dataTable th:nth-child(1) {
+        width: 35%;
+    }
+    .modal .modal-sm {
+        width: 95%;
+    }
+    .modal .m-t-lg {
+        margin-top: 20px;
+        margin-left: 0;
+    }
+    .modal .btn-success,
+    .modal .btn-disable {
+        margin-bottom: 10px;
+    }
+}
+
+
+
+/* ● Modal End */

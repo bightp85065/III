@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+        <title>Nexcom</title>
+        <link rel="shortcut icon" href="../resources/images/NEXCOM.jpg"/>
+<!--Adobe Edge Runtime-->
+        <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+        <script src="resources/js/kernel/md5.js"></script>
+        <script src="resources/js/global.js"></script>
+<!--        <script type="text/javascript" charset="utf-8" src="edge_includes/edge.6.0.0.min.js"></script>-->
+        <style>
+            .edgeLoad-EDGE-7147164 {
+                    visibility:hidden; 
+            }
+            td .Import #userimport {
+                margin-left: 135px;
+            }
+            td .Import #passimport {
+                margin-left: 135px;
+            }
+        </style>
+        <link href="resources/css/AS.css" rel="stylesheet" type="text/css">
+        <link href="resources/css/style.css" rel="stylesheet" type="text/css">
+    <script>
+//        AdobeEdge.loadComposition('login', 'EDGE-7147164', {
+//            scaleToFit: "none",
+//            centerStage: "none",
+//            minW: "0px",
+//            maxW: "undefined",
+//            width: "undefined",
+//            height: "undefined"
+//        }, {dom: [ ]}, {dom: [ ]});
+    </script>
+<!--Adobe Edge Runtime End-->
+
+</head>
+
+
+<body >
+	
+ <div class="wrap animated zoomIn">
+<div class="login_wrap " >
+    
+ <div id="nex_logo" ><img src="resources/images/title.png" alt=""  ></d>  
+    
+    
+    <div id="login_form">
+      
+      <table border="0">
+        <tbody>
+          <tr>
+            <td>
+              <input name="username" type="text" id="username" placeholder="username" value="admin">
+              <span class="Import"><img src="resources/images/!.png" alt="" width="17" height="17" id="userimport"/></span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input name="password" type="password" id="password" placeholder="password" value="admin">
+           <span class="Import"><img src="resources/images/!.png" alt="" width="17" height="17" id="passimport"/></span>   
+            </td>
+          </tr>
+          <tr>
+            
+            <td class="text1">Language 
+                <select name="Language" id="Language" style="font-size:12px; ">
+                    <option value="en-us">English</option>
+                    <option value="zh-tw">Chinese(zh-tw)</option>
+                </select>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <input name="loginbn" type="button" id="loginbn" value="LOGIN">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div></div>
+</div>   
+    
+     
+     
+     
+
+<div id="footer"><p>Industry 4.0 Device & Network Health Manager</p></div>
+	
+    <script>
+        
+        $("#userimport").hide();
+        $("#passimport").hide();
+        
+        function setCookie(name, value, expires, path, domain, secure){
+            document.cookie= name + "=" + escape(value) +
+            ((expires) ? "; expires=" + expires.toGMTString() : "") +
+            ((path) ? "; path=" + path : "") +       //you having wrong quote here
+            ((domain) ? "; domain=" + domain : "") +
+            ((secure) ? "; secure" : "");
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0; i<ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1);
+                if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+            }
+            return "";
+        }
+        
+        $("#loginbn").bind("click",function(){
+            $.ajax({
+                type:"POST",
+                dataType: "text",
+                url: "pages/jsp/account.jsp",
+                data: {
+                    "func": "login",
+                    "a_account": $("#username").val(),
+                    "a_password": md5($("#password").val())
+                },
+                success: function(data){
+                    console.log(data);
+                    data = JSON.parse(data);
+                    if( data.success ) {
+                            setCookie( "IIITranslate" , $("#Language").val() , "", "/" );
+                            location.href = "pages/start.html";
+                    }
+                    else 
+                    {
+                            $("#userimport").show();
+                            $("#passimport").show();
+                            show_remind(data.msg, "error");
+                    } 
+                },
+                error:function(xhr, ajaxOptions, thrownError){ 
+                    console.log(xhr.status); 
+                    console.log(thrownError); 
+                }
+            });
+        });
+        
+        
+            $.ajax({
+                type:"POST",
+                url: "pages/jsp/login2.jsp",
+//                    dataType: "JSON",
+                data: {},
+                success: function(data){
+                        data = JSON.parse(data);
+                        console.log(data);
+                },
+                error:function(xhr, ajaxOptions, thrownError){ 
+                    console.log(xhr.status); 
+                    console.log(thrownError); 
+                }
+            });
+    </script>
+</body>
+</html>
