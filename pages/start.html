@@ -15,6 +15,7 @@
         <script type="text/javascript" src="../resources/js/view_upload_img.js"></script>
         
         <script type="text/javascript" src="../resources/js/global.js"></script>
+        <script type="text/javascript" src="../resources/js/login.js"></script>
         
         <link href="../resources/css/reset.css" rel="stylesheet" type="text/css">
         <link href="../resources/css/style_.css" rel="stylesheet" type="text/css">
@@ -82,14 +83,14 @@
               <li id="sContentMenu_03">
                 <a href="#sContent_03">
                   <span class="icon_1"></span>
-                    <c translate="PREDICTIVE_SURVEY">Predictive Survey</c>
+                    <c translate="SENSOR_NODE">Sensor Node</c>
                   <span class="icon_2"></span>
                 </a>
               </li>
               <li id="sContentMenu_04">
                 <a href="#sContent_04">
                   <span class="icon_1"></span>
-                    <c translate="SENSOR_NODE">Sensor Node</c>
+                    <c translate="PREDICTIVE_SURVEY">Predictive Survey</c>
                   <span class="icon_2"></span>
                 </a>
               </li>
@@ -113,7 +114,7 @@
                             <input id="mapUpload" type="file" style="display:none;">
                             <img id="mapUploadBtn" src="../resources/images/download.png" width="19" height="22" alt="" style="cursor:pointer;"/>
                             <span class="button-group">
-                                <button id="btnStep1Next" class="btnStart" translate="NEXT_STEP">Next Step</button>
+                                <button class="btnStart btnNext" translate="NEXT_STEP">Next Step</button>
                             </span>
                         </div>
                         <ul class="nav nav-pills">
@@ -161,8 +162,8 @@
                              </select>
                             <span>cm</span>
                             <span class="button-group">
-                                <button id="btnStep2Prev" class="btnStart" translate="PREV_STEP">Prev Step</button>
-                                <button id="btnStep2Next" class="btnStart" translate="NEXT_STEP">Next Step</button>
+                                <button class="btnStart btnPrev" translate="PREV_STEP">Prev Step</button>
+                                <button class="btnStart btnNext" translate="NEXT_STEP">Next Step</button>
                             </span>
                         </div>
                         
@@ -171,55 +172,12 @@
                             <li id="btnStraightDrawWall" class="action-group" index="2"><a href="#" translate="DRAW_Straight_WALL">Draw Straight Wall</a></li>
                             <li id="btnDrawWall" class="action-group" index="2"><a href="#" translate="DRAW_WALL">Draw Wall</a></li>
                             <li id="btnElevator" class="action-group" index="3"><a href="#" translate="ELEVATOR">Elevator</a></li>
-                            <span style="margin-left: 15px;">
-                                <button id="btnPrevAction" class="btnStart" translate="PREV_ACTION" style="margin-top: 15px;" hidden>Prev Action</button>
-                                <button id="btnNextAction" class="btnStart" translate="NEXT_ACTION" style="margin-top: 15px;">Next Action</button>
-                            </span>
                         </ul>
                     </div>
 
                 </div>
 
                 <div class="sContentBox tab-pane fade" id="sContent_03">
-                    <div class="subOption">
-                        <div class="listBox">
-                            <span><input id="apTypeMesh" type="radio" name="apType" value="Mesh" style="display:inline-block;" checked></span>
-                            <span><label for="apTypeMesh">MESH</label></span>
-                            
-                            <span class="placeForChooseApType" for="Mesh">
-                                <select id="selectApValue" for="Mesh" style="display: inline-block;"></select>
-                                <span style="width:90px;" translate="AP_HEIGHT">AP Height</span>
-                                <span><input id="inputAPHeight" step="0.1" style="padding-right: 0;width: 75px;" value="0" type="number" for="Mesh"></span>
-                                <span>m</span>
-                                <span style="width:90px;" translate="MINIMUM_RSSI">Minimum RSSI</span>
-                                <span><input id="inputMiniRSSI" step="1" style="padding-right: 0;width: 75px;" value="-100" for="Mesh"></span>
-                                <span>dBm</span>
-                            </span>
-                            <span class="button-group">
-                                <button id="btnStep3Prev" class="btnStart" translate="PREV_STEP">Prev Step</button>
-                                <button id="btnStep3Next" class="btnStart" translate="NEXT_STEP">Next Step</button>
-                            </span>
-                        </div>
-
-                        <div class="listBox">
-                            <span><input id="apTypeAP" type="radio" name="apType" value="Ap" style="display:inline-block;"></span>
-                            <span><label for="apTypeAP">AP</label></span>
-                            
-                            <span class="placeForChooseApType" for="Ap" style="display: none;">
-                                <select id="selectApValue" for="Ap" style="display: inline-block;"></select>
-                                <span style="width:90px;" translate="AP_HEIGHT">AP Height</span>
-                                <span><input id="inputAPHeight" step="0.1" style="padding-right: 0;width: 75px;" value="0" type="number" for="Ap"></span>
-                                <span>m</span>
-                                <span style="width:90px;" translate="MINIMUM_RSSI">Minimum RSSI</span>
-                                <span><input id="inputMiniRSSI" step="1" style="padding-right: 0;width: 75px;" value="-100" for="Ap"></span>
-                                <span>dBm</span>
-                            </span>
-                            
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sContentBox tab-pane fade" id="sContent_04">
                     <div class="subOption">
                         <div class="listBox">
                             <span translate="SENSOR_NODE_COLON" style="width: 90px;">Sensor Node:</span>
@@ -230,12 +188,133 @@
                                 </ul>
                             </span>
                             <span class="button-group" style="width: 90px;">
-                                <button id="btnStep4Prev" class="btnStart" translate="PREV_STEP">Prev Step</button>
-                                <button id="btnStep4Next" class="btnStart" translate="BUILD">BUILD</button>
+                                <button class="btnStart btnPrev" translate="PREV_STEP">Prev Step</button>
+                                <button class="btnStart btnNext" translate="NEXT_STEP">Next Step</button>
+                            </span>
+                            <span id="sensorNodeAttr" style="width: auto;">
+                                <h3>RECEIVER</h3>
+                                <span style="width:90px;" translate="">RX Power</span>
+                                <span><input readonly="readonly" step="0.1" style="padding-right: 0;width: 75px;" value="-60" type="number"></span>
+                                <span>[dBm]</span>
+                                <span style="width:90px;" translate="">Cable Loss</span>
+                                <span><input step="0.1" style="padding-right: 0;width: 75px;" value="0" type="number"></span>
+                                <span>[dB]</span>
+                                <span style="width:90px;" translate="">Antenna Gain</span>
+                                <span><input step="0.1" style="padding-right: 0;width: 75px;" value="0" type="number"></span>
+                                <span>[dBi]</span>
+                                <span style="width:90px;" translate="">Frequency</span>
+                                <span><input step="1" style="padding-right: 0;width: 75px;" value="2400" type="number"></span>
+                                <span>[MHz]</span>
                             </span>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="listBox" id="placeSelectUplinkPoint">
+                <div class="sContentBox tab-pane fade" id="sContent_04">
+                    <div class="subOption">
+                        <div index="1">
+                            <div class="listBox">
+                                <span><input id="apTypeMesh" type="radio" name="apType" value="Mesh" style="display:inline-block;" checked></span>
+                                <span><label for="apTypeMesh">MESH</label></span>
+
+                                <span class="placeForChooseApType" for="Mesh">
+                                    <select id="selectApValue" for="Mesh" style="display: inline-block;"></select>
+                                    <span style="width:90px;" translate="AP_HEIGHT">AP Height</span>
+                                    <span><input id="inputAPHeight" step="0.1" style="padding-right: 0;width: 75px;" value="0" type="number" for="Mesh"></span>
+                                    <span>m</span>
+                                    <span style="width:90px;" translate="MINIMUM_RSSI">Minimum RSSI</span>
+                                    <span><input id="inputMiniRSSI" step="1" style="padding-right: 0;width: 75px;" value="-100" for="Mesh"></span>
+                                    <span>dBm</span>
+
+                                    <div style="width: auto;">
+                                        <table style="transform: 100px 0;line-height: 1.5; vertical-align: top; width: 100%;" cellpadding="7" border="0" for="Mesh">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="50%">
+                                                        <h1><b>TRANSMITTER</b></h1>
+                                                        <h1>TX Power</h1>
+                                                        <h1><input step="0.1" name="tx_power" value="20" size="3" maxlength="6" type="number">[dBm]</h1>
+                                                        <h1>Cable Loss</h1>
+                                                        <h1><input step="0.1" name="cable_loss_tx" value="0" size="8" maxlength="8" type="number">[dB]</h1>
+                                                        <h1>Antenna Gain</h1>
+                                                        <h1><input step="0.1" name="antenna_gain_tx" value="0" size="4" maxlength="4" type="number">[dBi]</h1>
+                                                        <h1>Frequency</h1>
+                                                        <h1><input step="1" name="freq" value="2400" size="8" maxlength="8" type="number">[MHz]</h1>
+                                                    </td>
+                                                    <td width="50%">
+                                                        <h1><b>RECEIVER</b></h1>
+                                                        <h1>RX Power</h1>
+                                                        <h1><input readonly="readonly" step="0.1" type="number" size="8" name="rssi" value="-60">[dBm]</h1>
+                                                        <h1>Cable Loss</h1>
+                                                        <h1><input step="0.1" type="number" name="cable_loss_rx" value="0" size="8" maxlength="8">[dB]</h1>
+                                                        <h1>Antenna Gain</h1>
+                                                        <h1><input step="0.1" type="number" name="antenna_gain_rx" value="0" size="4" maxlength="4">[dBi]</h1>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </span>
+
+
+                                <span class="button-group">
+                                    <button class="btnStart btnPrev" translate="PREV_STEP">Prev Step</button>
+                                    <button class="btnStart btnNext" id="btnStep4Next" translate="NEXT_STEP">Next Step</button>
+                                    <button class="btnStart btnNext" id="btnStep4Build" translate="BUILD" style="display: none;">BUILD</button>
+                                </span>
+                            </div>
+
+                            <div class="listBox">
+                                <span><input id="apTypeAP" type="radio" name="apType" value="Ap" style="display:inline-block;"></span>
+                                <span><label for="apTypeAP">AP</label></span>
+
+                                <span class="placeForChooseApType" for="Ap" style="display: none;">
+                                    <select id="selectApValue" for="Ap" style="display: inline-block;"></select>
+                                    <span style="width:90px;" translate="AP_HEIGHT">AP Height</span>
+                                    <span><input id="inputAPHeight" step="0.1" style="padding-right: 0;width: 75px;" value="0" type="number" for="Ap"></span>
+                                    <span>m</span>
+                                    <span style="width:90px;" translate="MINIMUM_RSSI">Minimum RSSI</span>
+                                    <span><input id="inputMiniRSSI" step="1" style="padding-right: 0;width: 75px;" value="-100" for="Ap"></span>
+                                    <span>dBm</span>
+
+                                    <div style="width: auto;">
+
+                                        <table style="transform: 100px 0;line-height: 1.5; vertical-align: top; width: 100%;" cellpadding="7" border="0" for="Ap">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="50%">
+                                                        <h1><b>TRANSMITTER</b></h1>
+                                                        <h1>TX Power</h1>
+                                                        <h1><input step="0.1" name="tx_power" value="20" size="3" maxlength="6" type="number">[dBm]</h1>
+                                                        <h1>Cable Loss</h1>
+                                                        <h1><input step="0.1" name="cable_loss_tx" value="0" size="8" maxlength="8" type="number">[dB]</h1>
+                                                        <h1>Antenna Gain</h1>
+                                                        <h1><input step="0.1" name="antenna_gain_tx" value="0" size="4" maxlength="4" type="number">[dBi]</h1>
+                                                        <h1>Frequency</h1>
+                                                        <h1><input step="1" name="freq" value="2400" size="8" maxlength="8" type="number">[MHz]</h1>
+                                                    </td>
+                                                    <td width="50%">
+                                                        <h1><b>RECEIVER</b></h1>
+                                                        <h1>RX Power</h1>
+                                                        <h1><input step="0.1" type="number" size="8" name="rssi" value="-60" readonly="readonly">[dBm]</h1>
+                                                        <h1>Cable Loss</h1>
+                                                        <h1><input step="0.1" type="number" name="cable_loss_rx" value="0" size="8" maxlength="8">[dB]</h1>
+                                                        <h1>Antenna Gain</h1>
+                                                        <h1><input step="0.1" type="number" name="antenna_gain_rx" value="0" size="4" maxlength="4">[dBi]</h1>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </span>
+
+                            </div>
+                        
+                        </div>
+                        
+
+                        <div class="listBox" index="2">
                             <span translate="UPLINK_POINT">Uplink Point:</span>
                             <select id="selectUplinkPoint" style="display: inline-block;"></select>
                             <span style="transform: translateY(28%); margin-left: 5px;">
@@ -243,7 +322,12 @@
                                     <li id="btnUplinkPoint" role="presentation"><a href="#" translate="DRAW">Draw</a></li>
                                 </ul>
                             </span>
+                            <span class="button-group">
+                                <button class="btnStart btnPrev" translate="PREV_STEP">Prev Step</button>
+                                <button class="btnStart btnNext" translate="BUILD">BUILD</button>
+                            </span>
                         </div>
+                        
                     </div>
                 </div>
                 <div class="sContentBox tab-pane fade" id="sContent_05">
@@ -325,6 +409,9 @@
     <div class="modal" id="modalManagement" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" style="z-index: 9999;">
             <div class="modal-content animated fadeIn">
+                <button type="button" class="close" data-dismiss="modal" style="margin-right: 5px;margin-top: 5px;position: absolute;right: 0;">
+                    <span aria-hidden="true" style="font-size: 30px;">×</span><span class="sr-only">Close</span>
+                </button>
                 <iframe src="account_management.html" width="100%" style="height: 95vh;"></iframe>
             </div>
         </div>
@@ -342,6 +429,8 @@
             });
             
             function init(){
+                //page position
+                $.nowPage = "1-1";
                 //radio button reset
                 $("#apTypeMesh").click();
                 //input reset
@@ -377,6 +466,14 @@
                 $(".placeForChooseApType").hide();
                 $(".placeForChooseApType[for="+$(this).attr("value")+"]").show();
                 
+                if($(this).attr("value")=="Mesh"){
+                    $("#btnStep4Build").hide();
+                    $("#btnStep4Next").show();
+                }
+                else if($(this).attr("value")=="Ap"){
+                    $("#btnStep4Next").hide();
+                    $("#btnStep4Build").show();
+                }
             });
         
 
@@ -460,10 +557,22 @@
         });
         
         function go2Steps(step){
-                var pos = $(".nav-tabs a").eq(step-1);
+                $.nowPage = step;
+                step = step.split("-");
+                var pos = $(".nav-tabs a").eq(parseInt(step[0])-1);
                 pos.tab('show');
                 $(".nav-tabs a").removeClass('active');
                 pos.addClass('active');
+                
+                if(step[0]=="2"){
+//                    $("#sContent_0"+step[0]).find("[index="+step[1]+"]").trigger();
+                    $(".nav.nav-pills li.action-group").removeClass("activeS");
+                    $("#sContent_0"+step[0]).find("li.action-group[index="+step[1]+"]").addClass("activeS");
+                }
+                else if(step[0]=="4"){
+                    $("#sContent_0"+step[0]).find("[index]").hide();
+                    $("#sContent_0"+step[0]).find("[index="+step[1]+"]").show();
+                }
         }
         
         $(".nav.nav-pills li").bind("click",function(){
@@ -477,54 +586,22 @@
             else{
                 $(".dragPlace").hide();
             }
-            if($(this).hasClass("action-group")){
-                $(".nav.nav-pills li.action-group").removeClass("activeS");
-                var index = $(this).attr("index");
-                $("li.action-group[index="+index+"]").addClass("activeS");
-                $("#btnPrevAction,#btnNextAction").show();
-                if( $(this).attr("index")==="1" ){
-                    $("#btnPrevAction").hide();
-                }
-                else if( $(this).attr("index")==="3" ){
-                    $("#btnNextAction").hide();
-                }
-            }
-        });
-        
-        $("#btnPrevAction").bind("click",function(){
-            var index = $("li.action-group.activeS").attr("index");
-            $(".nav.nav-pills li.action-group[index="+(parseInt(index)-1)+"]").eq(0).trigger("click");
-        });
-        $("#btnNextAction").bind("click",function(){
-            var index = $("li.action-group.activeS").attr("index");
-            if(index==="1"){
-                if($.imageScale===undefined){
-                    var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
-                    swal($.globalLang[lang]["PLEASE_DRAW_INPUT_YOUR_SCALE"],"","error");
-                    return false;
-                }
-            }
-            $(".nav.nav-pills li.action-group[index="+(parseInt(index)+1)+"]").eq(0).trigger("click");
+//            if($(this).hasClass("action-group")){
+//                $(".nav.nav-pills li.action-group").removeClass("activeS");
+//                var index = $(this).attr("index");
+//                $("li.action-group[index="+index+"]").addClass("activeS");
+//                $("#btnPrevAction,#btnNextAction").show();
+//                if( $(this).attr("index")==="1" ){
+//                    $("#btnPrevAction").hide();
+//                }
+//                else if( $(this).attr("index")==="3" ){
+//                    $("#btnNextAction").hide();
+//                }
+//            }
         });
         
         $("#mapUploadBtn").bind("click",function(){
             $("#mapUpload").click();
-        });
-        $("#btnStep1Next").bind("click",function(){
-
-            //mapUpload
-            if(!$.drawImgSrc){
-                var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
-                swal($.globalLang[lang]["PLEASE_IMPORT_MAP"],"","error");
-                return false;
-            }
-            if($.drawSquares[0]===undefined){
-                var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
-                swal($.globalLang[lang]["PLEASE_CHOOSE_REQUIREMENT_AREA"],"","error");
-                return false;
-            }
-            $("#btnScale").trigger("click");
-            go2Steps(2);
         });
             
         $("#inputScale").bind("keyup change",function(){
@@ -544,7 +621,7 @@
                 $(".canvasScale").eq(0).css("left",-scaleImageWidth/8+10);
         }).keyup(function(e) {
             if (e.which == 13) {
-                $("#btnNextAction").trigger("click");
+                $(".btnNext:eq(0)").trigger("click");
             }
         });
         $("#inputHeight").bind("keyup change",function(){
@@ -559,82 +636,169 @@
                 APListPos.data("info", info);
         });
 
-        $("#btnStep2Prev").bind("click",function(){
-            
-            $("#btnRequirementArea").trigger("click");
-            go2Steps(1);
-        });
-        $("#btnStep2Next").bind("click",function(){
+        $(".btnNext").bind("click",function(){
+            var arr = [ "1-1", "2-1", "2-2", "2-3", "3-1", "4-1", "4-2", "5-1" ];
+            var key = arraySearch(arr,$.nowPage);
+            console.log(arr[key+1]);
+            switch(arr[key+1]) {
+                case "2-1":
+                    if(!$.drawImgSrc){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_IMPORT_MAP"],"","error");
+                        return false;
+                    }
+                    if($.drawSquares[0]===undefined){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_CHOOSE_REQUIREMENT_AREA"],"","error");
+                        return false;
+                    }
+                    $("#btnScale").trigger("click");
+                    break;
+                case "2-2":
+                    if($.imageScale===undefined){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_DRAW_INPUT_YOUR_SCALE"],"","error");
+                        return false;
+                    }
+                    resetCanvasComponent();
+                    $("#btnStraightDrawWall").trigger("click");
+                    break;
+                case "2-3":
+                    $("#btnElevator").trigger("click");
+                    break;
+                case "3-1":
+                    $("#btnSensorNode").trigger("click");
+                    break;
+                case "4-1":
+                    var check = false;
+                    $.each( $("#sensorNodeAttr input"), function(k,v){
+                        if($(v).val()==""){
+                            check = true;
+                            return false;
+                        }
+                    });
+                    if(check){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_INPUT_RECEIVER_ATTRIBUTE"],"","error");
+                        return false;
+                    }
+                    
+                    if(arrayValue($.drawSensorNode).length===0){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_DRAW_LEAST_ONE_SENSOR_NODE"],"","error");
+                        return false;
+                    }
+                    
+                    $("#btnDrag").trigger("click");
+                    break;
+                case "4-2":
+                    
+                    if( $('[name="apType"]:checked').val()===undefined ){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_CHOOSE_AP_TYPE"],"","error");
+                        return false;
+                    }
 
-            if($.imageScale===undefined){
-                var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
-                swal($.globalLang[lang]["PLEASE_DRAW_INPUT_YOUR_SCALE"],"","error");
-                return false;
-            }
+                    var deployApType = $('[name="apType"]:checked').attr("value");
+                    if( $("[id=inputMiniRSSI][for="+deployApType+"]").val()==="" ){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_INPUT_MINI_RSSI"],"","error");
+                        return false;
+                    }
+                    var miniRSSI = parseInt( $("[id=inputMiniRSSI][for="+deployApType+"]").val() );
+                    if( miniRSSI > -50 || miniRSSI < -100 ){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_SET_RANGE"],"","error");
+                        return false;
+                    }
 
-            resetCanvasComponent();
-            $("#btnDrag").trigger("click");
-            go2Steps(3);
+                    if( $("[id=inputAPHeight][for="+deployApType+"]").val()==="" ){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_INPUT_AP_HEIGHT"],"","error");
+                        return false;
+                    }
+
+                    resetCanvasComponent();
+
+                    
+                    var check = false;
+                    $.each( $("table[for="+deployApType+"]").find("input"), function(k,v){
+                        console.log($(v).val());
+                        if($(v).val()===""){
+                            check = true;
+                            return false;
+                        }
+                    });
+                    if(check){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_INPUT_TRANSMITTER_AND_RECEIVER_ATTRIBUTE"],"","error");
+                        return false;
+                    }
+                    
+                    if( $('[name="apType"]:checked').val() === "Ap" ){
+
+                        //delete all uplink point
+                        $('.listOfComponent[component-type="uplinkPoint"] .close').trigger("click");
+                        
+                        arrangeAccessPoint();
+                        go2Steps(arr[key+2]);
+                        return false;
+                    }
+                    else if( $('[name="apType"]:checked').val() === "Mesh" ){
+                        
+                        $("#btnUplinkPoint").trigger("click");
+                    }
+                    
+                    
+                    break;
+                case "5-1":
+                    arrangeAccessPoint();
+                    break;
+            }
+            go2Steps(arr[key+1]);
         });
         
-        $("#btnStep3Prev").bind("click",function(){
-            $("#btnStraightDrawWall").trigger("click");
-            resetCanvasComponent();
-            go2Steps(2);
+        $(".btnPrev").bind("click",function(){
+            var arr = [ "1-1", "2-1", "2-2", "2-3", "3-1", "4-1", "4-2", "5-1" ];
+            var key = arraySearch(arr,$.nowPage);
+            
+            switch(arr[key-1]) {
+                case "1-1":
+                    resetCanvasComponent();
+                    $("#btnRequirementArea").trigger("click");
+                    break;
+                case "2-1":
+                    $("#btnScale").trigger("click");
+                    break;
+                case "2-2":
+                    $("#btnStraightDrawWall").trigger("click");
+                    break;
+                case "2-3":
+                    $("#btnElevator").trigger("click");
+                    break;
+                case "3-1":
+                    $("#btnSensorNode").trigger("click");
+                    break;
+                case "4-1":
+                    $("#btnDrag").trigger("click");
+                    break;
+                case "4-2":
+                    resetCanvasComponent();
+                    if( $('[name="apType"]:checked').val() === "Ap" ){
+                        $("#btnDrag").trigger("click");
+                        go2Steps(arr[key-2]);
+                        return false;
+                    }
+                    else if( $('[name="apType"]:checked').val() === "Mesh" ){
+                        $("#btnUplinkPoint").trigger("click");
+                    }
+                    break;
+            }
+            go2Steps(arr[key-1]);
         });
+
         
-        $("#btnStep3Next").bind("click",function(){
-            
-            if( $('[name="apType"]:checked').val()===undefined ){
-                var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
-                swal($.globalLang[lang]["PLEASE_CHOOSE_AP_TYPE"],"","error");
-                return false;
-            }
-            
-            var deployApType = $('[name="apType"]:checked').attr("value");
-            if( $("[id=inputMiniRSSI][for="+deployApType+"]").val()==="" ){
-                var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
-                swal($.globalLang[lang]["PLEASE_INPUT_MINI_RSSI"],"","error");
-                return false;
-            }
-            var miniRSSI = parseInt( $("[id=inputMiniRSSI][for="+deployApType+"]").val() );
-            if( miniRSSI > -50 || miniRSSI < -100 ){
-                var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
-                swal($.globalLang[lang]["PLEASE_SET_RANGE"],"","error");
-                return false;
-            }
-            
-            if( $("[id=inputAPHeight][for="+deployApType+"]").val()==="" ){
-                var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
-                swal($.globalLang[lang]["PLEASE_INPUT_AP_HEIGHT"],"","error");
-                return false;
-            }
-            
-            resetCanvasComponent();
-//            $(".nav.nav-pills li").removeClass("active");
-            
-            
-            if( $('[name="apType"]:checked').val() === "Ap" ){
-                
-                //delete all uplink point
-                $('.listOfComponent[component-type="uplinkPoint"] .close').trigger("click");
-                $("#placeSelectUplinkPoint").hide();
-            }
-            else if( $('[name="apType"]:checked').val() === "Mesh" ){
-                
-                
-                $("#placeSelectUplinkPoint").show();
-            }
-            $("#btnSensorNode").trigger("click");
-            go2Steps(4);
-        });
-        
-        $("#btnStep4Prev").bind("click",function(){
-            $("#btnDrag").trigger("click");
-            go2Steps(3);
-        });
-        
-        $("#btnStep4Next").bind("click",function(){
+        function arrangeAccessPoint(){
             
             loading_ajax_show();
             
@@ -695,19 +859,6 @@
                 }
             });
             
-            console.log({
-                    "pos":wallArr,
-                    "imgWidth": $.drawImg.width,
-                    "imgHeight": $.drawImg.height,
-                    "requirementArea": $.drawSquares[0],
-                    "elevator": arrayValue($.drawSquaresForElevator),
-                    "uplinkPoint": arrayValue($.drawUplinkPoint),
-                    "sensorNode": arrayValue($.drawSensorNode),
-                    "apType": $('[name="apType"]:checked').val(),
-                    "ap": ap,
-                    "scale": parseFloat($.imageScale),
-                    "miniRSSI":$("[id=inputMiniRSSI][for="+deployApType+"]").val()
-            });
             
             if($('[name="apType"]:checked').val()==="Mesh"){
                 var uplinkPoint = [];
@@ -722,6 +873,29 @@
             console.log(sensorNode);
             console.log(manuallyDeployNum);
             
+//            var deployApType = $('[name="apType"]:checked').attr("value");
+            var calJson = calculateBothDistanceAndInitPower($("table[for="+deployApType+"]"));
+            
+            console.log(calJson);
+            
+            console.log({
+                    "pos": wallArr,
+                    "imgWidth": $.drawImg.width,
+                    "imgHeight": $.drawImg.height,
+                    "requirementArea": $.drawSquares[0],
+                    "elevator": arrayValue($.drawSquaresForElevator),
+                    "uplinkPoint": uplinkPoint,
+                    "sensorNode": sensorNode,
+                    "sensorNodeImage": sensorNode[sensorNode.length-1].image,
+                    "apType": $('[name="apType"]:checked').val(),
+                    "ap": ap,
+                    "scale": GetDecimals(parseFloat($.imageScale),2),
+                    "miniRSSI":"-60",//$("[id=inputMiniRSSI][for="+deployApType+"]").val()
+                    "apAndApInitPower": calJson["apAndApInitPower"],
+                    "meshAndSSNInitPower": calJson["meshAndSSNInitPower"],
+                    "apAndApRange": calJson["apAndApRange"],
+                    "meshAndSSNRange": calJson["meshAndSSNRange"]
+            });
             
             $.ajax({
                 type:"POST",
@@ -735,10 +909,15 @@
                     "elevator": JSON.stringify(arrayValue($.drawSquaresForElevator)),
                     "uplinkPoint": JSON.stringify(uplinkPoint),
                     "sensorNode": JSON.stringify(sensorNode),
+                    "sensorNodeImage": sensorNode[sensorNode.length-1].image,
                     "apType": $('[name="apType"]:checked').val(),
                     "ap": JSON.stringify(ap),
                     "scale": GetDecimals(parseFloat($.imageScale),2),
-                    "miniRSSI":$("[id=inputMiniRSSI][for="+deployApType+"]").val()
+                    "miniRSSI":"-60",//$("[id=inputMiniRSSI][for="+deployApType+"]").val()
+                    "apAndApInitPower":calJson["apAndApInitPower"],
+                    "meshAndSSNInitPower":calJson["meshAndSSNInitPower"],
+                    "apAndApRange":calJson["apAndApRange"],
+                    "meshAndSSNRange":calJson["meshAndSSNRange"]
                 },
                 success: function(data){
                         data = JSON.parse(data);
@@ -746,9 +925,10 @@
                         $.debugData = data;
                         
                         loading_ajax_hide();
-                        go2Steps(5);
-                        
-                        $(".coverCanvas[type=heatmap]").css("background-image","url('../../III/resources/images/heatmap/"+data.heatmap_fname+"')").show();
+                        //go2Steps("5-1");
+                        var heatmap_fname = data.heatmap_fname;
+                        heatmap_fname = heatmap_fname.split("/")[heatmap_fname.split("/").length-1];
+                        $(".coverCanvas[type=heatmap]").css("background-image","url('../../III/resources/images/heatmap/"+heatmap_fname+"')").show();
                         var deployApType = $('[name="apType"]:checked').attr("value");
                         var selectTag = $('[id=selectApValue][for='+deployApType+']');
                         var optTag = selectTag.find("[value="+selectTag.val()+"]");
@@ -770,18 +950,16 @@
                     console.log(thrownError); 
                 }
             });
-
-        });
-    
-
+        }
+        
         $("#btnReDraw").bind("click",function(e){
                 $(".coverCanvas").hide();
                 $("#btnReDraw").hide();
-                go2Steps(4);
+                go2Steps("4-1");
         });
         
         $("#btnReBuild").bind("click",function(e){
-                $("#btnStep4Next").trigger("click");
+                
         });
         
         

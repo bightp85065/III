@@ -414,7 +414,7 @@
             $.drawIsDown=false;
             if($("#btnRequirementArea").hasClass("active")){
                 $.drawSquares = [ { x1:$.drawStartX,y1:$.drawStartY,x2:$.drawMouseX,y2:$.drawMouseY } ];
-                $("#btnStep1Next").trigger("click");
+                $(".btnNext:eq(0)").trigger("click");
                 $("#placeForScale").css("margin-left", (($.drawStartX<$.drawMouseX?$.drawStartX:$.drawMouseX)-10)+"px");
             }
             else if($("#btnScale").hasClass("active")){

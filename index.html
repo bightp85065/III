@@ -126,6 +126,7 @@
                     data = JSON.parse(data);
                     if( data.success ) {
                             setCookie( "IIITranslate" , $("#Language").val() , "", "/" );
+                            setCookie( "III_Token" , data.au_token , "", "/" );
                             location.href = "pages/start.html";
                     }
                     else 

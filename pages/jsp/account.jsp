@@ -36,6 +36,9 @@
             case "login": 
                 jsonCallback = login(request); 
                 break; 
+            case "loginByToken": 
+                jsonCallback = loginByToken(request); 
+                break; 
             case "delete": 
                 jsonCallback = accountDelete(request); 
                 break; 
@@ -61,6 +64,16 @@
 
 <%!
     
+    public static String randomAlphaNumeric(int count) {
+        String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder builder = new StringBuilder();
+        while (count-- != 0) {
+            int character = (int)(Math.random()*ALPHA_NUMERIC_STRING.length());
+            builder.append(ALPHA_NUMERIC_STRING.charAt(character));
+        }
+        return builder.toString();
+    }
+
     public static JSONObject createAccount(HttpServletRequest request) {
         
         JSONObject jsonCallback = new JSONObject();
@@ -163,18 +176,38 @@
             jsonCallback.put("data", data);
             
             
+            String au_token = randomAlphaNumeric(20);
+            jsonCallback.put("au_token", au_token);
             
             
-            
-            
-            String aid = Integer.toString(a_id);
-            query = "Update account SET a_last_datetime=? where a_id=?";
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();
+            String aid = Integer.toString(a_id);
+            ///////////////////////////////test
+            query = "INSERT INTO authenticate (au_a_id, au_token, au_effect_datetime) VALUES (?, ?, ?)";
+            
+            preparedStatement = con.prepareStatement(query);
+            preparedStatement.setString(1, aid);
+            preparedStatement.setString(2, au_token);
+            preparedStatement.setString(3, dateFormat.format(date));
+            int state = preparedStatement.executeUpdate();
+
+            if( state==0 ){
+                jsonCallback.put("success", false);
+                jsonCallback.put("data", "create token fail");
+                return jsonCallback;
+            }
+            
+            
+            
+            
+            
+            
+            query = "Update account SET a_last_datetime=? where a_id=?";
             PreparedStatement preparedStatement2 = con.prepareStatement(query);
             preparedStatement2.setString(1, dateFormat.format(date));
             preparedStatement2.setString(2, aid);
-            int state = preparedStatement2.executeUpdate();
+            state = preparedStatement2.executeUpdate();
 
 //            st.close();
 
@@ -195,7 +228,79 @@
 
         return jsonCallback;
     }
-    
+
+    public static JSONObject loginByToken(HttpServletRequest request) {
+        
+        JSONObject jsonCallback = new JSONObject();
+        //JSONArray data = new JSONArray();
+        JSONObject data2;
+        Connection con = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");    
+            // 其中test是我们要链接的数据库，user是数据库用户名，password是数据库密码。    
+            // 3306是mysql的端口号，一般是这个    
+            // 后面那串长长的参数是为了防止乱码，免去每次都需要在任何语句都加入一条SET NAMES UTF8    
+            String url = "jdbc:mysql://localhost:3306/iii?useUnicode=true&characterEncoding=utf8&useOldAliasMetadataBehavior=true";    
+            String user = "root";    
+            String password = "mitlab";    
+            con = DriverManager.getConnection(url, user, password);
+            
+            String query = "SELECT a.a_id, a.a_account, a.a_name, a.a_role FROM account as a JOIN authenticate as au on a.a_id=au.au_a_id WHERE au.au_token = ?";
+
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setString(1, request.getParameter("token"));
+            ResultSet rs = preparedStatement.executeQuery();
+            // create the java statement
+//            Statement st = con.createStatement();
+            rs.last(); 
+            int size = rs.getRow();
+            if(size==0){
+                jsonCallback.put("success", false);
+                jsonCallback.put("msg", "token error.");
+                return jsonCallback;
+            }
+            rs.beforeFirst();
+            // execute the query, and get a java resultset
+//            ResultSet rs = st.executeQuery(query);
+            // iterate through the java resultset
+            data2 = new JSONObject();
+
+            while (rs.next())
+            {
+                
+                
+                data2.put("a_id", rs.getInt("a_id"));
+                data2.put("a_account", rs.getString("a_account"));
+                data2.put("a_name", rs.getString("a_name"));
+                data2.put("a_role", rs.getString("a_role"));
+            }
+            jsonCallback.put("success", true);
+            jsonCallback.put("data", data2);
+            
+            
+            String au_token = randomAlphaNumeric(20);
+            jsonCallback.put("au_token", au_token);
+            
+//            st.close();
+
+//            out.println("sucessss！");  
+        } catch (Exception e) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+//            out.println(pw.toString());  
+//            out.println("<br>");
+//            out.println(e.toString());
+//            out.println(e.getMessage());
+            jsonCallback.put("success", false);
+            jsonCallback.put("msg2", e.toString());
+            jsonCallback.put("msg3", pw.toString());
+            jsonCallback.put("msg", e.getMessage());
+        }
+
+        return jsonCallback;
+    }
+
     public static JSONObject accountDelete(HttpServletRequest request) {
         
         JSONObject jsonCallback = new JSONObject();

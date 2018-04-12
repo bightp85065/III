@@ -349,13 +349,14 @@ function paddingRight(str,lenght){
 
 $.globalLang = { "zh-tw":{}, "en-us":{} };
 $("document").ready(function() {
-    
+        
         if( isEmpty( getCookie( "IIITranslate" ) ) )
             setCookie( "IIITranslate" ,"en-us" , "", "/" );
         
 	doTranslate( getCookie("IIITranslate") , $.globalLang[ getCookie("IIITranslate") ] );
+        
 });
-     
+
 $.strToMoneyNumber = function(str) {
     str = str.toString().split(".");
     var val = str[0].replace(/\,/g,"").split("").reverse();
@@ -559,4 +560,102 @@ function arrayValue(array){
             returnArr[returnArr.length] = v;
     });
     return returnArr;
+}
+
+
+function calculateBothDistanceAndInitPower(chooseTable){
+        
+        var returnJson = {};
+        
+        var pos = chooseTable.find("input");
+        
+//        var sensor_rx_power = $("#sensorNodeAttr").find("input").eq(0).val();
+        var sensor_cable_loss_rx = parseInt( $("#sensorNodeAttr").find("input").eq(1).val() );
+        var sensor_antenna_gain_rx = parseInt( $("#sensorNodeAttr").find("input").eq(2).val() );
+        var sensor_freq = parseInt( $("#sensorNodeAttr").find("input").eq(3).val() );
+        
+        var tx_power = parseInt( pos.eq(0).val() );
+        var cable_loss_tx = parseInt( pos.eq(1).val() );
+        var antenna_gain_tx = parseInt( pos.eq(2).val() );
+        
+        var freq = parseInt( pos.eq(3).val() );
+        var cable_loss_rx = parseInt( pos.eq(5).val() );
+        var antenna_gain_rx = parseInt( pos.eq(6).val() );
+        
+        var tmpArr = calculateDistanceAndInitPower( tx_power, cable_loss_tx, antenna_gain_tx, sensor_cable_loss_rx, sensor_antenna_gain_rx, sensor_freq );
+        
+        returnJson["meshAndSSNRange"] = tmpArr[0];
+        returnJson["meshAndSSNInitPower"] = tmpArr[1];
+        
+        var tmpArr = calculateDistanceAndInitPower( tx_power, cable_loss_tx, antenna_gain_tx, cable_loss_rx, antenna_gain_rx, freq );
+        
+        returnJson["apAndApRange"] = tmpArr[0];
+        returnJson["apAndApInitPower"] = tmpArr[1];
+        
+        return returnJson;
+}
+
+function calculateDistanceAndInitPower( tx_power, cable_loss_tx, antenna_gain_tx, cable_loss_rx, antenna_gain_rx, freq ){
+        
+        console.log( "tx_power="+tx_power );
+        console.log( "cable_loss_tx="+cable_loss_tx );
+        console.log( "antenna_gain_tx="+antenna_gain_tx );
+        console.log( "cable_loss_rx="+cable_loss_rx );
+        console.log( "antenna_gain_rx="+antenna_gain_rx );
+        console.log( "freq="+freq );
+        
+        var rx_power = -60;
+        
+        var rssi, pathloss;
+
+        /* inspired by Stefan Teuscher ... DANKE FUER DEN INPUT !!!!!!!!!*/
+
+        var offset_tx = 0;
+//        if(document.generator.tx_dB[0].checked) {offset_tx = 0;};
+//        if(document.generator.tx_dB[1].checked) {offset_tx = 2.15;};
+
+        var offset_rx = 0;
+//        if(document.generator.rx_dB[0].checked) {offset_rx = 0;};
+//        if(document.generator.rx_dB[1].checked) {offset_rx = 2.15;};
+
+        /* inspired by Jonathan Mlsna ... Thank You !!!! */
+
+        antenna_gain_tx = antenna_gain_tx + offset_tx;
+        antenna_gain_rx = antenna_gain_rx + offset_rx;
+
+//        var antenna_out = ( tx_power ) - ( cable_loss_tx ) + ( antenna_gain_tx );
+
+//        var antenna_in = antenna_out - pathloss ;
+
+//        var rx_in = antenna_in - cable_loss_rx ;
+
+        pathloss = tx_power - rx_power - cable_loss_tx - cable_loss_rx + antenna_gain_tx + antenna_gain_rx ;
+        pathloss = Math.round ( pathloss * 1000) / 1000 ;
+        
+        var distance = Math.exp( ( pathloss - 32.44 - 20 * Math.log(freq)/2.302585093 )/20 *2.302585093 ) ;
+        distance = distance * 1000 ; //meter
+        
+        var arr = [ distance.toString() ];
+        console.log( "distance="+distance );
+        
+        //if distance = 1 meter
+        pathloss = 32.44 + 20 * Math.log(freq)/2.302585093 + 20 * Math.log(0.001)/2.302585093 ;
+        pathloss = Math.round ( pathloss * 1000) / 1000 ;
+        
+        var initRssi = Math.round (100*(tx_power - pathloss - cable_loss_tx - cable_loss_rx + antenna_gain_tx + antenna_gain_rx ))/100;
+        
+        arr[arr.length] = initRssi.toString();
+        
+        console.log( "initRssi="+initRssi );
+        
+        return arr;
+        
+        
+}
+        
+function arraySearch(arr,val) {
+    for (var i=0; i<arr.length; i++)
+        if (arr[i] === val)                    
+            return i;
+    return false;
 }
