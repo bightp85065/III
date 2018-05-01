@@ -1,0 +1,42 @@
+
+@import url(plugins/bootstrap.min.css);/*bootstrap*/
+@import url(plugins/pagination.css);/*pagination*/
+@import url(plugins/animate.css);/*Animation*/
+@import url(plugins/sweetalert/sweetalert.css);/*sweetalert*/
+@import url(../font-awesome/css/font-awesome.min.css);/*font-awesome*/
+
+@font-face {
+    font-family: "PingFangTC";
+    src: url(../font/PingFang.ttf);
+}
+body {
+    font-family: PingFangTC;
+    overflow-x: hidden;
+}
+/*toggle mobile / web*/
+.mobile {
+    display: none;
+}
+.web {
+    display: block;
+}
+@media only screen and (max-width: 575px) {
+    .mobile {
+        display: block;
+    }
+    .web {
+        display: none;
+    }
+}
+
+.display-none{
+    display: none;
+}
+
+table.dataTable td, table.dataTable th{
+    white-space: nowrap;
+}
+
+.multiTd input{
+    width: 20%!important;
+}

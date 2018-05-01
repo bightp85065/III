@@ -55,7 +55,7 @@
     height: 720px; 
     background-image: url('https://140.118.122.246:24682/III/resources/images/indr_merge_color.jpg');
     background-size: cover;
-    opacity: 0.8;
+    opacity: 0.6;
 }
 .dragPlace{
     display: none;
@@ -203,4 +203,9 @@
 }
 #subContent .sContentBox .subOption .listBox span.placeForChooseApType{
 /*    width: auto;*/
+}
+.canvasBackgroundImg{
+    position: absolute;
+    opacity: 0.3;
+    z-index: -1;
 }

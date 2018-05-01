@@ -21,18 +21,17 @@
 
 <%@ page import="com.mitlab.JSONparser" %>
 <%@ page import="com.mitlab.DataPacket" %>
-<%@ page import="com.mitlab.ImageWeight" %>
 <%@ page import="com.mitlab.EXCELwriter" %>
 <%@ page import="com.mitlab.FunctionPack" %>
 <%@ page import="com.mitlab.AlgorithmPack" %>
 <%@ page import="com.mitlab.AlgorithmPatch" %>
 
-<%@ page import="org.bytedeco.javacv.*" %>
+<%-- <%@ page import="org.bytedeco.javacv.*" %>
 <%@ page import="org.bytedeco.javacpp.*" %>
 <%@ page import="org.bytedeco.javacpp.indexer.*" %>
 <%@ page import="org.bytedeco.javacpp.opencv_core.*" %>
 <%@ page import="org.bytedeco.javacpp.opencv_highgui.*" %>
-<%@ page import="org.bytedeco.javacpp.opencv_imgcodecs.*" %>
+<%@ page import="org.bytedeco.javacpp.opencv_imgcodecs.*" %> --%>
 
 <%@ page import="jxl.Workbook" %>
 <%@ page import="jxl.WorkbookSettings" %>
@@ -51,15 +50,13 @@
     JSONArray  heatmap_RGB_arr  = new JSONArray();
     JSONObject rssi_info_obj    = new JSONObject();
     JSONObject heatmap_RGB_obj  = new JSONObject();
-    JSONObject ap_pos_info_obj  = new JSONObject();
+    // JSONObject ap_pos_info_obj  = new JSONObject();
     JSONObject jsonCallback     = new JSONObject();
-
-    double scale  = Double.parseDouble(request.getParameter("scale"));
+    String scale  = request.getParameter("scale");
+    // double scale  = Double.parseDouble(request.getParameter("scale"));
     // float scale  = Float.valueOf(request.getParameter("scale"));
-
     int imgWidth  = Integer.valueOf(request.getParameter("imgWidth"));
     int imgHeight = Integer.valueOf(request.getParameter("imgHeight"));
-
     JSONObject jsonObj          = new JSONObject();                                         // store indoor image information
     JSONArray pos               = new JSONArray(request.getParameter("pos"));               // wall positions
     JSONArray elevator          = new JSONArray(request.getParameter("elevator"));          // elevator positions
@@ -67,7 +64,7 @@
     JSONArray uplinkPoint       = new JSONArray(request.getParameter("uplinkPoint"));       // uplinkPoint positions
     JSONObject ap               = new JSONObject(request.getParameter("ap"));               // ap information
     JSONObject requirementArea  = new JSONObject(request.getParameter("requirementArea"));  // Requirement Area
-
+    JSONArray regionClassifications = new JSONArray(request.getParameter("regionClassifications"));  // Sub-Requirement Area
     String apType   = request.getParameter("apType");
     String miniRSSI = request.getParameter("miniRSSI");
     String apAndApInitPower = request.getParameter("apAndApInitPower");
@@ -92,15 +89,11 @@
     jsonObj.put("apAndApRange", apAndApRange);
     jsonObj.put("meshAndSSNRange", meshAndSSNRange);
     jsonObj.put("sensorNodeImage", sensorNodeImage);
+    jsonObj.put("regionClassifications", regionClassifications);
 
     // ----------------------------------- ONLY EXIST IN JSP ----------------------------------- //
 
     // ===== COPY TO JSP : START ===== //
-    int img_pxl_value;
-    int deployed_ap_num;
-	    // int weight_value;
-    final UByteIndexer img_Idx;
-    // final UByteIndexer img_weight_Idx;
     JSONparser    jsonParser    = new JSONparser();
     DataPacket    packet        = new DataPacket();
     AlgorithmPack algorithmPack = new AlgorithmPack();
@@ -111,7 +104,7 @@
     JSONObject jsonObject_wall_info = null;
     JSONObject jsonObject_indr_img = new JSONObject();
     JSONObject jsonObject_program_state = new JSONObject();
-    Point deployed_AP_pos = new Point();
+    // Point deployed_AP_pos = new Point();
 
     jsonObject_wall_info = functionPack.get_wallList_fromDB();
     jsonParser.generate_wall_info(packet, jsonObject_wall_info);
@@ -125,77 +118,35 @@
     packet.apImg_path = Paths.get(packet.dst_img_output_path, packet.apImg_fname);                                 // folder path with file name
     packet.apImg_path_fname = packet.apImg_path.toString();
 
-    // packet.AP_dict.put("p_d0", -20);        // The strength with dBm at "1 meter" distance(d0) from the AP
-    // packet.AP_dict.put("nW_C", 2);          // The maximum number of obstructions(walls) up to which the attenuation factor makes a difference
-    // packet.AP_dict.put("n_rate", 2);        // The rate at which the path loss increases with distance
-    // packet.AP_dict.put("d0", 1);            // Reference distance
-
         // out.println(packet.AP_dict.toString(4));
     // out.println(jsonObject_wall_info.toString(4));
     // out.println(packet.wall_dict.toString(4));
 
     // out.println("\n------------------------------------------------------------------");
-    // out.println("JsonObject parameters     >> imgWidth = " + jsonObj.getInt("imgWidth"));
-    // out.println("JsonObject parameters     >> imgHeight = " + jsonObj.getInt("imgHeight"));
+    // out.println("JsonObject parameters     >> apType = " + jsonObj.getDouble("apType"));
     // out.println("JsonObject parameters     >> scale = " + jsonObj.getDouble("scale"));
-    // out.println("JsonObject parameters     >> apType = " + jsonObj.getString("apType"));
-    // out.println("JsonObject parameters     >> miniRSSI = " + jsonObj.getString("miniRSSI"));
+    // out.println("JsonObject parameters     >> apAndApRange = " + jsonObj.getString("apAndApRange"));
+    // out.println("JsonObject parameters     >> meshAndSSNRange = " + jsonObj.getString("meshAndSSNRange"));
 
-    jsonObject_indr_img = jsonObj;
+    // jsonObject_indr_img = jsonObj;
+    jsonObject_indr_img = new JSONObject(jsonObj, JSONObject.getNames(jsonObj));
     jsonParser.initialize_all_parameters(packet, jsonObject_indr_img);                          // Initialize all parameters in DataPacket.java
     jsonParser.generate_image_array(packet, functionPack, jsonObject_indr_img);
     jsonParser.generate_requirement_area_image_array(packet, functionPack, jsonObject_indr_img);
+    jsonParser.generate_subRegion_parameters(packet, jsonObject_indr_img);                      // subregion parameter
+
+    // out.println("Paramaters (AP) >> AP radius = " + packet.radius);
+    // out.println("Paramaters (AP) >> AP diameter = " + packet.json_content_apIntensity);
+    // out.println("Paramaters (AP) >> AP heigtht = " + packet.ap_z_coordinate);
+
     // Transform img_arr to Mat format
     packet.img = functionPack.array_to_mat(packet.img_arr, packet.img);
     packet.img_ori_clone = functionPack.array_to_mat(packet.img_arr_ori_clone, packet.img_ori_clone);
 
-
-    // ===== 2nd: Find candidate AP positions ===== //
-    // ----- fill Mat value to image_array ----- //
-    img_Idx = packet.img.createIndexer();
-    for(int _row=0; _row<packet.img_rows; _row++){
-        for(int _col=0; _col<packet.img_cols; _col++){
-            img_pxl_value = img_Idx.get(_row, _col, 0);
-            packet.img_arr[_row][_col] = img_pxl_value;
-        }
-    }
-    // out.println("\n------------------------------------------------------------------");
-    // out.println("JSONObject parameters    >> upper left x1 = " + jsonObj.getInt("imgWidth"));
-    // out.println("JSONObject parameters    >> lower left x2 = " + packet.x2_reqArea + "\tlower left y2 = " + packet.y2_reqArea);
-    // out.println("JSONObject parameters    >> Map scale = " + packet.map_scale);
-    // out.println("JSONObject parameters    >> AP type = " + packet.apType);
-    // out.println("JSONObject parameters    >> AP radius = " + packet.radius + "\tAP diameter = " + packet.json_content_apIntensity + "\tAP heigtht = " + packet.ap_z_coordinate);
-    // out.println("JSONObject parameters    >> Image rows = " + packet.img_rows + "\tImage cols = " + packet.img_cols);
-    // out.println("JSONObject parameters    >> Max particle numbers across all quadrants = " + packet.particle_num);
-    // out.println("JSONObject parameters    >> Window size to slide image = " + packet.window_size);
-
-    // out.println("\n==================================================================");
-    // out.println("Deployed AP numbers = " + packet.output_ap_pos.size());
-
-        // imageWeight_func_time_start = System.nanoTime();
-    // algorithmPatch.initParameters(jsonObject_indr_img, packet);
     packet.mapArray = algorithmPatch.genMapArray(packet, jsonObject_indr_img, packet.state_wall, packet.state_wall, packet.state_wall);
     packet.middlization_elected_points = algorithmPatch.middlization(packet);
 
     algorithmPack.apDeployAlgorithm(packet, functionPack, jsonParser, jsonObject_indr_img);
-        // imageWeight_func_time_end = System.nanoTime();
-        // imageWeight_func_elapsed_time = imageWeight_func_time_end - imageWeight_func_time_start;
-        // out.println("\nElapsed time of algorithmPack.apDeployAlgorithm is " + imageWeight_func_elapsed_time/1000000000 + "." + imageWeight_func_elapsed_time%1000000000 + " sec");
-
-        // out.println("\n------------------------------------------------------------------");
-        // out.println("Requirement (Area)        >> upper left x1 = " + packet.x1_reqArea + "\tupper left y1 = " + packet.y1_reqArea);
-        // out.println("Requirement (Area)        >> lower left x2 = " + packet.x2_reqArea + "\tlower left y2 = " + packet.y2_reqArea);
-        // out.println("Parameters  (scale)       >> Map scale = " + packet.map_scale);
-        // out.println("Paramaters  (AP)          >> AP type = " + packet.apType);
-        // out.println("Paramaters  (AP)          >> AP radius = " + packet.radius + "\tAP diameter = " + packet.json_content_apIntensity + "\tAP heigtht = " + packet.ap_z_coordinate);
-        // out.println("Paramaters  (Image)       >> Image rows = " + packet.img_rows + "\tImage cols = " + packet.img_cols);
-        // out.println("Paramaters  (Particle)    >> Max particle numbers across all quadrants = " + packet.particle_num);
-        // out.println("Paramaters  (Window Size) >> Window size to slide image = " + packet.window_size);
-
-        // out.println("\n==================================================================");
-        // out.println("Deployed AP numbers = " + packet.output_ap_pos.size());
-
-    img_Idx.release();
 
     // Store Data for excel exporting
     packet.json_content_sensorNode_power = jsonParser.getParameterJSON(jsonObject_indr_img, 6);
@@ -208,22 +159,22 @@
     // ===== COPY TO JSP : END ===== //
 
     // ===== Return AP information to front-end part ===== //
-    jsonCallback.put("heatmap_fname", packet.heatmap_path_fname);                            // output filename of heatmap image
-    jsonCallback.put("ap_heatmap_fname", packet.ap_heatmap_path_fname);                            // output filename of heatmap image
+    jsonCallback.put("heatmap_fname", packet.heatmap_fname);                            // output filename of heatmap image
+    jsonCallback.put("ap_heatmap_fname", packet.ap_heatmap_fname);                            // output filename of heatmap image
     // jsonCallback.put("indr_img_fname", packet.indr_img_fname);                          // output filename of indoor image
     // jsonCallback.put("indr_heatmap_fname", packet.indr_heatmap_fname);                  // output filename of indoor image combining heatmap
-    jsonCallback.put("sensorNode_Image_path", packet.sensorNode_path_fname);                 // output filename of sensorNode Image
+    jsonCallback.put("sensorNode_Image_path", packet.sensorNode_fname);                 // output filename of sensorNode Image
     jsonCallback.put("excel_report", packet.excel_export_path_name);                    // output filename of report in excel format
 
     // debug
-    int wall_key_int;
-    String wall_key_string;
-    Iterator<String> wall_dict_keys;
+    // int wall_key_int;
+    // String wall_key_string;
+    // Iterator<String> wall_dict_keys;
 
     // ----- Add deployed AP positions to json ----- //
     for(int i=0; i<packet.output_ap_pos.size(); i++){
-        ap_pos_info_obj = new JSONObject();
-        deployed_AP_pos = packet.output_ap_pos.get(i);
+        JSONObject ap_pos_info_obj = new JSONObject();
+        Point deployed_AP_pos = packet.output_ap_pos.get(i);
         // out.println("idx = " + i + "\tap_x = " + deployed_AP_pos.x + "\tap_y = " + deployed_AP_pos.y);
         ap_pos_info_obj.put("x", deployed_AP_pos.x);
         ap_pos_info_obj.put("y", deployed_AP_pos.y);
@@ -246,6 +197,11 @@
 
     }
     jsonCallback.put("Deployed_AP_pos", ap_pos_info_arr);                                // output RSSI value of every pixel
+    
+    JSONArray sensorNodeRSSIArr = new JSONArray();
+    if(packet.sensorNodeRSSI.length() != 0)
+        sensorNodeRSSIArr = packet.sensorNodeRSSI.getJSONArray("sensorNodeRSSI");
+    jsonCallback.put("sensorNodeRSSI", sensorNodeRSSIArr);                                // output RSSI value of every pixel
 
     // ----- Add RSSI information to json ----- //
     // for(int _row=packet.y1_reqArea; _row<packet.y2_reqArea; _row++){
@@ -288,7 +244,7 @@
     //     if (!(ap_x >= packet.x1_reqArea && ap_x <= packet.x2_reqArea && ap_y >= packet.y1_reqArea && ap_y <= packet.y2_reqArea))
     //         out.println("(ERROR) >> AP is out of requirement Area" + "\tap_x = " + ap_x + "\tap_y = " + ap_y);
     // }
-
+    System.gc();
 %>
 
 <%= jsonCallback%>

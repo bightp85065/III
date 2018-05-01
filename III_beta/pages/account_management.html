@@ -1,0 +1,537 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Account管理</title>
+    <link rel="shortcut icon" href="../resources/images/NEXCOM.jpg"/>
+    	
+    <!-- Global CSS -->
+    <link href="../resources/css/global.css" rel="stylesheet">
+    <!-- Style CSS -->
+    <link href="../resources/css/back.css" rel="stylesheet">
+    <link href="../resources/css/addFix_2.css" rel="stylesheet">
+
+    <script src="../resources/js/kernel/jquery.min.js"></script>
+    <script src="../resources/js/kernel/bootstrap.min.js"></script>
+    <script src="../resources/js/kernel/datatables.min.js"></script>
+    <script src="../resources/js/kernel/ajaxq.js"></script>
+    <script src="../resources/js/kernel/md5.js"></script>
+    <script src="../resources/js/kernel/notify.js"></script>
+    <script src="../resources/js/kernel/sweetalert.min.js"></script>
+    <script src="../resources/js/kernel/pagination.js"></script>
+    <script src="../resources/js/global.js"></script>
+    <script src="../resources/js/login.js"></script>
+
+    
+    <script>
+        $(document).ready(function() {
+            
+            //tab-block
+            $('.tab-block').each(function(index, element) {
+                    $(this).find('.tabs a').eq(0).addClass('active');
+                    $(this).find('.tab-content > li').eq(0).show();
+            });
+
+            $('.tab-block .tabs a').unbind('click').bind('click',function(){
+            var $tabIndex = $(this).index();
+                    $(this).addClass('active').siblings().removeClass('active');
+                    $(this).parent().siblings('.tab-content').find('> li').eq($tabIndex).show().siblings().hide();
+            });
+        });
+    </script>
+</head>
+<body>
+    
+    <!--header-->
+    <div class="navbar-wrapper" style="height: auto;">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container">
+                <div class="">
+                    <div class="menu-sm">
+                        <div class="burger-container">
+                            <div id="burger">
+                                <div class="bar topBar"></div>
+                                <div class="bar btmBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mobile-hide" style="position: absolute;top: 70px;color: #8181b1;">English version backend management</p>
+                </div>
+            </div>
+            <!--<div id="navbar" class="navbar-collapse collapse menu" style="padding: 0;">-->
+            <div id="navbar" class="mobile-hide header-menu">
+                <ul class="nav navbar-nav navbar-right">
+    <!--                <li id="language">
+                        <span class="lan active" value="zh-tw"><a>中文版</a></span><span class="lan m-r-md" value="en-us"><a>英文版</a></span>
+                    </li>-->
+<!--                    <li><a style="cursor: pointer;" onclick="processAdminLogout();">登出</a></li>-->
+                </ul>
+                <br>
+                <ul class="nav nav-sec navbar-bottom relative text-center">
+                    <li>
+                        <a href="account_management.html">Account</a>
+                    </li>
+                    <li>
+                        <a href="ap_management.html">Access Point</a>
+                    </li>
+                    <li>
+                        <a href="wall_management.html">Wall</a>
+                    </li>
+                    <li style="border-right: none;">
+                        <a href="region_classification_management.html">Region Classification</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        // Mobile Menu
+        var burger = document.querySelector('.burger-container'),
+            header = document.querySelector('.navbar-default'),
+            menu = document.querySelector('#navbar');
+
+        burger.onclick = function() {
+            header.classList.toggle('menu-opened');
+            menu.classList.toggle('block');
+        };
+
+    </script>
+    
+    <!--html-->
+    <div class="container">
+        <p>Account Management</p>
+
+        <div class="col-sm-12 filter p-n">
+            <div class="col-sm-2 import" style="padding: 10px;" id="btnAddAccount">
+                <i class="fa fa-plus m-r-sm" aria-hidden="true"></i>Add Account</div>
+        </div>
+
+        <div id="datatable">
+            <!--sample code-->
+            <table id="example" class="display" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Account ID</th>
+                        <th>Account</th>
+                        <th>Role</th>
+                        <th>Name</th>
+                        <th>Last Login</th>
+                        <th>Create</th>
+                        <th>Operate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+    <!--add modal-->
+    <div class="modal" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm" style="z-index: 9999;">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">
+                        <i class="fa fa-plus m-r-sm" aria-hidden="true"></i>
+                        Add Account
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <table class="display dataTable" width="100%" cellspacing="0">
+                        <tbody>
+                            <tr class="p-sm">
+                                <td>Account</td>
+                                <td class="filter">
+                                    <input id="addAccount" type="text">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Password</td>
+                                <td class="filter">
+                                    <input id="addPassword" type="password">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Check Password</td>
+                                <td class="filter">
+                                    <input id="addCheckPassword" type="password">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Account Name</td>
+                                <td class="filter">
+                                    <input id="addAccountName" type="text">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Role</td>
+                                <td class="filter">
+                                    <select id="addRole">
+                                        <option value="1">Common</option>
+                                        <option value="2">Admin</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="m-t-lg text-center">
+                        <button type="submit" class="btn-success" id="btnAddModalYes">Submit</button>
+                        <button type="submit" class="btn-disable" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--edit modal-->
+    <div class="modal" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm" style="z-index: 9999;">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Modify Account</h4>
+                </div>
+                <div class="modal-body">
+
+                    <table class="display dataTable" width="100%" cellspacing="0">
+                        <tbody>
+                            <tr class="p-sm">
+                                <td>Account</td>
+                                <td class="filter">
+                                    <input id="modifyAccount" type="text">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Password</td>
+                                <td class="filter">
+                                    <input id="modifyPassword" type="password">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Check Password</td>
+                                <td class="filter">
+                                    <input id="modifyCheckPassword" type="password">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Account Name</td>
+                                <td class="filter">
+                                    <input id="modifyAccountName" type="text">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>Role</td>
+                                <td class="filter">
+                                    <select id="modifyRole">
+                                        <option value="1">Common</option>
+                                        <option value="2">Admin</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="m-t-lg text-center">
+                        <button type="submit" class="btn-success" id="btnModifyModalYes">Modify</button>
+                        <button type="submit" class="btn-disable" data-dismiss="modal">Cancel</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+    <script>
+        
+//        function unconnected_callback() {
+////                loading_ajax_hide();
+//                show_remind("未登入，三秒後轉跳到登入。", "error");
+//                setTimeout( function(){ returnAdminLoginPage(); }, 3000);
+//        };
+
+        /* 管理者未登入則跳轉到首頁 */
+//        function connected_callback(member) {
+//                $.member = member;
+//                if( $.member.userinfo_InExUser !== "admin" ){
+//                    show_remind("您不是管理者，三秒後轉跳到登入。", "error");
+//                    setTimeout( function(){ returnAdminLoginPage(); }, 3000);
+//                }
+//                else{
+//                    adminInit();
+//                }
+//        };
+        adminInit();
+        
+        function adminInit(){
+                $("#btnAddAccount").bind("click",function(){
+                        $("#addAccount").val("");
+                        $("#addPassword").val("");
+                        $("#addCheckPassword").val("");
+                        $("#addAccountName").val("");
+                        $('#addModal').modal();
+                });
+                $("#btnAddModalYes").bind("click",function(){
+                    var bool = true;
+                    var msg = "",doubleEachBreak;
+                    if($("#addAccount").val()===""){
+                        bool = false;
+                        msg += msg===""? "Please Input account" : "、account";
+                    }
+                    if($("#addPassword").val()===""){
+                        bool = false;
+                        msg += msg===""? "Please Input password" : "、password";
+                    }
+                    if($("#addCheckPassword").val()===""){
+                        bool = false;
+                        msg += msg===""? "Please Input check password" : "、check password";
+                    }
+                    else if($("#addCheckPassword").val()!==$("#addPassword").val()){
+                        bool = false;
+                        msg += msg===""? "Check password is different from password" : "、check password is different from password";
+                    }
+                    if($("#addAccountName").val()===""){
+                        bool = false;
+                        msg += msg===""? "Please Input account name" : "、account name";
+                    }
+                    
+                    if(!bool){
+                        swal(msg, "", "error");
+                        return false;
+                    }
+                    
+                    $.ajax({
+                        type:"POST",
+                        dataType: "text",
+                        url: "jsp/account.jsp",
+                        data: {
+                            "func": "create",
+                            "a_account": $("#addAccount").val(),
+                            "a_password": md5($("#addPassword").val()),
+                            "a_name": $("#addAccountName").val(),
+                            "a_role": $("#addRole").val()
+                        },
+                        success: function(data){
+                            console.log(data);
+                            data = JSON.parse(data);
+                            if( data.success ) {
+                                    getAccountListByAdmin();
+                                    show_remind("create success");
+                                    $("#addModal").modal("hide");
+                            }
+                            else 
+                            {
+                                    show_remind(data.msg, "error");
+                            } 
+                        },
+                        error:function(xhr, ajaxOptions, thrownError){ 
+                            console.log(xhr.status); 
+                            console.log(thrownError); 
+                        }
+                    });
+                });
+                $("#btnModifyModalYes").bind("click",function(){
+                    var bool = true;
+                    var msg = "",doubleEachBreak;
+                    var data = { a_id: $.modify_a_id , "func": "modifyOne" };
+                    if($("#modifyAccount").val()===""){
+                        bool = false;
+                        msg += msg===""? "Please Input account" : "、account";
+                    }
+                    if($("#modifyPassword").val()!==""){
+                        data["a_password"] = md5($("#modifyPassword").val());
+                    }
+                    if($("#modifyPassword").val()!==""&&$("#modifyCheckPassword").val()===""){
+                        bool = false;
+                        msg += msg===""? "Please Input check password" : "、check password";
+                    }
+                    else if($("#modifyPassword").val()!=="" && $("#modifyCheckPassword").val()!==$("#modifyPassword").val()){
+                        bool = false;
+                        msg += msg===""? "Check password is different from password" : "、check password is different from password";
+                    }
+                    if($("#modifyAccountName").val()===""){
+                        bool = false;
+                        msg += msg===""? "Please Input account name" : "、account name";
+                    }
+                    
+                    data["a_role"] = $("#modifyRole").val();
+                    data["a_account"] = $("#modifyAccount").val();
+                    data["a_name"] = $("#modifyAccountName").val();
+                    
+                    if(!bool){
+                        swal(msg, "", "error");
+                        return false;
+                    }
+                    
+                    $.ajax({
+                        type:"POST",
+                        dataType: "text",
+                        url: "jsp/account.jsp",
+                        data: data,
+                        success: function(data){
+                            console.log(data);
+                            data = JSON.parse(data);
+                            if( data.success ) {
+                                    getAccountListByAdmin();
+                                    show_remind("modify success");
+                                    $("#editModal").modal("hide");
+                            }
+                            else 
+                            {
+                                    show_remind(data.msg, "error");
+                            } 
+                        },
+                        error:function(xhr, ajaxOptions, thrownError){ 
+                            console.log(xhr.status); 
+                            console.log(thrownError); 
+                        }
+                    });
+                });
+                
+                getAccountListByAdmin();
+                
+                $("#datatable").delegate(".modifyProductType","click",function(){
+                        var a_id = $(this).attr("a_id");
+                        $.ajax({
+                            type:"GET",
+                            dataType: "text",
+                            url: "jsp/account.jsp",
+                            headers: {},
+                            data: {
+                                func: "getOne",
+                                a_id: a_id
+                            },
+                            success: function(data){
+                                console.log(data);
+                                data = JSON.parse(data);
+                                if( data.success ) {
+                                        $.modify_a_id = data.data.a_id;
+                                        $("#modifyAccount").val(data.data.a_account);
+                                        $("#modifyAccountName").val(data.data.a_name);
+                                        $("#modifyRole").val(data.data.a_role);
+                                        $("#modifyPassword").val("");
+                                        $("#modifyCheckPassword").val("");
+                                        $('#editModal').modal();
+                                }
+                                else {
+                                        swal("ERROR", data.msg, "error");
+                                }
+                            },
+                            error:function(xhr, ajaxOptions, thrownError){ 
+                                console.log(xhr.status); 
+                                console.log(thrownError); 
+                            }
+                        });
+                });
+                
+                $("#datatable").delegate(".delAccount","click",function(){
+                        $.delAId = $(this).attr("a_id");
+                        var a_name = $(this).attr("a_name");
+                        var swalJSON = {
+                                    title: "Attention: Can not be restored after deleted",
+                                    text: "You are deleting account name: "+a_name+"." ,
+                                    type: "warning",
+                                    confirmButtonColor: "#aedef4",
+                                    confirmButtonText: "Submit",
+                                    cancelButtonText: "Cancel",
+                                    showCancelButton: true,
+                                    closeOnConfirm: true,
+                                    closeOnCancel: true };
+                        swal( swalJSON ,
+                            function (isConfirm) {
+                                if (isConfirm) {
+                                    deleteAccount( $.delAId );
+                                } else {
+                                    
+                                }
+                        });
+                });
+                
+                
+        }
+        
+        function deleteAccount(a_id){
+            
+                $.ajax({
+                    type:"POST",
+                    dataType: "text",
+                    url: "jsp/account.jsp",
+                    data: {
+                        func: "delete",
+                        a_id: a_id
+                    },
+                    success: function(data){
+                        console.log(data);
+                        data = JSON.parse(data);
+                        if( data.success ) {
+                                show_remind("Delete success");
+                                getAccountListByAdmin();
+                        }
+                        else {
+                                swal("ERROR", data.msg, "error");
+                        }
+                    },
+                    error:function(xhr, ajaxOptions, thrownError){ 
+                        console.log(xhr.status); 
+                        console.log(thrownError); 
+                    }
+                });
+        }
+        
+        function getAccountListByAdmin(){
+                $.ajax({
+                    type:"GET",
+                    dataType: "text",
+                    url: "jsp/account.jsp",
+                    headers: {},
+                    data: {
+                        "func" : "list"
+                    },
+                    success: function(data){
+                        console.log(data);
+                        data = JSON.parse(data);
+                        if( data.success ) {
+                                $("#example").DataTable().destroy();
+                                var html="",role;
+                                $.each(data.data,function(k,v){
+                                    role = v.a_role=="1" ? "Common" : "Admin";
+                                    html += '<tr a_id="'+v.a_id+'">\n\
+                                                <td>'+v.a_id+'</td>\n\
+                                                <td>'+v.a_account+'</td>\n\
+                                                <td>'+role+'</td>\n\
+                                                <td>'+v.a_name+'</td>\n\
+                                                <td>'+v.a_last_datetime+'</td>\n\
+                                                <td>'+v.a_create_datetime+'</td>\n\
+                                                <td><a style="cursor:pointer;" a_id="'+v.a_id+'" class="modifyProductType">Modify</a>|<a style="cursor:pointer;" a_id="'+v.a_id+'" a_name="'+v.a_name+'" class="delAccount">Delete</a></td>\n\
+                                            </tr>';
+                                });
+                                $('#example tbody').html(html);
+                                
+                                $('#example').DataTable( {       
+                                    "order": [[ 1, "asc" ]],
+                                    "pageLength": 20,
+                                    "dom": 'tp',
+                                    "pagingType": 'numbers'
+                                });
+                        }
+                        else {
+                                swal("ERROR", data.msg, "error");
+                        }
+                    },
+                    error:function(xhr, ajaxOptions, thrownError){ 
+                        console.log(xhr.status); 
+                        console.log(thrownError); 
+                    }
+                });
+        }
+        
+    </script>
+</body>
+</html>

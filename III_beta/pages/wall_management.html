@@ -1,0 +1,385 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Wall管理</title>
+    <link rel="shortcut icon" href="../resources/images/NEXCOM.jpg"/>
+    
+    <!-- Global CSS -->
+    <link href="../resources/css/global.css" rel="stylesheet">
+    <!-- Style CSS -->
+    <link href="../resources/css/back.css" rel="stylesheet">
+    <link href="../resources/css/addFix_2.css" rel="stylesheet">
+    
+    <script src="../resources/js/kernel/jquery.min.js"></script>
+    <script src="../resources/js/kernel/bootstrap.min.js"></script>
+    <script src="../resources/js/kernel/datatables.min.js"></script>
+    <script src="../resources/js/kernel/ajaxq.js"></script>
+    <script src="../resources/js/kernel/md5.js"></script>
+    <script src="../resources/js/kernel/notify.js"></script>
+    <script src="../resources/js/kernel/sweetalert.min.js"></script>
+    <script src="../resources/js/kernel/pagination.js"></script>
+    <script src="../resources/js/global.js"></script>
+
+    
+    <script>
+        $(document).ready(function() {
+            
+            //tab-block
+            $('.tab-block').each(function(index, element) {
+                    $(this).find('.tabs a').eq(0).addClass('active');
+                    $(this).find('.tab-content > li').eq(0).show();
+            });
+
+            $('.tab-block .tabs a').unbind('click').bind('click',function(){
+            var $tabIndex = $(this).index();
+                    $(this).addClass('active').siblings().removeClass('active');
+                    $(this).parent().siblings('.tab-content').find('> li').eq($tabIndex).show().siblings().hide();
+            });
+        });
+    </script>
+</head>
+<body>
+    
+    <!--header-->
+    <div class="navbar-wrapper" style="height: auto;">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container">
+                <div class="">
+                    <div class="menu-sm">
+                        <div class="burger-container">
+                            <div id="burger">
+                                <div class="bar topBar"></div>
+                                <div class="bar btmBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mobile-hide" style="position: absolute;top: 70px;color: #8181b1;">English version backend management</p>
+                </div>
+            </div>
+            <!--<div id="navbar" class="navbar-collapse collapse menu" style="padding: 0;">-->
+            <div id="navbar" class="mobile-hide header-menu">
+                <ul class="nav navbar-nav navbar-right">
+    <!--                <li id="language">
+                        <span class="lan active" value="zh-tw"><a>中文版</a></span><span class="lan m-r-md" value="en-us"><a>英文版</a></span>
+                    </li>-->
+<!--                    <li><a style="cursor: pointer;" onclick="processAdminLogout();">登出</a></li>-->
+                </ul>
+                <br>
+                <ul class="nav nav-sec navbar-bottom relative text-center">
+                    <li>
+                        <a href="account_management.html">Account</a>
+                    </li>
+                    <li>
+                        <a href="ap_management.html">Access Point</a>
+                    </li>
+                    <li>
+                        <a href="wall_management.html">Wall</a>
+                    </li>
+                    <li style="border-right: none;">
+                        <a href="region_classification_management.html">Region Classification</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        // Mobile Menu
+        var burger = document.querySelector('.burger-container'),
+            header = document.querySelector('.navbar-default'),
+            menu = document.querySelector('#navbar');
+
+        burger.onclick = function() {
+            header.classList.toggle('menu-opened');
+            menu.classList.toggle('block');
+        };
+
+    </script>
+    
+    <!--html-->
+    <div class="container">
+        <p>Wall Management</p>
+
+        <div class="col-sm-12 filter p-n"></div>
+
+        <div id="datatable">
+            <!--sample code-->
+            <table id="example" class="display" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Wall ID</th>
+                        <th>Name</th>
+                        <th>Attenuation Factor</th>
+                        <th>Color</th>
+                        <th>Last Update</th>
+                        <th>Create</th>
+                        <th>Operate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <!--edit modal-->
+    <div class="modal" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm" style="z-index: 9999;">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Modify Wall</h4>
+                </div>
+                <div class="modal-body">
+
+                    <table class="display dataTable" width="100%" cellspacing="0">
+                        <tbody>
+                            <tr class="p-sm">
+                                <td>wall name</td>
+                                <td class="filter">
+                                    <input id="modifyWall" type="text">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>attenuation factor</td>
+                                <td class="filter">
+                                    <input id="modifyAttenuationFactor" type="text">
+                                </td>
+                            </tr>
+                            <tr class="p-sm">
+                                <td>color(rgb)</td>
+                                <td class="filter">
+                                    <input id="modifyColorRGB" type="text">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="m-t-lg text-center">
+                        <button type="submit" class="btn-success" id="btnModifyModalYes">Modify</button>
+                        <button type="submit" class="btn-disable" data-dismiss="modal">Cancel</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+    <script>
+        
+//        function unconnected_callback() {
+////                loading_ajax_hide();
+//                show_remind("未登入，三秒後轉跳到登入。", "error");
+//                setTimeout( function(){ returnAdminLoginPage(); }, 3000);
+//        };
+
+        /* 管理者未登入則跳轉到首頁 */
+//        function connected_callback(member) {
+//                $.member = member;
+//                if( $.member.userinfo_InExUser !== "admin" ){
+//                    show_remind("您不是管理者，三秒後轉跳到登入。", "error");
+//                    setTimeout( function(){ returnAdminLoginPage(); }, 3000);
+//                }
+//                else{
+//                    adminInit();
+//                }
+//        };
+        adminInit();
+        
+        function adminInit(){
+                
+                $("#btnModifyModalYes").bind("click",function(){
+                    var bool = true;
+                    var msg = "";
+                    if($("#modifyWall").val()===""){
+                        bool = false;
+                        msg += msg===""? "Please Input name" : "、name";
+                    }
+                    if($("#modifyAttenuationFactor").val()===""){
+                        bool = false;
+                        msg += msg===""? "Please Input attenuation factor" : "、input attenuation factor";
+                    }
+                    if($("#modifyColorRGB").val()===""){
+                        bool = false;
+                        msg += msg===""? "Please Input color RGB" : "、input color RGB";
+                    }
+                    
+                    
+                    if(!bool){
+                        swal(msg, "", "error");
+                        return false;
+                    }
+                    
+                    $.ajax({
+                        type:"POST",
+                        dataType: "text",
+                        url: "jsp/wall.jsp",
+                        data: { w_id: $.modify_w_id , 
+                            "func": "modifyOne" , 
+                            "w_name": $("#modifyWall").val() ,
+                            "w_attenuation_factor": $("#modifyAttenuationFactor").val() ,
+                            "w_color_rgb": $("#modifyColorRGB").val()
+                        },
+                        success: function(data){
+                            console.log(data);
+                            data = JSON.parse(data);
+                            if( data.success ) {
+                                    getWallList();
+                                    show_remind("modify success");
+                                    $("#editModal").modal("hide");
+                            }
+                            else 
+                            {
+                                    show_remind(data.msg, "error");
+                            } 
+                        },
+                        error:function(xhr, ajaxOptions, thrownError){ 
+                            console.log(xhr.status); 
+                            console.log(thrownError); 
+                        }
+                    });
+                });
+                
+                getWallList();
+                
+                $("#datatable").delegate(".modifyProductType","click",function(){
+                        var w_id = $(this).attr("w_id");
+                        $.ajax({
+                            type:"GET",
+                            dataType: "text",
+                            url: "jsp/wall.jsp",
+                            headers: {},
+                            data: {
+                                func: "getOne",
+                                w_id: w_id
+                            },
+                            success: function(data){
+                                console.log(data);
+                                data = JSON.parse(data);
+                                if( data.success ) {
+                                        $.modify_w_id = data.data.w_id;
+                                        $("#modifyWall").val(data.data.w_name);
+                                        $("#modifyAttenuationFactor").val(data.data.w_attenuation_factor);
+                                        $("#modifyColorRGB").val(data.data.w_color_rgb);
+                                        $('#editModal').modal();
+                                }
+                                else {
+                                        swal("ERROR", data.msg, "error");
+                                }
+                            },
+                            error:function(xhr, ajaxOptions, thrownError){ 
+                                console.log(xhr.status); 
+                                console.log(thrownError); 
+                            }
+                        });
+                });
+                
+                $("#datatable").delegate(".delAccount","click",function(){
+                        $.delAId = $(this).attr("w_id");
+                        var a_name = $(this).attr("a_name");
+                        var swalJSON = {
+                                    title: "Attention: Can not be restored after deleted",
+                                    text: "You are deleting account name: "+a_name+"." ,
+                                    type: "warning",
+                                    confirmButtonColor: "#aedef4",
+                                    confirmButtonText: "Submit",
+                                    cancelButtonText: "Cancel",
+                                    showCancelButton: true,
+                                    closeOnConfirm: true,
+                                    closeOnCancel: true };
+                        swal( swalJSON ,
+                            function (isConfirm) {
+                                if (isConfirm) {
+                                    deleteAccount( $.delAId );
+                                } else {
+                                    
+                                }
+                        });
+                });
+                
+                
+        }
+        
+        function deleteAccount(w_id){
+            
+                $.ajax({
+                    type:"POST",
+                    dataType: "text",
+                    url: "jsp/wall.jsp",
+                    data: {
+                        func: "delete",
+                        w_id: w_id
+                    },
+                    success: function(data){
+                        console.log(data);
+                        data = JSON.parse(data);
+                        if( data.success ) {
+                                show_remind("Delete success");
+                                getWallList();
+                        }
+                        else {
+                                swal("ERROR", data.msg, "error");
+                        }
+                    },
+                    error:function(xhr, ajaxOptions, thrownError){ 
+                        console.log(xhr.status); 
+                        console.log(thrownError); 
+                    }
+                });
+        }
+        
+        function getWallList(){
+                $.ajax({
+                    type:"GET",
+                    dataType: "text",
+                    url: "jsp/wall.jsp",
+                    data: {
+                        "func" : "list"
+                    },
+                    success: function(data){
+                        console.log(data);
+                        data = JSON.parse(data);
+                        console.log(data);
+                        if( data.success ) {
+                                $("#example").DataTable().destroy();
+                                var html="";
+                                $.each(data.data,function(k,v){
+                                    html += '<tr w_id="'+v.w_id+'">\n\
+                                                <td>'+v.w_id+'</td>\n\
+                                                <td>'+v.w_name+'</td>\n\
+                                                <td>'+v.w_attenuation_factor+'</td>\n\
+                                                <td><div style="width:50px;height:50px;background-color:#'+v.w_color_rgb+'"></div></td>\n\
+                                                <td>'+v.w_last_update_datetime+'</td>\n\
+                                                <td>'+v.w_create_datetime+'</td>\n\
+                                                <td><a style="cursor:pointer;" w_id="'+v.w_id+'" class="modifyProductType">Modify</a></td>\n\
+                                            </tr>';
+                                });
+                                $('#example tbody').html(html);
+                                
+                                $('#example').DataTable( {
+                                    "order": [[ 0, "asc" ]],
+                                    "pageLength": 20,
+                                    "dom": 'tp',
+                                    "pagingType": 'numbers'
+                                });
+                        }
+                        else {
+                                swal("ERROR", data.msg, "error");
+                        }
+                    },
+                    error:function(xhr, ajaxOptions, thrownError){ 
+                        console.log(xhr.status); 
+                        console.log(thrownError); 
+                    }
+                });
+        }
+        
+    </script>
+</body>
+</html>

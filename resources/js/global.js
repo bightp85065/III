@@ -60,10 +60,6 @@ function containsAllAscii(str) {
     return  /^[\000-\177]*$/.test(str) ;
 }
 
-function PutBT( num ){
-    show_remind( num ) 
-};
-
 function getStrLength( str ) {
 
     return str.replace(/[^\x00-\xff]/g,"xx").length;
@@ -659,3 +655,128 @@ function arraySearch(arr,val) {
             return i;
     return false;
 }
+
+function openProject(jsonObject_unpack, imagePath){
+    console.log( jsonObject_unpack );
+    console.log( imagePath );
+    
+    initParameters();
+    if(imagePath!==""){
+        $.imgZoom = jsonObject_unpack.imgZoom;
+        imgInitCanvasForUrl(imagePath);
+    }
+    else{
+        //need to add
+        $.imgZoom = 1;
+    }
+    
+    $.drawRequirementAreaPolygonals = jsonObject_unpack.drawRequirementAreaPolygonals;
+    drawWhole();
+//    $.requirementAreaPixel = getRequirementAreaPixel();
+    
+    
+    //update jsonObject_unpack
+    $.drawLines = jsonObject_unpack.drawLines;
+    $.drawStraightLines = jsonObject_unpack.drawStraightLines;
+    $.drawSquares = jsonObject_unpack.drawSquares;
+    $.drawSquaresForElevator = jsonObject_unpack.drawSquaresForElevator;
+    $.drawUplinkPoint = jsonObject_unpack.drawUplinkPoint;
+    $.drawSensorNode = jsonObject_unpack.drawSensorNode;
+    $.drawRegionClassifications = jsonObject_unpack.drawRegionClassifications;
+    $.drawRegionClassificationsTemp = jsonObject_unpack.drawRegionClassificationsTemp;
+    $.drawRequirementAreaPolygonalsTemp = jsonObject_unpack.drawRequirementAreaPolygonalsTemp;
+    drawWhole();
+    resetCanvasComponent();
+    
+    $.deploymentType = jsonObject_unpack.deploymentType;
+    
+    var deployApType = jsonObject_unpack.deployApType;
+    $('[name="apType"][value="'+deployApType+'"]').click();
+    $('[id=selectApValue][for='+deployApType+']').val( jsonObject_unpack.ap.range );
+    $("[id=inputAPHeight][for="+deployApType+"]").val( jsonObject_unpack.ap.height );
+    
+    var pos = $("table[for="+deployApType+"]");
+    
+    
+    pos.eq(0).val( jsonObject_unpack.deployPara[0] );
+    pos.eq(1).val( jsonObject_unpack.deployPara[1] );
+    pos.eq(2).val( jsonObject_unpack.deployPara[2] );
+    pos.eq(3).val( jsonObject_unpack.deployPara[3] );
+    pos.eq(5).val( jsonObject_unpack.deployPara[4] );
+    pos.eq(6).val( jsonObject_unpack.deployPara[5] );
+    
+    $.imageScale = jsonObject_unpack.scale;
+    
+    $("#sensorNodeAttr").find("input").eq(1).val( jsonObject_unpack.sensorNode[0] );
+    $("#sensorNodeAttr").find("input").eq(2).val( jsonObject_unpack.sensorNode[1] );
+    $("#sensorNodeAttr").find("input").eq(3).val( jsonObject_unpack.sensorNode[2] );
+//                        sensorNode: JSON.stringify(  ),
+//                        
+//                    }
+    //check show operate list
+//     $.each(data.Deployed_AP_pos,function(k,v){
+//        if(k>=manuallyDeployNum)
+//            addOneUplinkPoint(v.x, v.y, parseFloat($("[id=inputAPHeight][for="+deployApType+"]").val()), $.drawUplinkPoint.length, optTag.attr("image"), optTag.attr("device"))
+//    });
+    
+    $.each($('.listOfComponent[component-type]'),function(k,v){
+        autoDisplayList($(v));
+    });
+    
+    
+    var arr = [ "1-1", "1-2", "2-1", "2-2", "2-3", "3-1", "4-1", "4-2", "5-1" ];
+    var key = arraySearch(arr,jsonObject_unpack.nowPage);
+    if(key==0){
+        $.nowPage = arr[key];
+        go2Steps($.nowPage);
+    }
+    else{
+        $.nowPage = arr[key-1];
+        $(".btnNext").eq(0).trigger("click");
+    }
+}
+
+function showSensorNodeRSSI(e){
+        e.stopPropagation();
+        e.preventDefault();
+
+        var initOffSetLeft = $("head").offset().left;
+        var initOffSetTop = $("head").offset().top;
+        var correctX = e.clientX-e.pageX;
+        var correctY = e.clientY-e.pageY;
+
+        var drawCanvasOffset=$("#canvas").offset();
+        var drawOffsetX=drawCanvasOffset.left-$("head").offset().left;
+        var drawOffsetY=drawCanvasOffset.top-$("head").offset().top;
+        var drawMouseX,drawMouseY;
+        if(initOffSetLeft === $("head").offset().left){
+            drawMouseX=parseInt(e.clientX-drawOffsetX);
+        }
+        else{
+            drawMouseX=parseInt(e.pageX-drawOffsetX+correctX);
+        }
+        if(initOffSetTop === $("head").offset().top){
+            drawMouseY=parseInt(e.clientY-drawOffsetY);
+        }
+        else{
+            drawMouseY=parseInt(e.pageY-drawOffsetY+correctY);
+        }
+
+        var drawOffsetX = drawCanvasOffset.left-$("head").offset().left;
+        var drawOffsetY=drawCanvasOffset.top-$("head").offset().top;
+        var x=parseInt(e.clientX-drawOffsetX), y=parseInt(e.clientY-drawOffsetY);//+68
+        console.log(x ,y );
+}
+
+//document.body.onclick = function (e) {
+//    var isRightMB;
+//    e = e || window.event;
+//
+//    if ("which" in e)  // Gecko (Firefox), WebKit (Safari/Chrome) & Opera
+//        isRightMB = e.which == 3; 
+//    else if ("button" in e)  // IE, Opera 
+//        isRightMB = e.button == 2; 
+//    
+//    console.log(isRightMB)
+////    alert("Right mouse button " + (isRightMB ? "" : " was not") + "clicked!");
+//} 

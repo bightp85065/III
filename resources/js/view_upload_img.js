@@ -16,6 +16,9 @@ function allowSubname( val ) {
             case "images":
                 subname = [ "jpg" , "jpeg" , "png" , "gif" ];
                 break;
+            case "fu3i":
+                subname = [ "fu3i" ];
+                break;
         }
         return subname;
 }
@@ -54,6 +57,61 @@ function upload_event()
                     }
 
 
+                    var files = e.originalEvent.target.files;
+                    $.debugFiles = files;
+                    if( $( this ).attr( "size" ) ){
+                        var size2 = $( this ).attr( "size" );
+                        // check upload img width height
+                        var _URL = window.URL || window.webkitURL;
+                        var file, img;
+                        if ((file = this.files[0])) {
+                            img = new Image();
+//                                    img.setAttribute("size", size2);
+                            img.onload = function onload() {
+//                                        var size = this.getAttribute("size");
+                                var size = allowSize( size2 );
+                                if( size.width !== this.width || size.height !== this.height ){
+                                        show_remind( "please check width:"+size.width+"，height"+size.height+"" , "error");
+                                        return false;
+                                }
+                                imgInitCanvas(files[0]);
+                                $("#mapUploadFileName").val(files[0]["name"]);
+                                handleFileUpload( files , $( "[id='bar'][target='"+$(e.target).attr("target")+"']" ) , "canvasImage" , $(e.target) );
+
+                            };
+                            img.src = _URL.createObjectURL(file);
+                        }
+
+                    }
+                    else{
+                        imgInitCanvas(this.files[0]);
+                        $("#mapUploadFileName").val(this.files[0]["name"]);
+                        handleFileUpload( files , $( "[id='bar'][target='"+$(e.target).attr("target")+"']" ) , "canvasImage" , $(e.target) );
+                    }
+//                        }
+                    e.preventDefault();
+                    
+            });
+            
+            $("#projectUpload").bind("change",function(e){
+                    
+                    var JudgeFilesType = e.originalEvent.target.files[0].name.split(".");
+                    JudgeFilesType = JudgeFilesType[JudgeFilesType.length-1];
+                    JudgeFilesType = JudgeFilesType.toLowerCase();
+
+                    var allow = "fu3i";//$( this ).attr( "allow" )
+
+                    if( typeof allow === "undefined" ){
+
+                    }
+                    else{
+                        allow = allowSubname( allow );
+                        if( $.inArray( JudgeFilesType , allow ) === -1 ) {
+                            show_remind( "please upload " + allow.join( "、" ) + " file" , "error" );
+                        }
+                    }
+
+
                         var files = e.originalEvent.target.files;
                         $.debugFiles = files;
                         if( $( this ).attr( "size" ) ){
@@ -62,34 +120,20 @@ function upload_event()
                             var _URL = window.URL || window.webkitURL;
                             var file, img;
                             if ((file = this.files[0])) {
-                                img = new Image();
-//                                    img.setAttribute("size", size2);
-                                img.onload = function onload() {
-//                                        var size = this.getAttribute("size");
-                                    var size = allowSize( size2 );
-                                    if( size.width !== this.width || size.height !== this.height ){
-                                            show_remind( "please check width:"+size.width+"，height"+size.height+"" , "error");
-                                            return false;
-                                    }
-//                                    handleFileUpload( files , $( "[id='bar'][target='"+$(e.target).attr("target")+"']" ) , "transient2" , $(e.target) );
-                                    imgInitCanvas(files[0]);
-                                    $("#mapUploadFileName").val(files[0]["name"]);
-                                    
-                                };
-                                img.src = _URL.createObjectURL(file);
+                                    handleFileUpload( files , $( "[id='bar'][target='"+$(e.target).attr("target")+"']" ) , "transient" , $(e.target) );
                             }
 
                         }
                         else{
-                            imgInitCanvas(this.files[0]);
-                            $("#mapUploadFileName").val(this.files[0]["name"]);
-//                            handleFileUpload( files , $( "[id='bar'][target='"+$(e.target).attr("target")+"']" ) , "transient2" , $(e.target) );
+                            
+                            handleFileUpload( files , $( "[id='bar'][target='"+$(e.target).attr("target")+"']" ) , "transient" , $(e.target) );
                             
                         }
 //                        }
                     e.preventDefault();
                     
             });
+            
             
             $( ".clear_upload" ).unbind('click').bind('click', function(e) {
                     var target = $( this ).attr( "target" );
@@ -184,7 +228,12 @@ function sendHtmlToServer( formData , file , status , func , event , backup_name
 {
             var uploadURL;
             
-            uploadURL ='service/upload/tempFile';
+//            uploadURL ='jsp/upload.jsp';
+            if( func === "canvasImage" )
+                uploadURL ='https://140.118.122.151:443/III/php/user_upload_image.php?func=canvasImage';
+            else
+                uploadURL ='https://140.118.122.151:443/III/php/user_upload_image.php?func=transient_nobody';
+            
 //                    + '&Image_name=' + $("#Add_Image_name").val()
 //                    + '&Artist=' + $("#Add_Artist").val()
 //                    + '&Type=' + $("#Add_Type").val()
@@ -229,61 +278,39 @@ function sendHtmlToServer( formData , file , status , func , event , backup_name
                                 console.log(data);
                                 if( data.success ){
                                     
-//                                    if(func==="transient"){
-//                                        show_remind("上傳??��??");
-//                                        $.upload_file_transient[ $.upload_file_transient.length ] = data.data.file;
-//                                        $.upload_file[ this.data2 ] = data.data.file;
-////                                        if( this.data2==="adImage" ){
-////                                            
-////                                        }
-//                                        if( $( "#" + this.data2 ).attr( "data-show" ) === "text" ){
-//                                                $( "#" + this.data2 ).val( data.data.ori_file );
-//                                        }
-//                                        else{
-//                                            if( $( "#" + this.data2 ).prop("tagName")==="IMG" )
-//                                                $( "#" + this.data2 ).attr( "src" , data.data.path + data.data.file );
-//                                            else
-//                                                $( "#" + this.data2 ).css( "background-image" , "url('" + data.data.path + data.data.file + "')" );
-//                                        }
-//                                        
-//                                        if( this.data2==="profileUserIcon" ){
-//                                            $("#checkUploadUserIcon").removeClass("display-none");
-//                                        }
-//                                        else if( this.data2==="addSliderImage" ){
-//                                            $("#addSliderImageText").html(data.data.ori_file);
-//                                        }
-//                                        else if( this.data2==="modifySliderImage" ){
-//                                            $("#modifySliderImageText").html(data.data.ori_file);
-//                                        }
-//                                        else if( this.data2==="addProductTypeImage" ){
-//                                            $("#addProductTypeImageText").html(data.data.ori_file);
-//                                        }
-//                                        else if( this.data2==="modifyProductTypeImage" ){
-//                                            $("#modifyProductTypeImageText").html(data.data.ori_file);
-//                                        }
-//                                        
-//                                    }
-//                                    else if(func==="transient2"){
-//                                        show_remind("");
-//                                        $.upload_file_transient[ $.upload_file_transient.length ] = data.data.file;
-////                                        $.upload_file[ this.data2 ] = data.data.file;
-////                                        if( this.data2==="adImage" ){
-////                                            
-////                                        }
-//                                        var pos = this.data2.prev().prev();
-//                                        if( pos.attr( "data-show" ) === "text" ){
-//                                                pos.val( data.data.ori_file );
-//                                        }
-//                                        else{
-//                                            if( pos.prop("tagName")==="IMG" )
-//                                                pos.attr( "src" , data.data.path + data.data.file ).attr("data",data.data.file);
-//                                            else
-//                                                pos.css( "background-image" , "url('" + data.data.path + data.data.file + "')" );
-//                                        }
-//                                        
-//                                        pos.prev().html(data.data.ori_file);
-//                                        
-//                                    }
+                                    if( func === "canvasImage" ){
+                                        $.uploadMapImage = data.data.file;
+                                    }
+                                    else{
+                                        $.ajax({
+                                            type:"POST",
+                                            url: "jsp/projectManager.jsp",
+                            //                    dataType: "JSON",
+                                            data: {
+                                                readOrSave:true,//true for read
+                                                "targetFile": data.data.file
+                                            },
+                                            success: function(data){
+                                                    data = JSON.parse(data);
+                                                    console.log(data);
+                                                    
+                                                    show_remind( "Open Success" );
+                                                    
+                                                    var imagePath = data.project_image_name===""?"":"../../III/resources/projects/unpack/"+data.project_image_name;
+                                                    $.uploadMapImage = data.project_image_name;
+                                                    
+                                                    openProject(data.jsonObject_unpack, imagePath);
+                                                    
+                                            },
+                                            error:function(xhr, ajaxOptions, thrownError){
+                                                console.log("errrrrrrrrrrrrrrrrrrorrrrrrrrrrrrrrrrrrrrrr");
+                                                console.log(xhr.status); 
+                                                console.log(thrownError); 
+                                            }
+                                        });
+                                    }
+                                    
+                                    
                                 }
                                 else{
                                     show_remind( data.msg , "error" );

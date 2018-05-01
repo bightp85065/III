@@ -1,0 +1,211 @@
+#iconmenu > li > a {
+    cursor: auto; 
+}
+.canvasBtnPlace>span {
+    width: 140px!important;
+}
+.fade.in{
+    display: block;
+}
+.fade{
+    display: none;
+}
+.headBtn{
+    margin: 10px;
+    float: right;
+}
+#inputScalePlace,#inputHeightPlace{
+    display: none;
+    position: absolute; 
+    z-index: 120; 
+/*    width:80px;*/
+}
+#inputScalePlace>span:first-child, #inputHeightPlace>span:first-child{
+    width: 75px;
+    height: 35px;
+    display: inline-block;
+}
+#inputScalePlace>span:nth-child(2), #inputHeightPlace>span:nth-child(2){
+    width: 75px;
+    height: 35px;
+    display: inline-block;
+    margin-left: 21px;
+}
+#inputScale, #inputHeight{
+    width: 120px;
+    display: inline-block;
+    padding-right: 20px;
+}
+/*#inputScale:after{
+    content: "m";
+}*/
+#canvasPlace{
+    position:relative;
+/*    width: 100%;*/
+    height: 100%;
+    float: left; 
+    visibility:hidden;
+    padding-bottom: 24px;
+    text-align: right;
+}
+.coverCanvas{
+    display: none;
+    position:absolute; 
+    width: 996px;
+    height: 720px; 
+    background-image: url('https://140.118.122.246:24682/III/resources/images/indr_merge_color.jpg');
+    background-size: cover;
+    opacity: 0.8;
+}
+.dragPlace{
+    display: none;
+    position:absolute; 
+    width: 996px;
+    height: 720px; 
+}
+.dragPlace>div{
+    position:absolute; 
+    cursor: move;
+}
+#dragFrame{
+    display: none;
+    position:absolute; 
+    cursor: move;
+    border-style: dotted;
+    border-width: 2px;
+    border-color: black;
+}
+#scaleForImage{
+/*    display: none;*/
+    right: -25px;
+    position: relative;
+    width: 250px;
+    margin-left: auto;
+    text-align: center;
+}
+#scaleForImage>span{
+    width: 20%;
+    display: inline-block;
+}
+#listOfCompnentPlace{
+/*    width: 560px;*/
+    position: relative;
+    float: left;
+}
+.listOfComponent{
+    width: 140px;
+    height: 100%;
+    float: left;
+    overflow-y: auto;
+    max-height: 620px;
+    display: none;
+}
+.list-name{
+    text-align: center;
+    margin: 10px;
+}
+.list-group-item{
+    cursor: pointer;
+}
+.list-group-item-sample{
+    display: none;
+}
+.list-group-item .color{
+    width: 11px; 
+    height: 11px; 
+    display: inline-block;
+}
+.list-group-item .word{
+    
+}
+.list-group-item .close{
+    float: right; 
+    color: red; 
+    cursor: pointer;    
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+#loading{
+    height: 100%; 
+    position: fixed; 
+    width: 100%; 
+    z-index: -999; 
+    text-align: center; 
+    background-color: rgb(17, 17, 17); 
+    opacity: 0.4; 
+    display: none;
+}
+#loading>i{
+    vertical-align: middle;
+}
+#loading>div{
+    vertical-align: middle; 
+    height: 100%; 
+    display: inline-block;
+}
+.nav.nav-pills{
+    padding-left: 0!important;
+}
+.coverCanvas>div{
+    width: 1px;
+    height: 1px;
+    display: inline-block;
+    float: left;
+}
+.button-group{
+    float: right;
+    margin-right: 50px;
+    width: auto !important;
+}
+.canvasScale{
+    visibility: hidden;
+    display: block;
+}
+.canvasScaleImage{
+    width: 200px;
+    height: 20px;
+/*    display: none; */
+    display: block;
+    right: 0;
+    position: relative; 
+    margin-left: auto;
+    visibility: hidden;
+}
+
+.btnStart{
+    width: 100px;
+    background-color: #FFFFFF;
+    border-radius: 3px;
+    color: #4A4F55;
+    font-size: 1em;
+    font-weight: bold;
+    height: 33px;
+    margin-top: 15px;color: #FFFFFF;
+    background-image: -webkit-linear-gradient(90deg,rgba(75,75,75,1.00) 0%,rgba(152,152,152,1.00) 100%);
+    background-image: -moz-linear-gradient(90deg,rgba(75,75,75,1.00) 0%,rgba(152,152,152,1.00) 100%);
+    background-image: -o-linear-gradient(90deg,rgba(75,75,75,1.00) 0%,rgba(152,152,152,1.00) 100%);
+    background-image: linear-gradient(0deg,rgba(75,75,75,1.00) 0%,rgba(152,152,152,1.00) 100%);
+    border: 1px solid #5C5C5C;
+}
+.btnStart-big{
+    width: 150px;
+}
+.action-group{
+    margin: 15px;
+    display: none;
+}
+.action-group.activeS{
+    display: block;
+}
+#subContent .sContentBox .subOption .listBox span.placeForChooseApType{
+    width: auto;
+}
+#subContent .sContentBox .subOption .listBox span.placeForChooseApType{
+/*    width: auto;*/
+}
+.canvasBackgroundImg{
+    position: absolute;
+    opacity: 0.3;
+    z-index: -1;
+}

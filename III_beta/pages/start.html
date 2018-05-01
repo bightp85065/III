@@ -1,0 +1,1340 @@
+<!doctype html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>Nexcom</title>
+        <link rel="shortcut icon" href="../resources/images/NEXCOM.jpg"/>
+        <link rel="stylesheet" href="../resources/css/bootstrap.min.css">
+        <script type="text/javascript" src="https://code.jquery.com/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="../resources/js/bootstrap.min.js"></script>
+        <script src="../resources/js/kernel/ajaxq.js"></script>
+        
+<!--        <script type="text/javascript" src="js/lib/jquery.steps-1.1.0/jquery.steps.js"></script>-->
+        <script type="text/javascript" src="../resources/js/lib/sweetalert.min.js"></script>
+        <script type="text/javascript" src="../resources/js/view_upload_img.js"></script>
+        
+        <script type="text/javascript" src="../resources/js/global.js"></script>
+        <script type="text/javascript" src="../resources/js/login.js"></script>
+        
+        <link href="../resources/css/reset.css" rel="stylesheet" type="text/css">
+        <link href="../resources/css/style_.css" rel="stylesheet" type="text/css">
+        <link href="../resources/css/css_hack.css" rel="stylesheet" type="text/css">
+        <link href="../resources/css/addFix_1.css" rel="stylesheet" type="text/css">
+        <link href="../resources/css/modal.css" rel="stylesheet" type="text/css">
+        
+	<link rel="stylesheet" type="text/css" href="../resources/css/lib/sweetalert.css" />
+<!--	<link rel="stylesheet" type="text/css" href="css/index.css" />-->
+	<link rel="stylesheet" type="text/css" href="../resources/css/close.css" />
+<!--	<link rel="stylesheet" type="text/css" href="css/extra.css" />-->
+	<link rel="stylesheet" type="text/css" href="../resources/css/start.css" />
+	<link rel="stylesheet" type="text/css" href="../resources/css/font-awesome.css" />
+        
+        <script>
+            $.upload_file_transient = [];
+        </script>
+</head>
+<body>
+    <div id="loading">
+        <i class="fa fa-spinner fa-spin fa-2x"></i>
+        <div></div>
+    </div>
+    
+    <div class="head">
+        <img src="../resources/images/top.png" width="38" height="49" alt=""/>
+        <img class="logo" src="../resources/images/Nexcom.png" width="230" height="22" alt=""/>
+        <a href="../">
+            <button class="btn headBtn" translate="LOGOUT">Logout</button>
+        </a>
+        <a href="#">
+            <button class="btn headBtn" translate="ACCESS_POINT_MANAGEMENT" data-toggle="modal" data-target="#modalManagement">Management</button>
+        </a>
+        <a href="#">
+            <button id="btnSaveProject" class="btn headBtn" translate="SAVE_PROJECT">Save Project</button>
+        </a>
+        <a href="#">
+            <button id="btnOpenProject" class="btn headBtn" translate="OPEN_PROJECT">Open Project</button>
+            <input id="projectUpload" type="file" style="display:none;">
+        </a>
+    </div>
+
+    <div class="headContent">
+        <div class="topOption">
+<!--            <span translate="MODE">Mode:</span>
+            <select>
+              <option translate="FIXED">Fixed</option>
+            </select>-->
+        </div>
+    </div>
+
+
+
+    <div class="content">
+        <!-- Menu -->
+        <nav class="nav">
+          <ul id="iconmenu" class="nav-tabs">
+              <li id="sContentMenu_01">
+                <a href="#sContent_01" class="active">
+                  <span class="icon_1"></span>
+                    <c translate="MAP_SCALE">Map&Scale</c>
+                  <span class="icon_2"></span>
+                </a>
+              </li>
+              <li id="sContentMenu_02">
+                <a href="#sContent_02">
+                  <span class="icon_1"></span>
+                    <c translate="BOUNDARY_OBSTACLE">Boundary&Obstacle</c>
+                  <span class="icon_2"></span>
+                </a>
+              </li>
+              <li id="sContentMenu_03">
+                <a href="#sContent_03">
+                  <span class="icon_1"></span>
+                    <c translate="SENSOR_NODE">Sensor Node</c>
+                  <span class="icon_2"></span>
+                </a>
+              </li>
+              <li id="sContentMenu_04">
+                <a href="#sContent_04">
+                  <span class="icon_1"></span>
+                    <c translate="PREDICTIVE_SURVEY">Predictive Survey</c>
+                  <span class="icon_2"></span>
+                </a>
+              </li>
+              <li id="sContentMenu_05">
+                <a href="#sContent_05">
+                  <span class="icon_1"></span>
+                    <c translate="REPORT">Report</c>
+                  <span class="icon_2"></span>
+                </a>
+              </li>
+           </ul>
+        </nav>
+
+        <!-- sub Content -->
+        <div id="subContent" class="tab-conten">
+                <div class="sContentBox tab-pane fade in active" id="sContent_01">
+                    <div class="subOption" index="1">
+                        <span class="button-group">
+                            <button class="btnStart field" translate="INDOOR" type="Indoor">Indoor</button>
+                            <button class="btnStart field" translate="OUTDOOR" type="Outdoor">Outdoor</button>
+                        </span>
+                    </div>
+                    <div class="subOption" index="2" hidden>
+                        <div class="listBox">
+                            <span translate="IMPORT_MAP">Import Map:</span>
+                            <input id="mapUploadFileName" type="text" disabled>
+                            <input id="mapUpload" type="file" style="display:none;">
+                            <img id="mapUploadBtn" src="../resources/images/download.png" width="19" height="22" alt="" style="cursor:pointer;"/>
+                            <span class="button-group">
+                                <button class="btnStart btnPrev" translate="PREV_STEP">Prev Step</button>
+                                <button class="btnStart btnNext" translate="NEXT_STEP">Next Step</button>
+                            </span>
+                        </div>
+                        <ul class="nav nav-pills">
+                            <li id="btnRequirementArea" class="active"><a href="#" translate="REQUIREMENT_AREA">Requirement Area</a></li>
+                            <li id="btnRequirementAreaPolygonal"><a href="#" translate="REQUIREMENT_AREA_POLYGONAL">Requirement Area (Polygonal)</a></li>
+                            <li id="btnDrag" style="display: none;"></li>
+                        </ul>
+                    </div>
+<!--                    <div class="contentBox">
+                       <div class="incontent">
+                          1
+                       </div>
+                     </div>-->
+                </div>
+
+                <div class="sContentBox tab-pane fade" id="sContent_02">
+                    <div class="subOption">
+                        <div class="listBox drawType" type="Indoor">
+                            <span translate="BOUNDARY_WALL">Boundary: Wall</span>
+                            <select id="wallColor" style="display: inline-block;">
+<!--                                 <option value="#888888" w_type="0" translate="Metal_Sliver">Metal(Sliver)</option>
+                                 <option value="#009FCC" w_type="0" translate="GLASS_BLUE">Glass(Blue)</option>
+                                 <option value="#DDAA00" w_type="1" translate="CUBICLE_YELLOW">Cubicle(Yellow)</option>
+                                 <option value="#880000" w_type="2" translate="BRICK_RED">Brick(Red)</option>
+                                 <option value="#666666" w_type="3" translate="CONCRETE_GRAY">Concrete(Gray)</option>
+                                 <option value="#8B4513" w_type="4" translate="WOOD_BROWN">Wood(Browm)</option>
+                                 <option value="#227700" w_type="5" translate="WATER_GREEN">Water(Green)</option>-->
+                             </select>
+                            <span class="icon-box-0"></span>
+                            <span translate="THICKNESS_WALL">Thickness: Wall</span>
+                             <select id="wallThick" style="display: inline-block;">
+                                 <option value="15">15</option>
+                                 <option value="10">10</option>
+                                 <option value="5">5</option>
+                                 <option value="3">3</option>
+                                 <option value="2">2</option>
+                                 <option value="1">1</option>
+                             </select>
+                            <span>cm</span>
+                            <span class="button-group">
+                                <button class="btnStart btnPrev" translate="PREV_STEP">Prev Step</button>
+                                <button class="btnStart btnNext" translate="NEXT_STEP">Next Step</button>
+                            </span>
+                        </div>
+                        
+                        <div class="listBox drawType" type="Outdoor">
+                            <span translate="BOUNDARY_REGION_CLASSIFICATION">Boundary: Region Classification</span>
+                            <select id="regionClassificationColor" style="display: inline-block;">
+                             </select>
+                            <span class="icon-box-0"></span>
+                            <span class="button-group">
+                                <button class="btnStart btnPrev" translate="PREV_STEP">Prev Step</button>
+                                <button class="btnStart btnNext" translate="NEXT_STEP">Next Step</button>
+                            </span>
+                        </div>
+                        
+                        <ul class="nav nav-pills">
+                            <li id="btnScale" class="action-group" index="1"><a href="#" translate="SCALE">Scale</a></li>
+                            <li id="btnStraightDrawWall" class="action-group" index="2" type="Indoor"><a href="#" translate="DRAW_Straight_WALL">Draw Straight Wall</a></li>
+                            <li id="btnDrawWall" class="action-group" index="2" type="Indoor"><a href="#" translate="DRAW_WALL">Draw Wall</a></li>
+                            <li id="btnDrawRegionClassification" class="action-group" index="2" type="Outdoor"><a href="#" translate="DRAW_REGION_CLASSIFICATION">Draw Region Classification</a></li>
+                            <li id="btnElevator" class="action-group" index="3"><a href="#" translate="ELEVATOR">Elevator</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="sContentBox tab-pane fade" id="sContent_03">
+                    <div class="subOption">
+                        <div class="listBox">
+                            <span translate="SENSOR_NODE_COLON" style="width: 90px;">Sensor Node:</span>
+                            <select id="selectSensorNode" style="display: inline-block;"></select>
+                            <span style="transform: translateY(28%); margin-left: 5px;">
+                                <ul class="nav nav-pills" style="padding: 0px 12px; height: auto; border-bottom: none; box-shadow: none;">
+                                    <li id="btnSensorNode" role="presentation"><a href="#" translate="DRAW">Draw</a></li>
+                                </ul>
+                            </span>
+                            <span class="button-group" style="width: 90px;">
+                                <button class="btnStart btnPrev" translate="PREV_STEP">Prev Step</button>
+                                <button class="btnStart btnNext" translate="NEXT_STEP">Next Step</button>
+                            </span>
+                            <span id="sensorNodeAttr" style="width: auto;">
+                                <h3>RECEIVER</h3>
+                                <span style="width:90px;" translate="">RX Power</span>
+                                <span><input readonly="readonly" step="0.1" style="padding-right: 0;width: 75px;" value="-60" type="number"></span>
+                                <span>[dBm]</span>
+                                <span style="width:90px;" translate="">Cable Loss</span>
+                                <span><input step="0.1" style="padding-right: 0;width: 75px;" value="0" type="number"></span>
+                                <span>[dB]</span>
+                                <span style="width:90px;" translate="">Antenna Gain</span>
+                                <span><input step="0.1" style="padding-right: 0;width: 75px;" value="0" type="number"></span>
+                                <span>[dBi]</span>
+                                <span style="width:90px;" translate="">Frequency</span>
+                                <span><input step="1" style="padding-right: 0;width: 75px;" value="2400" type="number"></span>
+                                <span>[MHz]</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sContentBox tab-pane fade" id="sContent_04">
+                    <div class="subOption">
+                        <div index="1">
+                            <div class="listBox">
+                                <span><input id="apTypeMesh" type="radio" name="apType" value="Mesh" style="display:inline-block;" checked></span>
+                                <span><label for="apTypeMesh">MESH</label></span>
+
+                                <span class="placeForChooseApType" for="Mesh">
+                                    <select id="selectApValue" for="Mesh" style="display: inline-block;"></select>
+                                    <span style="width:90px;" translate="AP_HEIGHT">AP Height</span>
+                                    <span><input id="inputAPHeight" step="0.1" style="padding-right: 0;width: 75px;" value="0" type="number" for="Mesh"></span>
+                                    <span>m</span>
+                                    <span style="width:90px;" translate="MINIMUM_RSSI">Minimum RSSI</span>
+                                    <span><input id="inputMiniRSSI" step="1" style="padding-right: 0;width: 75px;" value="-100" for="Mesh"></span>
+                                    <span>dBm</span>
+
+                                    <div style="width: auto;">
+                                        <table style="transform: 100px 0;line-height: 1.5; vertical-align: top; width: 100%;" cellpadding="7" border="0" for="Mesh">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="50%">
+                                                        <h1><b>TRANSMITTER</b></h1>
+                                                        <h1>TX Power</h1>
+                                                        <h1><input step="0.1" name="tx_power" value="20" size="3" maxlength="6" type="number">[dBm]</h1>
+                                                        <h1>Cable Loss</h1>
+                                                        <h1><input step="0.1" name="cable_loss_tx" value="0" size="8" maxlength="8" type="number">[dB]</h1>
+                                                        <h1>Antenna Gain</h1>
+                                                        <h1><input step="0.1" name="antenna_gain_tx" value="0" size="4" maxlength="4" type="number">[dBi]</h1>
+                                                        <h1>Frequency</h1>
+                                                        <h1><input step="1" name="freq" value="2400" size="8" maxlength="8" type="number">[MHz]</h1>
+                                                    </td>
+                                                    <td width="50%">
+                                                        <h1><b>RECEIVER</b></h1>
+                                                        <h1>RX Power</h1>
+                                                        <h1><input readonly="readonly" step="0.1" type="number" size="8" name="rssi" value="-60">[dBm]</h1>
+                                                        <h1>Cable Loss</h1>
+                                                        <h1><input step="0.1" type="number" name="cable_loss_rx" value="0" size="8" maxlength="8">[dB]</h1>
+                                                        <h1>Antenna Gain</h1>
+                                                        <h1><input step="0.1" type="number" name="antenna_gain_rx" value="0" size="4" maxlength="4">[dBi]</h1>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </span>
+
+
+                                <span class="button-group">
+                                    <button class="btnStart btnPrev" translate="PREV_STEP">Prev Step</button>
+                                    <button class="btnStart btnNext" id="btnStep4Next" translate="NEXT_STEP">Next Step</button>
+                                    <button class="btnStart btnNext" id="btnStep4Build" translate="BUILD" style="display: none;">BUILD</button>
+                                </span>
+                            </div>
+
+                            <div class="listBox">
+                                <span><input id="apTypeAP" type="radio" name="apType" value="Ap" style="display:inline-block;"></span>
+                                <span><label for="apTypeAP">AP</label></span>
+
+                                <span class="placeForChooseApType" for="Ap" style="display: none;">
+                                    <select id="selectApValue" for="Ap" style="display: inline-block;"></select>
+                                    <span style="width:90px;" translate="AP_HEIGHT">AP Height</span>
+                                    <span><input id="inputAPHeight" step="0.1" style="padding-right: 0;width: 75px;" value="0" type="number" for="Ap"></span>
+                                    <span>m</span>
+                                    <span style="width:90px;" translate="MINIMUM_RSSI">Minimum RSSI</span>
+                                    <span><input id="inputMiniRSSI" step="1" style="padding-right: 0;width: 75px;" value="-100" for="Ap"></span>
+                                    <span>dBm</span>
+
+                                    <div style="width: auto;">
+
+                                        <table style="transform: 100px 0;line-height: 1.5; vertical-align: top; width: 100%;" cellpadding="7" border="0" for="Ap">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="50%">
+                                                        <h1><b>TRANSMITTER</b></h1>
+                                                        <h1>TX Power</h1>
+                                                        <h1><input step="0.1" name="tx_power" value="20" size="3" maxlength="6" type="number">[dBm]</h1>
+                                                        <h1>Cable Loss</h1>
+                                                        <h1><input step="0.1" name="cable_loss_tx" value="0" size="8" maxlength="8" type="number">[dB]</h1>
+                                                        <h1>Antenna Gain</h1>
+                                                        <h1><input step="0.1" name="antenna_gain_tx" value="0" size="4" maxlength="4" type="number">[dBi]</h1>
+                                                        <h1>Frequency</h1>
+                                                        <h1><input step="1" name="freq" value="2400" size="8" maxlength="8" type="number">[MHz]</h1>
+                                                    </td>
+                                                    <td width="50%">
+                                                        <h1><b>RECEIVER</b></h1>
+                                                        <h1>RX Power</h1>
+                                                        <h1><input step="0.1" type="number" size="8" name="rssi" value="-60" readonly="readonly">[dBm]</h1>
+                                                        <h1>Cable Loss</h1>
+                                                        <h1><input step="0.1" type="number" name="cable_loss_rx" value="0" size="8" maxlength="8">[dB]</h1>
+                                                        <h1>Antenna Gain</h1>
+                                                        <h1><input step="0.1" type="number" name="antenna_gain_rx" value="0" size="4" maxlength="4">[dBi]</h1>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </span>
+
+                            </div>
+                        
+                        </div>
+                        
+
+                        <div class="listBox" index="2">
+                            <span translate="UPLINK_POINT">Uplink Point:</span>
+                            <select id="selectUplinkPoint" style="display: inline-block;"></select>
+                            <span style="transform: translateY(28%); margin-left: 5px;">
+                                <ul class="nav nav-pills" style="padding: 0px 12px; height: auto; border-bottom: none; box-shadow: none;">
+                                    <li id="btnUplinkPoint" role="presentation"><a href="#" translate="DRAW">Draw</a></li>
+                                </ul>
+                            </span>
+                            <span class="button-group">
+                                <button class="btnStart btnPrev" translate="PREV_STEP">Prev Step</button>
+                                <button class="btnStart btnNext" translate="BUILD">BUILD</button>
+                                <button id="btnCalRSSI" class="btnStart" translate="JUST_CAL_RSSI">JUST CAL RSSI</button>
+                            </span>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="sContentBox tab-pane fade" id="sContent_05">
+                    <div class="subOption">
+                        <div class="listBox">
+                            <a href="../resources/test.xls" target="_blank">
+                                <button id="btnDownloadExcel" class="btnStart btnStart-big">Download Excel</button>
+                            </a>
+                            <span class="button-group">
+                                <button id="btnReBuild" class="btnStart" translate="REBUILD">Re-BUILD</button>
+                                <button id="btnReDraw" class="btnStart" style="display: none;" translate="REDRAW">Re-Draw</button>
+                                <button id="btnCalRSSI" class="btnStart" translate="JUST_CAL_RSSI">JUST CAL RSSI</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+    </div>
+    
+    <div id="inputScalePlace">
+        <span style="width: 75px;height: 35px;display: inline-block;"><input id="inputScale" step="1" type="number" class="form-control" value="0"></span>
+        <span style="width: 75px;height: 35px;display: inline-block;margin-left: 21px;">m</span>
+    </div>
+    <div id="inputHeightPlace">
+        <span style="width: 75px;height: 35px;display: inline-block;"><input id="inputHeight" step="0.1" type="number" class="form-control" value="0"></span>
+        <span style="width: 75px;height: 35px;display: inline-block;margin-left: 21px;">m</span>
+    </div>
+    
+    <div id="placeForScale" style="text-align: left;">
+        <span id="scaleForImage" class="canvasScale" style="display: inline-block; left: 0;">
+            <span>0</span><span></span><span></span><span></span><span></span>
+        </span>
+        <img class="canvasScaleImage" src="../resources/images/scale_200_horizontal.png" style="margin-right: auto; margin-left: 0; left: 10px;">
+    </div>
+    <div id="canvasPlace">
+        <div class="coverCanvas" type="heatmap"></div>
+        <div class="dragPlace"></div>
+        <div class="tooltip right" role="tooltip"> <div class="tooltip-arrow"></div> <div class="tooltip-inner"></div> </div>
+<!--        <div class="coverCanvas" type="indr_heatmap"></div>-->
+<!--        <div class="coverCanvas" type="indr_img"></div>-->
+        <div id="dragFrame"></div>
+        <div class="canvasBackgroundImg"></div>
+        <canvas id="canvas"></canvas>
+        <img style="display: block; right: 0; position: relative; margin-left: auto;" src="../resources/images/heatmap_schematic_transparent.png">
+<!--        <img class="canvasScaleImage" src="../resources/images/scale_200_horizontal.png">
+        <span id="scaleForImage" class="canvasScale">
+            <span>0</span><span></span><span></span><span></span><span></span>
+        </span>-->
+    </div>
+    <div id="listOfCompnentPlace">
+        <div class="listOfComponent" component-type="straightWall">
+            <div class="list-name" translate="STRAIGHT_WALL_LIST">Straight Wall List</div>
+            <ul class="list-group"></ul>
+        </div>
+        <div class="listOfComponent" component-type="wall">
+            <div class="list-name" translate="WALL_LIST">Wall List</div>
+            <ul class="list-group"></ul>
+        </div>
+        <div class="listOfComponent" component-type="elevator">
+            <div class="list-name" translate="ELEVATOR_LIST">Elevator List</div>
+            <ul class="list-group"></ul>
+        </div>
+        <div class="listOfComponent" component-type="uplinkPoint">
+            <div class="list-name" translate="UPLINK_POINT_LIST">Uplink Point List</div>
+            <ul class="list-group"></ul>
+        </div>
+        <div class="listOfComponent" component-type="sensorNode">
+            <div class="list-name" translate="SENSOR_NODE_LIST">Sensor Node List</div>
+            <button id="btnCleanSensorNode" class="btn en-us-style" translate="CLEAN_SENSOR_NODE" style="width: 100%;">Clean Sensor Node</button>
+            <ul class="list-group"></ul>
+        </div>
+    </div>
+    
+    <li class="list-group-item list-group-item-sample">
+        <img src="">
+        <span class="color"></span>
+        <span class="word"></span>
+        <span class="close">x</span>
+    </li>
+    
+    <div class="modal" id="modalManagement" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="z-index: 9999;">
+            <div class="modal-content animated fadeIn">
+                <button type="button" class="close" data-dismiss="modal" style="margin-right: 5px;margin-top: 5px;position: absolute;right: 0;">
+                    <span aria-hidden="true" style="font-size: 30px;">×</span><span class="sr-only">Close</span>
+                </button>
+                <iframe src="account_management.html" width="100%" style="height: 95vh;"></iframe>
+            </div>
+        </div>
+    </div>
+    
+    <footer>Industry 4.0 Device & Network Health Manager</footer>
+    
+        <script type="text/javascript" src="../resources/js/canvas.js"></script>
+        <script>
+            
+            
+            
+            $(document).ready(function(){
+                    init();
+            });
+            
+            function init(){
+                //page position
+                $.nowPage = "1-1";
+                //radio button reset
+                $("#apTypeMesh").click();
+                //input reset
+                $("#mapUploadFileName").val("");
+                $("#inputScale").val("0");
+                $("[id=inputAPHeight]").val("0");
+                $("[id=inputMiniRSSI]").val("-100");
+                //drag frame drag event
+                dragElement(document.getElementById(("dragFrame")));
+                
+                getWallList();
+                getRegionClassificationList();
+                getAccessPointList();
+                //get client info
+                $.ajax({
+                    type:"POST",
+                    url: "jsp/account.jsp",
+    //                    dataType: "JSON",
+                    data: {
+                        "func": "login2"
+                    },
+                    success: function(data){
+                            data = JSON.parse(data);
+                            console.log(data);
+                    },
+                    error:function(xhr, ajaxOptions, thrownError){ 
+                        console.log(xhr.status); 
+                        console.log(thrownError); 
+                    }
+                });
+            }
+            
+            $("#btnSaveProject").bind("click",function(){
+                
+                var deployApType = $('[name="apType"]:checked').attr("value");
+                var pos = $("table[for="+deployApType+"]");
+                var ap = { "range":$('[id=selectApValue][for='+deployApType+']').val(), "height":parseFloat($("[id=inputAPHeight][for="+deployApType+"]").val()) };
+                
+                $.ajax({
+                    type:"POST",
+                    url: "jsp/projectManager.jsp",
+    //                    dataType: "JSON",
+                    data: {
+                        
+                        readOrSave:false,//true for read
+                        "drawLines":JSON.stringify( $.drawLines ),
+                        "drawStraightLines":JSON.stringify( $.drawStraightLines ),
+                        "drawSquares":JSON.stringify( $.drawSquares ), 
+                        "drawSquaresForElevator":JSON.stringify( $.drawSquaresForElevator ),
+                        "drawUplinkPoint":JSON.stringify( $.drawUplinkPoint ),
+                        "drawSensorNode":JSON.stringify( $.drawSensorNode ),
+                        "drawRegionClassifications":JSON.stringify( $.drawRegionClassifications ),
+                        "drawRegionClassificationsTemp":JSON.stringify( $.drawRegionClassificationsTemp ),
+                        "drawRequirementAreaPolygonals":JSON.stringify( $.drawRequirementAreaPolygonals ),
+                        "drawRequirementAreaPolygonalsTemp":JSON.stringify( $.drawRequirementAreaPolygonalsTemp ),
+                        
+                        "imgWidth": $.drawImg===undefined?0:$.drawImg.width,
+                        "imgHeight": $.drawImg===undefined?0:$.drawImg.height,
+                        
+                        "deploymentType": $.deploymentType,
+                        deployPara: JSON.stringify( [pos.eq(0).val(), pos.eq(1).val(), pos.eq(2).val(), pos.eq(3).val(), pos.eq(5).val(), pos.eq(6).val()] ),
+                        
+                        sensorNode: JSON.stringify( [$("#sensorNodeAttr").find("input").eq(1).val(), $("#sensorNodeAttr").find("input").eq(2).val(), $("#sensorNodeAttr").find("input").eq(3).val()] ),
+                        
+//                        "apType": $('[name="apType"]:checked').val(),
+                        "deployApType": deployApType,
+                        
+                        nowPage: $.nowPage,
+                        
+                        "ap": JSON.stringify(ap),
+                        "scale": GetDecimals(parseFloat($.imageScale),2),
+                        "uploadMapImage": $.uploadMapImage===undefined?"":$.uploadMapImage
+                    },
+                    success: function(data){
+                            data = JSON.parse(data);
+                            console.log(data);
+                            window.open("../../III/resources/projects/"+data.project_name)
+
+                    },
+                    error:function(xhr, ajaxOptions, thrownError){
+                        console.log("errrrrrrrrrrrrrrrrrrorrrrrrrrrrrrrrrrrrrrrr");
+                        console.log(xhr.status); 
+                        console.log(thrownError); 
+                    }
+                });
+            });
+            $("#btnOpenProject").bind("click",function(){
+                $("#projectUpload").click();
+            });
+            
+            $(".field").bind("click",function(){
+                var type = $(this).attr("type");
+                $.deploymentType = type;
+                if( type === "Indoor" ){
+                    
+                }else if( type === "Outdoor" ){
+                    
+                }
+                $(".btnNext:eq(0)").trigger("click");
+            });
+            
+            $("[name='apType']").bind("change",function(e){
+                $(".placeForChooseApType").hide();
+                $(".placeForChooseApType[for="+$(this).attr("value")+"]").show();
+                
+                if($(this).attr("value")=="Mesh"){
+                    $("#btnStep4Build").hide();
+                    $("#btnStep4Next").show();
+                }
+                else if($(this).attr("value")=="Ap"){
+                    $("#btnStep4Next").hide();
+                    $("#btnStep4Build").show();
+                }
+            });
+        
+
+        
+        $(".list-group").delegate(".list-group-item","click",function(){
+            if($(this).hasClass("active")){
+                $(this).removeClass("active");
+                resetCanvasComponent();
+            }
+            else{
+                $(".list-group-item").removeClass("active");
+                $(this).addClass("active");
+                var componentType = $(this).parents("[component-type]").attr("component-type");
+                var info = $(this).data("info");
+                
+                switch(componentType) {
+                    case "wall":
+                        $("#dragFrame").css("left",info.x1<info.x2?info.x1:info.x2).css("top",info.y1<info.y2?info.y1:info.y2).css("width",Math.abs(info.x2-info.x1)).css("height",Math.abs(info.y2-info.y1));
+                        break;
+                    case "straightWall":
+                        $("#dragFrame").css("left",info.x1<info.x2?info.x1:info.x2).css("top",info.y1<info.y2?info.y1:info.y2).css("width",Math.abs(info.x2-info.x1)).css("height",Math.abs(info.y2-info.y1));
+                        break;
+                    case "elevator":
+                        $("#dragFrame").css("left",info.x1<info.x2?info.x1:info.x2).css("top",info.y1<info.y2?info.y1:info.y2).css("width",Math.abs(info.x2-info.x1)).css("height",Math.abs(info.y2-info.y1));
+                        break;
+                    case "uplinkPoint":
+                        $("#dragFrame").css("left",info.x-15).css("top",info.y-15).css("width",30).css("height",30);
+                        $("#inputHeight").val( info.height );
+                        $.setAPHeightType="uplinkPoint";
+                        $.setAPIndex = info.index;
+                        $("#inputHeightPlace").css("left", (info.x+$.drawCanvasOffset.left)+"px").css("top",(info.y+$.drawCanvasOffset.top)+"px").show();
+                        break;
+                    case "sensorNode":
+                        $("#dragFrame").css("left",info.x-15).css("top",info.y-15).css("width",30).css("height",30);
+                        $("#inputHeight").val( info.height );
+                        $.setAPHeightType="sensorNode";
+                        $.setAPIndex = info.index;
+                        $("#inputHeightPlace").css("left", (info.x+$.drawCanvasOffset.left)+"px").css("top",(info.y+$.drawCanvasOffset.top)+"px").show();
+                        break;
+                }
+                $("#dragFrame").attr("component-type",componentType)
+                            .attr("index",info.index)
+                            .data("info",info)
+                            .show();
+            }
+        });
+        
+        $(".list-group").delegate(".list-group-item .close","click",function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var componentType = $(this).parents("[component-type]").attr("component-type");
+            var info = $(this).parent().data("info");
+            $(this).parent().remove();
+            $("#dragFrame").hide();
+            
+            
+            switch(componentType) {
+                case "wall":
+                    delete $.drawLines[info.index];
+                    autoDisplayList($('.listOfComponent[component-type="wall"]'));
+                    break;
+                case "straightWall":
+                    delete $.drawStraightLines[info.index];
+                    autoDisplayList($('.listOfComponent[component-type="straightWall"]'));
+                    break;
+                case "elevator":
+                    delete $.drawSquaresForElevator[info.index];
+                    autoDisplayList($('.listOfComponent[component-type="elevator"]'));
+                    break;
+                case "uplinkPoint":
+                    delete $.drawUplinkPoint[info.index];
+                    autoDisplayList($('.listOfComponent[component-type="uplinkPoint"]'));
+                    break;
+                case "sensorNode":
+                    delete $.drawSensorNode[info.index];
+                    autoDisplayList($('.listOfComponent[component-type="sensorNode"]'));
+                    break;
+            }
+            drawWhole();
+            
+        });
+        
+        function go2Steps(step){
+                $.nowPage = step;
+                step = step.split("-");
+                var pos = $(".nav-tabs a").eq(parseInt(step[0])-1);
+                pos.tab('show');
+                $(".nav-tabs a").removeClass('active');
+                pos.addClass('active');
+                
+                if(step[0]=="1"){
+//                    $("#sContent_0"+step[0]).find("[index="+step[1]+"]").trigger();
+                    $("#sContent_0"+step[0]).find("[index]").hide();
+                    $("#sContent_0"+step[0]).find("[index="+step[1]+"]").show();
+                }
+                if(step[0]=="2"){
+//                    $("#sContent_0"+step[0]).find("[index="+step[1]+"]").trigger();
+                    $(".nav.nav-pills li.action-group").removeClass("activeS");
+                    if(step[1]==="2"){
+                        $("#sContent_0"+step[0]).find("li.action-group[index="+step[1]+"][type='"+$.deploymentType+"']").addClass("activeS");//
+                    }
+                    else
+                        $("#sContent_0"+step[0]).find("li.action-group[index="+step[1]+"]").addClass("activeS");//li.action-group
+                    
+                    $(".drawType").hide();
+                    $(".drawType[type='"+$.deploymentType+"']").show();
+                }
+                else if(step[0]=="4"){
+                    $("#sContent_0"+step[0]).find("[index]").hide();
+                    $("#sContent_0"+step[0]).find("[index="+step[1]+"]").show();
+                }
+        }
+        
+        $(".nav.nav-pills li").bind("click",function(){
+            if($(this).hasClass("active")){
+                $(".nav.nav-pills li").removeClass("active");
+                $("#btnDrag").trigger("click");
+            }
+            else{
+                $(".nav.nav-pills li").removeClass("active");
+                $(this).addClass("active");
+                resetCanvasComponent();
+                if($(this).attr("id")==="btnDrag"){
+                    console.log("btnDrag")
+                    $(".dragPlace").show();
+                }
+                else{
+                    $(".dragPlace").hide();
+                }
+            }
+            
+//            if($(this).hasClass("action-group")){
+//                $(".nav.nav-pills li.action-group").removeClass("activeS");
+//                var index = $(this).attr("index");
+//                $("li.action-group[index="+index+"]").addClass("activeS");
+//                $("#btnPrevAction,#btnNextAction").show();
+//                if( $(this).attr("index")==="1" ){
+//                    $("#btnPrevAction").hide();
+//                }
+//                else if( $(this).attr("index")==="3" ){
+//                    $("#btnNextAction").hide();
+//                }
+//            }
+        });
+        
+        $("#mapUploadBtn").bind("click",function(){
+            $("#mapUpload").click();
+        });
+            
+        $("#inputScale").bind("keyup change",function(){
+//                $("#htmlScale").html( parseFloat($("#inputScale").val())/$.scalePixel );
+                var scale = parseFloat($("#inputScale").val())/$.scalePixel;
+                $.imageScale = scale;
+                
+                var scaleImageWidth = getCloseHundred($.drawImg.width/3*$.imageScale)/$.imageScale;
+                var scaleOfOne = getCloseHundred($.drawImg.width/3*$.imageScale)/4;
+                for(var i=1;i<5;++i){
+                    $("#scaleForImage span:nth-child("+(i+1)+")").html(GetReadNumber(scaleOfOne*i));
+                }
+                $("#scaleForImage span:nth-child(5)").append("(m)");
+                $(".canvasScale,.canvasScaleImage").css("visibility","visible");//.css("display","block")
+                $(".canvasScaleImage").css("width",scaleImageWidth);
+                $(".canvasScale").css("width",scaleImageWidth*5/4);
+                $(".canvasScale").eq(0).css("left",-scaleImageWidth/8+10);
+        }).keyup(function(e) {
+            if (e.which == 13) {
+                $(".btnNext:eq(0)").trigger("click");
+            }
+        });
+        $("#inputHeight").bind("keyup change",function(){
+                var height = parseFloat($("#inputHeight").val());
+                var APListPos = $(".listOfComponent[component-type='"+$.setAPHeightType+"'] .list-group-item[index="+$.setAPIndex+"]");
+                if($.setAPHeightType==="sensorNode")
+                    $.drawSensorNode[$.setAPIndex]["height"] = height;
+                else if($.setAPHeightType==="uplinkPoint")
+                    $.drawUplinkPoint[$.setAPIndex]["height"] = height;
+                var info = APListPos.data("info");
+                info["height"] = height;
+                APListPos.data("info", info);
+        });
+
+        $(".btnNext").bind("click",function(){
+            var arr = [ "1-1", "1-2", "2-1", "2-2", "2-3", "3-1", "4-1", "4-2", "5-1" ];
+            var key = arraySearch(arr,$.nowPage);
+            console.log(arr[key+1]);
+            switch(arr[key+1]) {
+                case "1-2":
+                    
+                    break;
+                case "2-1":
+                    if(!$.drawImgSrc){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_IMPORT_MAP"],"","error");
+                        return false;
+                    }
+                    if($.drawSquares[0]===undefined&&$.drawRequirementAreaPolygonals[0]===undefined){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_CHOOSE_REQUIREMENT_AREA"],"","error");
+                        return false;
+                    }
+                    $("#btnScale").trigger("click");
+                    break;
+                case "2-2":
+                    if($.imageScale===undefined){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_DRAW_INPUT_YOUR_SCALE"],"","error");
+                        return false;
+                    }
+                    resetCanvasComponent();
+                    if($.deploymentType==="Indoor")
+                        $("#btnStraightDrawWall").trigger("click");
+                    else if($.deploymentType==="Outdoor")
+                        $("#btnDrawRegionClassification").trigger("click");
+                    break;
+                case "2-3":
+                    $("#btnElevator").trigger("click");
+                    break;
+                case "3-1":
+//                    $("#btnSensorNode").trigger("click");
+                    $("#btnDrag").trigger("click");
+                    break;
+                case "4-1":
+                    var check = false;
+                    $.each( $("#sensorNodeAttr input"), function(k,v){
+                        if($(v).val()==""){
+                            check = true;
+                            return false;
+                        }
+                    });
+                    if(check){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_INPUT_RECEIVER_ATTRIBUTE"],"","error");
+                        return false;
+                    }
+                    
+                    if(arrayValue($.drawSensorNode).length===0){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_DRAW_LEAST_ONE_SENSOR_NODE"],"","error");
+                        return false;
+                    }
+                    
+                    $("#btnDrag").trigger("click");
+                    break;
+                case "4-2":
+                    
+                    if( $('[name="apType"]:checked').val()===undefined ){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_CHOOSE_AP_TYPE"],"","error");
+                        return false;
+                    }
+
+                    var deployApType = $('[name="apType"]:checked').attr("value");
+                    if( $("[id=inputMiniRSSI][for="+deployApType+"]").val()==="" ){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_INPUT_MINI_RSSI"],"","error");
+                        return false;
+                    }
+                    var miniRSSI = parseInt( $("[id=inputMiniRSSI][for="+deployApType+"]").val() );
+                    if( miniRSSI > -50 || miniRSSI < -100 ){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_SET_RANGE"],"","error");
+                        return false;
+                    }
+
+                    if( $("[id=inputAPHeight][for="+deployApType+"]").val()==="" ){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_INPUT_AP_HEIGHT"],"","error");
+                        return false;
+                    }
+
+                    resetCanvasComponent();
+
+                    
+                    var check = false;
+                    $.each( $("table[for="+deployApType+"]").find("input"), function(k,v){
+                        console.log($(v).val());
+                        if($(v).val()===""){
+                            check = true;
+                            return false;
+                        }
+                    });
+                    if(check){
+                        var lang = isEmpty( getCookie( "IIITranslate" ) ) ? "en-us" : getCookie( "IIITranslate" );
+                        swal($.globalLang[lang]["PLEASE_INPUT_TRANSMITTER_AND_RECEIVER_ATTRIBUTE"],"","error");
+                        return false;
+                    }
+                    
+                    if( $('[name="apType"]:checked').val() === "Ap" ){
+
+                        //delete all uplink point
+                        $('.listOfComponent[component-type="uplinkPoint"] .close').trigger("click");
+                        
+                        arrangeAccessPoint("arrangeAccessPoint");
+                        go2Steps(arr[key+2]);
+                        return false;
+                    }
+                    else if( $('[name="apType"]:checked').val() === "Mesh" ){
+                        
+                        $("#btnUplinkPoint").trigger("click");
+                    }
+                    
+                    
+                    break;
+                case "5-1":
+                    arrangeAccessPoint("arrangeAccessPoint");
+                    break;
+            }
+            go2Steps(arr[key+1]);
+        });
+        
+        $(".btnPrev").bind("click",function(){
+            var arr = [ "1-1", "1-2", "2-1", "2-2", "2-3", "3-1", "4-1", "4-2", "5-1" ];
+            var key = arraySearch(arr,$.nowPage);
+            
+            switch(arr[key-1]) {
+                case "1-1":
+                    
+                    break;
+                case "1-2":
+                    resetCanvasComponent();
+                    $("#btnRequirementArea").trigger("click");
+                    break;
+                case "2-1":
+                    $("#btnScale").trigger("click");
+                    break;
+                case "2-2":
+                    $("#btnStraightDrawWall").trigger("click");
+                    break;
+                case "2-3":
+                    $("#btnElevator").trigger("click");
+                    break;
+                case "3-1":
+//                    $("#btnSensorNode").trigger("click");
+                    $("#btnDrag").trigger("click");
+                    break;
+                case "4-1":
+                    $("#btnDrag").trigger("click");
+                    break;
+                case "4-2":
+                    resetCanvasComponent();
+                    if( $('[name="apType"]:checked').val() === "Ap" ){
+                        $("#btnDrag").trigger("click");
+                        go2Steps(arr[key-2]);
+                        return false;
+                    }
+                    else if( $('[name="apType"]:checked').val() === "Mesh" ){
+                        $("#btnUplinkPoint").trigger("click");
+                    }
+                    break;
+            }
+            go2Steps(arr[key-1]);
+        });
+
+        
+        function arrangeAccessPoint(deployType){
+            
+            loading_ajax_show();
+            
+            var deployApType = $('[name="apType"]:checked').attr("value");
+            var ap = { "range":$('[id=selectApValue][for='+deployApType+']').val(), "height":parseFloat($("[id=inputAPHeight][for="+deployApType+"]").val()) };
+            
+            var wallLine = arrayValue($.drawLines).concat(arrayValue($.drawStraightLines));
+            var wallArr = [];
+            var x,y,lineWidth,min,max;
+            $.each(wallLine,function(k,v){
+                if(v!==undefined){
+                    
+                    lineWidth = parseInt(v.lineWidth);
+                    if(Math.abs(v.y2-v.y1)>=Math.abs(v.x2-v.x1)){
+                        //y長
+                        if(v.y1>=v.y2){
+                            min = v.y2; max = v.y1;
+                        }
+                        else{
+                            min = v.y1; max = v.y2;
+                        }
+                            
+                        for(y=min;y<=max;y++){
+                            x = Math.ceil((v.x2-v.x1+1)/(max-min+1)*(y-min+1))+v.x1;
+                            for(var z=parseInt(-(lineWidth-1)/2); z<parseInt(-(lineWidth-1)/2)+lineWidth; z++){
+                                wallArr[wallArr.length] = {"x":Math.abs(x+z),"y":y,"w_type":v.w_type};
+                                
+                            console.log(k);
+                            }
+                        }
+                    }
+                    else{
+                        //x長
+                        if(v.x1>=v.x2){
+                            min = v.x2; max = v.x1;
+                        }
+                        else{
+                            min = v.x1; max = v.x2;
+                        }
+                        for(x=min;x<=max;x++){
+                            y = Math.ceil((v.y2-v.y1+1)/(max-min+1)*(x-min+1))+v.y1;
+                            for(var z=parseInt(-(lineWidth-1)/2); z<parseInt(-(lineWidth-1)/2)+lineWidth; z++){
+                                wallArr[wallArr.length] = {"x":x,"y":Math.abs(y+z),"w_type":v.w_type};
+                                
+                            console.log(k);
+                            }
+                        }
+                    }
+                }
+            });
+
+            $.each($.drawSquaresForElevator,function(k,v){
+                if(v!==undefined)
+                for(var i=v.x1;i<=v.x2;i++){
+                    for(var j=v.y1;j<=v.y2;j++){
+                        wallArr[wallArr.length] = {"x":i,"y":j,"w_type":"0"};
+                    }
+                }
+            });
+            
+            
+//            if($('[name="apType"]:checked').val()==="Mesh"){
+//                var uplinkPoint = [];
+//                var sensorNode = arrayValue($.drawSensorNode).concat(arrayValue($.drawUplinkPoint));
+//                var manuallyDeployNum = sensorNode.length;
+//            }
+//            else if($('[name="apType"]:checked').val()==="Ap"){
+//                var uplinkPoint = [];
+//                var sensorNode = arrayValue($.drawSensorNode);
+//                var manuallyDeployNum = arrayValue($.drawSensorNode).length;
+//            }
+            
+            var uplinkPoint = arrayValue($.drawUplinkPoint);
+            var sensorNode = arrayValue($.drawSensorNode);
+            var manuallyDeployNum = arrayValue($.drawUplinkPoint).length;
+            
+            console.log(sensorNode);
+            console.log(manuallyDeployNum);
+            
+//            var deployApType = $('[name="apType"]:checked').attr("value");
+            var calJson = calculateBothDistanceAndInitPower($("table[for="+deployApType+"]"));
+            
+            console.log(calJson);
+            
+//            $.drawSquares[0]===undefined&&$.drawRequirementAreaPolygonals[0]
+            
+            console.log({
+                    "pos": wallArr,
+                    "imgWidth": $.drawImg.width,
+                    "imgHeight": $.drawImg.height,
+                    "requirementArea": $.drawSquares[0],
+                    "elevator": arrayValue($.drawSquaresForElevator),
+                    "uplinkPoint": uplinkPoint,
+                    "sensorNode": sensorNode,
+                    "sensorNodeImage": sensorNode[sensorNode.length-1].image,
+                    "apType": $('[name="apType"]:checked').val(),
+                    "ap": ap,
+                    "scale": GetDecimals(parseFloat($.imageScale),2).toString(),
+                    "miniRSSI":"-60",//$("[id=inputMiniRSSI][for="+deployApType+"]").val()
+                    "apAndApInitPower": calJson["apAndApInitPower"],
+                    "meshAndSSNInitPower": calJson["meshAndSSNInitPower"],
+                    "apAndApRange": calJson["apAndApRange"],
+                    "meshAndSSNRange": calJson["meshAndSSNRange"],
+                    "regionClassifications":[{"x":50,"y":50,"rc_value":"1.33",
+                                            "x":50,"y":51,"rc_value":"1.33",
+                                            "x":50,"y":52,"rc_value":"1.33",
+                                            "x":50,"y":53,"rc_value":"1.33",
+                                            "x":50,"y":54,"rc_value":"1.33"}]
+            });
+            
+            if(deployType=="arrangeAccessPoint"){
+                var url = "jsp/first.jsp";
+            }
+            else if(deployType=="justCalRSSI"){
+                var url = "jsp/extrafunction.jsp";
+            }
+            
+            $.ajax({
+                type:"POST",
+                url: url,
+//                    dataType: "JSON",
+                data: {
+                    "pos":JSON.stringify(wallArr),
+                    "imgWidth": $.drawImg.width,
+                    "imgHeight": $.drawImg.height,
+                    "requirementArea": JSON.stringify($.drawSquares[0]),
+                    "elevator": JSON.stringify(arrayValue($.drawSquaresForElevator)),
+                    "uplinkPoint": JSON.stringify(uplinkPoint),
+                    "sensorNode": JSON.stringify(sensorNode),
+                    "sensorNodeImage": sensorNode[sensorNode.length-1].image,
+                    "apType": $('[name="apType"]:checked').val(),
+                    "ap": JSON.stringify(ap),
+                    "scale": GetDecimals(parseFloat($.imageScale),2).toString(),
+                    "miniRSSI":"-60",//$("[id=inputMiniRSSI][for="+deployApType+"]").val()
+                    "apAndApInitPower":calJson["apAndApInitPower"],
+                    "meshAndSSNInitPower":calJson["meshAndSSNInitPower"],
+                    "apAndApRange":calJson["apAndApRange"],
+                    "meshAndSSNRange":calJson["meshAndSSNRange"],
+                    "regionClassifications":JSON.stringify([{"x":50,"y":50,"rc_value":"1.33",
+                                            "x":50,"y":51,"rc_value":"1.33",
+                                            "x":50,"y":52,"rc_value":"1.33",
+                                            "x":50,"y":53,"rc_value":"1.33",
+                                            "x":50,"y":54,"rc_value":"1.33"}])
+                },
+                success: function(data){
+                        data = JSON.parse(data);
+                        console.log(data);
+                        $.debugData = data;
+                        
+                        loading_ajax_hide();
+                        //go2Steps("5-1");
+                        
+                        $(".coverCanvas[type=heatmap]").css("background-image","url('../../III/resources/images/heatmap/"+data.heatmap_fname+"')").show();
+                        var deployApType = $('[name="apType"]:checked').attr("value");
+                        var selectTag = $('[id=selectApValue][for='+deployApType+']');
+                        var optTag = selectTag.find("[value="+selectTag.val()+"]");
+                        $.each(data.Deployed_AP_pos,function(k,v){
+                            if(k>=manuallyDeployNum)
+                                addOneUplinkPoint(v.x, v.y, selectTag.val(), parseFloat($("[id=inputAPHeight][for="+deployApType+"]").val()), $.drawUplinkPoint.length, optTag.attr("image"), optTag.attr("device"))
+                        });
+                        
+                        $.indr_RSSI_information = data.indr_RSSI_information;
+                        
+                        $("#btnDownloadExcel").parent().attr("href","../../III/resources/reports/"+data.excel_report);
+                        
+                        $("#btnDrag").trigger("click");
+                        
+                        $("#btnReDraw").show();
+                        
+                        $.sensorNodeRSSI = data.sensorNodeRSSI;
+                        
+                },
+                error:function(xhr, ajaxOptions, thrownError){
+                    console.log("errrrrrrrrrrrrrrrrrrorrrrrrrrrrrrrrrrrrrrrr");
+                    console.log(xhr.status); 
+                    console.log(thrownError); 
+                }
+            });
+        }
+        
+        $("#btnReDraw").bind("click",function(e){
+                $(".coverCanvas").hide();
+                $("#btnReDraw").hide();
+                go2Steps("4-1");
+        });
+        
+        $("#btnReBuild").bind("click",function(e){
+                $(".coverCanvas").hide();
+                $("#btnReDraw").hide();
+                go2Steps("4-1");
+        });
+        
+        $("[id=btnCalRSSI]").bind("click",function(e){
+                arrangeAccessPoint("justCalRSSI");
+                $(".coverCanvas").hide();
+                $("#btnReDraw").hide();
+                go2Steps("4-1");
+        });
+        
+        
+        $(".canvas-state-group").bind("click",function(e){
+                $("#inputScalePlace").hide();
+                if($(this).hasClass("active")){
+                    $(this).removeClass("active");
+                } else {
+                    $(".canvas-state-group").removeClass("active");
+                    $(this).addClass("active");
+                }
+        });
+        
+        $("#btnCleanSensorNode").bind("click",function(e){
+                $.drawSensorNode = [];
+                $('.listOfComponent[component-type="sensorNode"] .list-group').html("");
+                drawWhole();
+        });
+        
+        function resetCanvasComponent(){
+                $("#dragFrame,#inputScalePlace,#inputHeightPlace").hide();
+                $(".listOfComponent .list-group-item.active").removeClass("active");
+                $.drawRegionClassificationsTemp=[];
+                $.drawRequirementAreaPolygonalsTemp=[];
+                drawWhole();
+        }
+        
+        //get wall list
+        function getWallList(){
+                $.ajaxq("queue",{
+                    type:"GET",
+                    dataType: "text",
+                    url: "jsp/wall.jsp",
+                    data: {
+                        "func" : "list"
+                    },
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if( data.success ) {
+                                var html="";
+                                var traArr = ["Metal_Sliver","GLASS_BLUE","CUBICLE_YELLOW","BRICK_RED","CONCRETE_GRAY","WOOD_BROWN","WATER_GREEN"];
+                                $.each(data.data,function(k,v){
+                                    html += '<option value="#'+v.w_color_rgb+'" w_type="'+v.w_id+'" translate="'+traArr[k]+'">'+$.globalLang[getCookie("IIITranslate")][traArr[k]]+"("+v.w_attenuation_factor+'dB)</option>';
+                                });
+                                
+                                $('#wallColor').html(html);
+                                
+                                $("#wallColor").bind("change",function(e){
+                                    var pos = $("#wallColor").next();
+//                                    pos.removeClass();
+//                                    var selectOptPos = $("#wallColor [value="+$(this).val()+"]");
+//                                    var w_color = $("#wallColor [value="+$(this).val()+"]").attr("w_type");
+                                    pos.css("background-color",$(this).val());
+//                                    pos.addClass("icon-box-"+w_type);
+                                }).trigger("change");
+                        }
+                        else {
+                                swal("ERROR", data.msg, "error");
+                        }
+                    },
+                    error:function(xhr, ajaxOptions, thrownError){ 
+                        console.log(xhr.status); 
+                        console.log(thrownError); 
+                    }
+                });
+        }
+        
+        //get region classification list
+        function getRegionClassificationList(){
+                $.ajaxq("queue",{
+                    type:"GET",
+                    dataType: "text",
+                    url: "jsp/region_classification.jsp",
+                    data: {
+                        "func" : "list"
+                    },
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if( data.success ) {
+                                var html="";
+                                
+                                $.region_classification = data.data;
+                                
+                                var traArr = ["TANK_FARMS","BUILDING","LIGHT_PROCESS_AREAS","HEAVY_PROCESS_AREAS"];
+                                $.each(data.data,function(k,v){
+                                    html += '<option value="#'+v.rc_color_rgb+'" rc_type="'+v.rc_id+'" translate="'+traArr[k]+'">'+$.globalLang[getCookie("IIITranslate")][traArr[k]]+"("+v.rc_attenuation_factor+')</option>';
+                                });
+                                
+                                $('#regionClassificationColor').html(html);
+                                
+                                $("#regionClassificationColor").bind("change",function(e){
+                                    var pos = $("#regionClassificationColor").next();
+                                    pos.css("background-color",$(this).val());
+                                }).trigger("change");
+                        }
+                        else {
+                                swal("ERROR", data.msg, "error");
+                        }
+                    },
+                    error:function(xhr, ajaxOptions, thrownError){ 
+                        console.log(xhr.status); 
+                        console.log(thrownError); 
+                    }
+                });
+        }
+        
+        //get access point list
+        function getAccessPointList(){
+                $.ajax({
+                    type:"GET",
+                    dataType: "text",
+                    url: "jsp/access_point.jsp",
+                    data: {
+                        "func" : "list"
+                    },
+                    success: function(data){
+                        data = JSON.parse(data);
+                        if( data.success ) {
+                                var html="";
+                                $.each(data.data,function(k,v){
+                                    if($.inArray(v.ap_species,["all","uplinkpoint"])!==-1)
+                                        html += '<option value="'+v.ap_range+'" device="'+v.ap_name+'" image="'+v.ap_image+'">'+v.ap_name+'(range:'+v.ap_range+'m)</option>';
+                                });
+                                $('#selectUplinkPoint').html(html);
+                                $('[id=selectApValue][for=Mesh]').html(html);
+                                html="";
+                                $.each(data.data,function(k,v){
+                                    if($.inArray(v.ap_species,["all","sensornode"])!==-1)
+                                        html += '<option value="'+v.ap_range+'" device="'+v.ap_name+'" image="'+v.ap_image+'">'+v.ap_name+'(range:'+v.ap_range+'m)</option>';
+                                });
+                                $('#selectSensorNode').html(html);
+                                $('[id=selectApValue][for=Ap]').html(html);
+                        }
+                        else {
+                                swal("ERROR", data.msg, "error");
+                        }
+                    },
+                    error:function(xhr, ajaxOptions, thrownError){ 
+                        console.log(xhr.status); 
+                        console.log(thrownError); 
+                    }
+                });
+        }
+        
+        $( "#dragFrame" ).draggable({
+            containment: '#canvas',
+            drag: function(event) {
+                var elmnt = this;
+                var top = $(this).position().top;
+                var left = $(this).position().left;
+                var componentType = elmnt.getAttribute("component-type");
+                var listIndex = elmnt.getAttribute("index");
+                var info = $(this).data("info");
+                if($.inArray(componentType,["wall","straightWall","elevator","uplinkPoint","sensorNode"])==-1){
+                    return false;
+                }
+                updateComponentPos(componentType,listIndex,info,left,top,left+elmnt.offsetWidth ,top+elmnt.offsetHeight );
+            },
+        })
+        
+        function dragPlaceEvent(){
+            $( ".dragPlace>div" ).draggable({
+                containment: '#canvas',
+                start: function(event) {
+//                    var elmnt = this;
+//                    var top = $(this).position().top;
+//                    var left = $(this).position().left;
+//                    var componentType = elmnt.getAttribute("component-type");
+//                    var listIndex = elmnt.getAttribute("index");
+//                    var info = $(this).data("info");
+//                    if($.inArray(componentType,["wall","elevator","uplinkPoint","sensorNode"])==-1){
+//                        return false;
+//                    }
+                    //$(".listOfComponent[component-type="+componentType+"] [index="+info.index+"]").trigger("click");
+                },
+                drag: function(event) {
+                    var elmnt = this;
+                    var top = $(this).position().top;
+                    var left = $(this).position().left;
+                    var componentType = elmnt.getAttribute("component-type");
+                    var listIndex = elmnt.getAttribute("index");
+                    var info = $(this).data("info");
+                    if($.inArray(componentType,["wall","straightWall","elevator","uplinkPoint","sensorNode"])==-1){
+                        return false;
+                    }
+                    updateComponentPos(componentType,listIndex,info,left,top,left+elmnt.offsetWidth ,top+elmnt.offsetHeight );
+                },
+            })
+        }
+        
+        function dragElement(elmnt) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0, componentType, listIndex;
+            if (document.getElementById(elmnt.id + "header")) {
+                /* if present, the header is where you move the DIV from:*/
+                document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+            } else {
+                /* otherwise, move the DIV from anywhere inside the DIV:*/
+                elmnt.onmousedown = dragMouseDown;
+            }
+            
+            function dragMouseDown(e) {
+                e = e || window.event;
+                // get the mouse cursor position at startup:
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+            }
+
+            function closeDragElement() {
+                /* stop moving when mouse button is released:*/
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+        
+    </script>
+    
+</body>
+</html>
